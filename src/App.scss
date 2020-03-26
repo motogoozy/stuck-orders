@@ -14,9 +14,11 @@
 }
 
 .dashboard-panel {
-   // height: calc(50% - .75rem - 2px);
-   // width: calc(50% - .75rem - 2px);
-   height: 50%;
-   width: 50%;
-   box-sizing: content-box;
+   height: 49%;
+   width: 49%;
+}
+
+.chart-container {
+   height: 85%;
+   width: 100%;
 }
