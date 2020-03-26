@@ -1,0 +1,43 @@
+.high-priority-panel {
+   display: flex;
+	flex-direction: column;
+   justify-content: flex-start;
+   
+   .alert-table {
+      width: 100%;
+      height: 100%;
+      color: white;
+      
+      .alert-table-header {
+         width: 100%;
+         display: flex;
+         flex-direction: row;
+         justify-content: space-around;
+         align-items: center;
+         flex-wrap: nowrap;
+         border-bottom: 1px solid white;
+      }
+      
+      .alert-table-body {
+         width: 100%;
+         height: 100%;
+         overflow: auto;
+         display: flex;
+         flex-direction: column;
+         justify-content: flex-start;
+         align-items: center;
+         flex-wrap: nowrap;
+
+         .high-priority-row {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: nowrap;
+            font-size: .9rem;
+            
+         }
+      }
+   }
+}
