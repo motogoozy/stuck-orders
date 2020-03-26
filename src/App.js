@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import './App.scss';
+import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPanel';
+
+import axios from 'axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   const [orderData, setOrderData] = useState('');
+   const [expeditedCount, setExpeditedCount] = useState('');
+
+   useEffect(() => {
+      const getStuckOrders = async () => {
+         try {
+            let res = await axios.get('https://stuckorders.mobilsense.com/api/stuck_orders');
+            setOrderData(res.data);
+         } catch (err) {
+            console.log(err);
+         }
+      };
+      getStuckOrders();
+   }, []);
+
+   useEffect(() => {
+      const getExpeditedCount = () => {
+         let clients = {};
+         if (orderData) {
+            orderData.stuck_orders.forEach(order => {
+               clients[order.client] = clients[order.client] || {client: order.client, "Expedited": 0, "Non-Expedited": 0};
+               if (order.expedited) {
+                  clients[order.client]['Expedited']++;
+               } else {
+                  clients[order.client]['Non-Expedited']++;
+               }
+            })
+         }
+         const clientsArr = [];
+         for (let client in clients) {
+            clientsArr.push(clients[client]);
+         }
+         setExpeditedCount(clientsArr);
+      };
+
+      getExpeditedCount();
+   }, [orderData]);
+
+   return (
+      <div className='app'>
+         <div className='dashboard-panel'></div>
+         <ClientCountPanel expeditedCount={expeditedCount} />
+         <div className='dashboard-panel'></div>
+         <div className='dashboard-panel'></div>
+      </div>
+   );
 }
 
 export default App;

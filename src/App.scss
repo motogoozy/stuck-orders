@@ -1,0 +1,22 @@
+.app {
+   height: 100vh;
+   width: 100vw;
+   text-align: center;
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   justify-content: space-around;
+   align-items: center;
+   align-content: center;
+   overflow: hidden;
+   background-color: black;
+}
+
+.dashboard-panel {
+   // height: calc(50% - .75rem - 2px);
+   // width: calc(50% - .75rem - 2px);
+   height: 50%;
+   width: 50%;
+   box-sizing: content-box;
+}
