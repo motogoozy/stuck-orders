@@ -9,14 +9,17 @@ export default function ClientCountPanel(props) {
 		axis: {
 			ticks: {
 				text: {
-					fill: 'white'
+					fill: 'white',
+					fontSize: '.8rem',
+					letterSpacing: '.25px',
 				},
 			},
 			legend: {
 				text: {
-					fill: 'white'
+					fill: 'white',
+					fontSize: '1rem',
 				}
-			}
+			},
 		}
 	};
 
@@ -28,13 +31,14 @@ export default function ClientCountPanel(props) {
 					data={props.expeditedCount}
 					keys={[ 'Non-Expedited', 'Expedited' ]}
 					indexBy="client"
-					margin={{ top: 5, right: 120, bottom: 90, left: 50 }}
+					margin={{ top: 5, right: 125, bottom: 80, left: 55 }}
 					padding={0.3}
 					layout="vertical"
 					// colors={{ scheme: 'spectral' }}
-					colors={[ '#4393C3', '#D6604D' ]}
+					// colors={[ '#4393C3', '#D6604D' ]}
+					colors={[ '#0dc6ab', '#a5368d' ]}
 					colorBy='id'
-					theme = {theme}
+					theme={theme}
 					enableGridX={false}
 					enableGridY={true}
 					axisTop={null}
@@ -45,13 +49,13 @@ export default function ClientCountPanel(props) {
 							tickRotation: -30,
 							legend: 'Client',
 							legendPosition: 'middle',
-							legendOffset: 75,
+							legendOffset: 70,
 					}}
 					axisLeft={{
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: 0,
-							legend: 'Total',
+							legend: 'Total Orders',
 							legendPosition: 'middle',
 							legendOffset: -40,
 					}}

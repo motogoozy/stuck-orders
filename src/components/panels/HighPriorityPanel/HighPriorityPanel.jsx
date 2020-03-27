@@ -38,11 +38,11 @@ export default function HighPriorityPanel(props) {
          let date = formatDate(new Date(order.order_timestamp));
          return (
             <div key={order.order_number} className='high-priority-row'>
-               <p style={{ width: '10rem' }}>{order.order_number}</p>
-               <p style={{ width: '10rem' }}>{date}</p>
-               <p style={{ width: '10rem' }}>{order.client}</p>
-               <p style={{ width: '10rem' }}>{order.order_status}</p>
-               <p style={{ width: '10rem' }}>{order.order_type}</p>
+               <p>{order.order_number}</p>
+               <p>{date}</p>
+               <p>{order.client}</p>
+               <p>{order.order_status}</p>
+               <p>{order.order_type}</p>
             </div>
          )
       });
@@ -54,11 +54,11 @@ export default function HighPriorityPanel(props) {
          <p className='panel-header'>High Priority</p>
          <div className='alert-table'>
             <div className='alert-table-header'>
-               <p style={{ width: '10rem' }}>Order Number</p>
-               <p style={{ width: '10rem' }}>Time</p>
-               <p style={{ width: '10rem' }}>Client</p>
-               <p style={{ width: '10rem' }}>Status</p>
-               <p style={{ width: '10rem' }}>Type</p>
+               <p>Order Number</p>
+               <p>Time</p>
+               <p>Client</p>
+               <p>Status</p>
+               <p>Type</p>
             </div>
             <div className='alert-table-body'>
                { displayAlertRows() }

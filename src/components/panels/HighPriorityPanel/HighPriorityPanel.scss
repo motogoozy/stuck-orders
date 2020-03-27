@@ -1,8 +1,4 @@
 .high-priority-panel {
-   display: flex;
-	flex-direction: column;
-   justify-content: flex-start;
-   
    .alert-table {
       width: 100%;
       height: 100%;
@@ -16,6 +12,10 @@
          align-items: center;
          flex-wrap: nowrap;
          border-bottom: 1px solid white;
+
+         p {
+            width: 10rem;
+         }
       }
       
       .alert-table-body {
@@ -37,6 +37,9 @@
             flex-wrap: nowrap;
             font-size: .9rem;
             
+            p {
+               width: 10rem;
+            }
          }
       }
    }
