@@ -2,7 +2,7 @@ import React from 'react';
 import './ClientCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
-import { linearGradientDef } from '@nivo/core';
+// import { linearGradientDef } from '@nivo/core';
 
 export default function ClientCountPanel(props) {
 	const theme = {
@@ -28,39 +28,15 @@ export default function ClientCountPanel(props) {
 					data={props.expeditedCount}
 					keys={[ 'Non-Expedited', 'Expedited' ]}
 					indexBy="client"
-					margin={{ top: 0, right: 0, bottom: 100, left: 50 }}
+					margin={{ top: 5, right: 120, bottom: 90, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={{ scheme: 'spectral' }}
-					colorBy='index'
+					// colors={{ scheme: 'spectral' }}
+					colors={[ '#4393C3', '#D6604D' ]}
+					colorBy='id'
 					theme = {theme}
-					borderRadius={5}
 					enableGridX={false}
 					enableGridY={true}
-					defs={[
-						{
-							id: 'lines',
-							type: 'patternLines',
-							background: 'white',
-							color: 'inherit',
-							rotation: -45,
-							lineWidth: 7,
-							spacing: 8,
-						},
-						linearGradientDef('gradientA', [
-							{ offset: 0, color: 'inherit' },
-							{ offset: 0, color: 'inherit', opacity: .75}
-
-						])
-					]}
-					fill={[
-						{
-							match: {
-								id: 'Non-Expedited'
-							},
-							id: 'gradientA'
-						}
-					]}
 					axisTop={null}
 					axisRight={null}
 					axisBottom={{
@@ -82,30 +58,53 @@ export default function ClientCountPanel(props) {
 					labelSkipWidth={12}
 					labelSkipHeight={12}
 					labelTextColor={'white'}
-					// legends={[
-					// 		{
-					// 			dataFrom: 'keys',
-					// 			anchor: 'bottom-right',
-					// 			direction: 'column',
-					// 			justify: false,
-					// 			translateX: 120,
-					// 			translateY: 0,
-					// 			itemsSpacing: 2,
-					// 			itemWidth: 100,
-					// 			itemHeight: 20,
-					// 			itemDirection: 'left-to-right',
-					// 			itemOpacity: 0.85,
-					// 			itemTextColor: 'white',
-					// 			symbolSize: 20,
-					// 			effects: [
-					// 				{
-					// 						on: 'hover',
-					// 						style: {
-					// 							itemOpacity: 1
-					// 						}
-					// 				}
-					// 			]
-					// 		}
+					legends={[
+							{
+								dataFrom: 'keys',
+								anchor: 'bottom-right',
+								direction: 'column',
+								justify: false,
+								translateX: 120,
+								translateY: 0,
+								itemsSpacing: 2,
+								itemWidth: 100,
+								itemHeight: 20,
+								itemDirection: 'left-to-right',
+								itemOpacity: 0.85,
+								itemTextColor: 'white',
+								symbolSize: 20,
+								effects: [
+									{
+											on: 'hover',
+											style: {
+												itemOpacity: 1
+											}
+									}
+								]
+							}
+					]}
+										// defs={[
+					// 	{
+					// 		id: 'lines',
+					// 		type: 'patternLines',
+					// 		background: 'white',
+					// 		color: 'inherit',
+					// 		rotation: -45,
+					// 		lineWidth: 7,
+					// 		spacing: 8,
+					// 	},
+					// 	linearGradientDef('gradientA', [
+					// 		{ offset: 0, color: 'inherit' },
+					// 		{ offset: 0, color: 'inherit', opacity: .75}
+					// 	])
+					// ]}
+					// fill={[
+					// 	{
+					// 		match: {
+					// 			id: 'Non-Expedited'
+					// 		},
+					// 		id: 'gradientA'
+					// 	}
 					// ]}
 					animate={true}
 					motionStiffness={90}
