@@ -62,8 +62,8 @@ function App() {
       if (orderData) {
          orderData.stuck_orders.forEach(order => {
             let today = new Date();
-            let orderDate = new Date(order.order_timestamp);
-            let difference = (today.getDate() - orderDate.getDate()).toString();
+            let statusChangeDate = new Date(order.status_change_timestamp);
+            let difference = (today.getDate() - statusChangeDate.getDate()).toString();
             days[difference] = days[difference] || {day: difference, count: 0};
             days[difference].count++;
          })
