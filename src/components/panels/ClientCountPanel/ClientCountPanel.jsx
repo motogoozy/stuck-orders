@@ -28,10 +28,10 @@ export default function ClientCountPanel(props) {
 			<p className='panel-header'>Stuck Orders</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					data={props.expeditedCount}
+					data={props.clientCount}
 					keys={[ 'Non-Expedited', 'Expedited' ]}
 					indexBy="client"
-					margin={{ top: 5, right: 125, bottom: 80, left: 55 }}
+					margin={{ top: 5, right: 125, bottom: 80, left: 50 }}
 					padding={0.3}
 					layout="vertical"
 					// colors={{ scheme: 'spectral' }}
@@ -87,7 +87,7 @@ export default function ClientCountPanel(props) {
 								]
 							}
 					]}
-										// defs={[
+					// defs={[
 					// 	{
 					// 		id: 'lines',
 					// 		type: 'patternLines',

@@ -29,10 +29,10 @@ export default function ApprovalDayCountPanel(props) {
 					data={props.approvalDayCount}
 					keys={[ 'count' ]}
 					indexBy="day"
-					margin={{ top: 5, right: 40, bottom: 80, left: 55 }}
+					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={{ scheme: 'yellow_orange_red' }}
+					colors={{ scheme: 'purple_blue_green' }}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}
