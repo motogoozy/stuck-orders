@@ -14,7 +14,7 @@ function App() {
 
    const getOrderData = async () => {
       try {
-         let res = await axios.get('https://stuckorders.mobilsense.com/api/stuck_orders');
+         let res = await axios.get('/api/stuck_orders');
          setOrderData(res.data);
          console.log(res.data.stuck_orders)
       } catch (err) {
