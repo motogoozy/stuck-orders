@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.scss';
 import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPanel';
 import HighPriorityPanel from './components/panels/HighPriorityPanel/HighPriorityPanel';
-import DayCountPanel from './components/panels/DayCountPanel/DayCountPanel';
+import StatusDayCountPanel from './components/panels/StatusDayCountPanel/StatusDayCountPanel';
+import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/ApprovalDayCountPanel';
 
 import axios from 'axios';
 
@@ -10,7 +11,8 @@ function App() {
    const [orderData, setOrderData] = useState();
    const [expeditedCount, setExpeditedCount] = useState([]);
    const [highPriorities, setHighPriorities] = useState([]);
-   const [dayCount, setDayCount] = useState([]);
+   const [statusDayCount, setDayCount] = useState([]);
+   const [approvalDayCount, setApprovalDayCount] = useState([]);
 
    const getOrderData = async () => {
       try {
@@ -57,7 +59,7 @@ function App() {
       return priorities;
    };
 
-   const getDayCount = (orderData) => {
+   const getStatusDayCount = (orderData) => {
       let days = {};
       if (orderData) {
          orderData.stuck_orders.forEach(order => {
@@ -68,11 +70,29 @@ function App() {
             days[difference].count++;
          })
       }
-      const daysArr = [];
+      const statusDaysArr = [];
       for (let day in days) {
-         daysArr.push(days[day]);
+         statusDaysArr.push(days[day]);
       }
-      return daysArr;
+      return statusDaysArr;
+   };
+
+   const getApprovalDayCount = (orderData) => {
+      let days = {};
+      if (orderData) {
+         orderData.stuck_orders.forEach(order => {
+            let today = new Date();
+            let approvalDate = new Date(order.approval_timestamp);
+            let difference = (today.getDate() - approvalDate.getDate()).toString();
+            days[difference] = days[difference] || {day: difference, count: 0};
+            days[difference].count++;
+         })
+      }
+      const approvalDaysArr = [];
+      for (let day in days) {
+         approvalDaysArr.push(days[day]);
+      }
+      return approvalDaysArr;
    };
 
    useEffect(() => {
@@ -82,18 +102,21 @@ function App() {
    useEffect(() => {
       const clientsArr = getExpeditedCount(orderData);
       const prioritiesArr = getHighPriorities(orderData);
-      const daysArr = getDayCount(orderData);
+      const statusDaysArr = getStatusDayCount(orderData);
+      const approvalDaysArr = getApprovalDayCount(orderData);
+
       setExpeditedCount(clientsArr);
       setHighPriorities(prioritiesArr);
-      setDayCount(daysArr);
+      setDayCount(statusDaysArr);
+      setApprovalDayCount(approvalDaysArr);
    }, [orderData]);
 
    return (
       <div className='app'>
          <ClientCountPanel expeditedCount={expeditedCount} />
          <HighPriorityPanel highPriorities={highPriorities} />
-         <DayCountPanel dayCount={dayCount} />
-         <div className='dashboard-panel'></div>
+         <StatusDayCountPanel statusDayCount={statusDayCount} />
+         <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
       </div>
    );
 }

@@ -14,7 +14,7 @@
          border-bottom: 1px solid white;
 
          p {
-            width: 10rem;
+            width: 20%;
          }
       }
       
@@ -30,15 +30,15 @@
 
          .high-priority-row {
             width: 100%;
+            height: auto;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
-            flex-wrap: nowrap;
             font-size: .9rem;
             
             p {
-               width: 10rem;
+               width: 20%;
             }
          }
       }

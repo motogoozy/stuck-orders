@@ -1,9 +1,9 @@
 import React from 'react';
-import './DayCountPanel.scss';
+import './ApprovalDayCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
+export default function ApprovalDayCountPanel(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -22,14 +22,14 @@ export default function ClientCountPanel(props) {
 	};
 
 	return (
-		<div className='dashboard-panel day-count-panel'>
-			<p className='panel-header'>Day Count</p>
+		<div className='dashboard-panel approval-day-count-panel'>
+			<p className='panel-header'>Approval Change</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					data={props.dayCount}
+					data={props.approvalDayCount}
 					keys={[ 'count' ]}
 					indexBy="day"
-					margin={{ top: 5, right: 55, bottom: 80, left: 55 }}
+					margin={{ top: 5, right: 40, bottom: 80, left: 55 }}
 					padding={0.3}
 					layout="vertical"
 					colors={{ scheme: 'yellow_orange_red' }}
@@ -83,7 +83,7 @@ export default function ClientCountPanel(props) {
 					// 			]
 					// 		}
 					// ]}
-										// defs={[
+					// defs={[
 					// 	{
 					// 		id: 'lines',
 					// 		type: 'patternLines',
