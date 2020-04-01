@@ -71,8 +71,8 @@ function App() {
             let today = new Date();
             let statusChangeDate = new Date(order.status_change_timestamp);
             let difference = (today.getDate() - statusChangeDate.getDate()).toString();
-            days[difference] = days[difference] || {day: difference, count: 0};
-            days[difference].count++;
+            days[difference] = days[difference] || {day: difference, 'Day': 0};
+            days[difference]['Day']++;
          })
       }
       const statusDaysArr = [];
@@ -93,8 +93,8 @@ function App() {
             let today = new Date();
             let approvalDate = new Date(order.approval_timestamp);
             let difference = (today.getDate() - approvalDate.getDate()).toString();
-            days[difference] = days[difference] || {day: difference, count: 0};
-            days[difference].count++;
+            days[difference] = days[difference] || {day: difference, 'Day': 0};
+            days[difference]['Day']++;
          })
       }
       const approvalDaysArr = [];

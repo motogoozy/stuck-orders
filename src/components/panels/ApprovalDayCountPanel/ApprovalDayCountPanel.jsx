@@ -27,7 +27,7 @@ export default function ApprovalDayCountPanel(props) {
 			<div className='chart-container'>
 				<ResponsiveBar
 					data={props.approvalDayCount}
-					keys={[ 'count' ]}
+					keys={[ 'Day' ]}
 					indexBy="day"
 					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
