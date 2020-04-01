@@ -23,7 +23,7 @@ export default function StatusDayCountPanel(props) {
 
 	return (
 		<div className='dashboard-panel status-day-count-panel'>
-			<p className='panel-header'>Status Change</p>
+			<p className='panel-header'>Current Status Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
 					data={props.statusDayCount}
@@ -43,7 +43,7 @@ export default function StatusDayCountPanel(props) {
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: -0,
-							legend: 'Days Back',
+							legend: 'Days',
 							legendPosition: 'middle',
 							legendOffset: 70,
 					}}

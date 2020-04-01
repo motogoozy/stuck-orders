@@ -7,6 +7,7 @@ import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/App
 
 import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
+import moment from 'moment';
 
 function App() {
    const [orderData, setOrderData] = useState('');
@@ -19,7 +20,7 @@ function App() {
       try {
          let res = await axios.get('/api/stuck_orders');
          setOrderData(res.data);
-         console.log(res.data.stuck_orders)
+         // console.log(res.data.stuck_orders)
       } catch (err) {
          console.log(err);
       }
@@ -52,9 +53,13 @@ function App() {
       let priorities = [];
       if (orderData) {
          priorities = orderData.stuck_orders.filter(order => {
-            let today = new Date();
-            let orderDate = new Date(order.order_timestamp);
-            if (today.getDate() - orderDate.getDate() > 2) { // older than 2 days
+            let now = new Date();
+            let date = new Date(order.order_timestamp);
+            let today = moment([now.getFullYear(), now.getMonth(), now.getDate()]);
+            let orderDate = moment([date.getFullYear(), date.getMonth(), date.getDate()]);
+            const difference = today.diff(orderDate, 'days');
+
+            if (difference > 2) { // older than 2 days
                return true;
             } else {
                return false;
@@ -66,45 +71,69 @@ function App() {
 
    const getStatusDayCount = (orderData) => {
       let days = {};
-      if (orderData) {
-         orderData.stuck_orders.forEach(order => {
-            let today = new Date();
-            let statusChangeDate = new Date(order.status_change_timestamp);
-            let difference = (today.getDate() - statusChangeDate.getDate()).toString();
-            days[difference] = days[difference] || {day: difference, 'Day': 0};
-            days[difference]['Day']++;
-         })
-      }
-      const statusDaysArr = [];
-      for (let day in days) {
-         if (statusDaysArr.length === 9) {
-            break;
+      for (let i = 0; i <= 7; i++) {
+         if (i === 7) {
+            days['7+'] = {day: '7+', 'Day': 0};
          } else {
-            statusDaysArr.push(days[day]);
+            days[i.toString()] = {day: i.toString(), 'Day': 0};
          }
       }
+
+      if (orderData) {
+         orderData.stuck_orders.forEach(order => {
+            let now = new Date();
+            let change = new Date(order.status_change_timestamp);
+            let today = moment([now.getFullYear(), now.getMonth(), now.getDate()]);
+            let statusChange = moment([change.getFullYear(), change.getMonth(), change.getDate()]);
+            const difference = today.diff(statusChange, 'days');
+
+            if (difference >= 7) {
+               days['7+']['Day']++;
+            } else {
+               days[difference.toString()]['Day']++;
+            }
+         })
+      }
+
+      let statusDaysArr = [];
+      for (let day in days) {
+         statusDaysArr.push(days[day]);
+      }
+
       return statusDaysArr;
    };
 
    const getApprovalDayCount = (orderData) => {
       let days = {};
-      if (orderData) {
-         orderData.stuck_orders.forEach(order => {
-            let today = new Date();
-            let approvalDate = new Date(order.approval_timestamp);
-            let difference = (today.getDate() - approvalDate.getDate()).toString();
-            days[difference] = days[difference] || {day: difference, 'Day': 0};
-            days[difference]['Day']++;
-         })
-      }
-      const approvalDaysArr = [];
-      for (let day in days) {
-         if (approvalDaysArr.length === 9) {
-            break;
+      for (let i = 0; i <= 7; i++) {
+         if (i === 7) {
+            days['7+'] = {day: '7+', 'Day': 0};
          } else {
-            approvalDaysArr.push(days[day]);
+            days[i.toString()] = {day: i.toString(), 'Day': 0};
          }
       }
+
+      if (orderData) {
+         orderData.stuck_orders.forEach(order => {
+            let now = new Date();
+            let change = new Date(order.approval_timestamp);
+            let today = moment([now.getFullYear(), now.getMonth(), now.getDate()]);
+            let approvalChange = moment([change.getFullYear(), change.getMonth(), change.getDate()]);
+            const difference = today.diff(approvalChange, 'days');
+
+            if (difference >= 7) {
+               days['7+']['Day']++;
+            } else {
+               days[difference.toString()]['Day']++;
+            }
+         })
+      }
+      
+      const approvalDaysArr = [];
+      for (let day in days) {
+         approvalDaysArr.push(days[day]);
+      }
+
       return approvalDaysArr;
    };
 

@@ -23,7 +23,7 @@ export default function ApprovalDayCountPanel(props) {
 
 	return (
 		<div className='dashboard-panel approval-day-count-panel'>
-			<p className='panel-header'>Approval Change</p>
+			<p className='panel-header'>Approval Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
 					data={props.approvalDayCount}
@@ -43,7 +43,7 @@ export default function ApprovalDayCountPanel(props) {
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: -0,
-							legend: 'Days Back',
+							legend: 'Days',
 							legendPosition: 'middle',
 							legendOffset: 70,
 					}}
