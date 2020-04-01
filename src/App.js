@@ -71,9 +71,9 @@ function App() {
 
    const getStatusDayCount = (orderData) => {
       let days = {};
-      for (let i = 0; i <= 7; i++) {
-         if (i === 7) {
-            days['7+'] = {day: '7+', 'Day': 0};
+      for (let i = 0; i <= 8; i++) {
+         if (i === 8) {
+            days['8+'] = {day: '8+', 'Day': 0};
          } else {
             days[i.toString()] = {day: i.toString(), 'Day': 0};
          }
@@ -87,8 +87,8 @@ function App() {
             let statusChange = moment([change.getFullYear(), change.getMonth(), change.getDate()]);
             const difference = today.diff(statusChange, 'days');
 
-            if (difference >= 7) {
-               days['7+']['Day']++;
+            if (difference >= 8) {
+               days['8+']['Day']++;
             } else {
                days[difference.toString()]['Day']++;
             }
@@ -105,9 +105,9 @@ function App() {
 
    const getApprovalDayCount = (orderData) => {
       let days = {};
-      for (let i = 0; i <= 7; i++) {
-         if (i === 7) {
-            days['7+'] = {day: '7+', 'Day': 0};
+      for (let i = 0; i <= 8; i++) {
+         if (i === 8) {
+            days['8+'] = {day: '8+', 'Day': 0};
          } else {
             days[i.toString()] = {day: i.toString(), 'Day': 0};
          }
@@ -121,8 +121,8 @@ function App() {
             let approvalChange = moment([change.getFullYear(), change.getMonth(), change.getDate()]);
             const difference = today.diff(approvalChange, 'days');
 
-            if (difference >= 7) {
-               days['7+']['Day']++;
+            if (difference >= 8) {
+               days['8+']['Day']++;
             } else {
                days[difference.toString()]['Day']++;
             }
