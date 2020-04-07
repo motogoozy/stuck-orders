@@ -148,41 +148,6 @@ export default function DetailsView() {
 		});
 	};
 
-	/*
-	- sortable on any of the columns
-	- filterable by client, expedited, order_status
-	- searchable by service_number, client, order_number
-
-	status_change_timestamp: "2020-02-25T16:00:03.299836-07:00"
-	order_timestamp: "2020-02-25T15:46:06.927024-07:00"
-	expedited_approval_alert: false
-	approval_raw_age: 982
-	device_type: "iPhone"
-	client_db_name: "avis"
-	order_type: "Equipment Upgrade"
-	order_business_age: 694
-	standard_aged_order_alert: true
-	expedited_aged_order_alert: false
-	report_timestamp: "2020-04-06T15:17:52.100374-06:00"
-	carrier: "Verizon"
-	order_status: "Approved"
-	order_raw_age: 982
-	approval_business_age: 694
-	approval_timestamp: "2020-02-25T16:00:03.299836-07:00"
-	standard_approval_alert: true
-	status_change_raw_age: 982
-	pending_order_alert: false
-	subscriber_name: "Pierce, Donald A"
-	service_number: "6502704069"
-	notes: null
-	expedited: false
-	client: "Avis"
-	status_change_business_age: 694
-	model: "iPhone 8 64GB"
-	order_number: "15163-15545"
-	make: "Apple"
-	*/
-
 	const clientOptions = () => {
 		return filterOptions.client.map(option => (
 			<option key={option} value={option}>{option}</option>
