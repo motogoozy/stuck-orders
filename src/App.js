@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPanel';
-import HighPriorityPanel from './components/panels/HighPriorityPanel/HighPriorityPanel';
+import AlertPanel from './components/panels/AlertPanel/AlertPanel';
 import StatusDayCountPanel from './components/panels/StatusDayCountPanel/StatusDayCountPanel';
 import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/ApprovalDayCountPanel';
 
@@ -21,43 +21,66 @@ export const getOrderData = async () => {
 
 const getClientCount = (orderData) => {
    let clients = {};
-   if (orderData) {
-      orderData.stuck_orders.forEach(order => {
-         clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Non-Expedited': 0, 'Total': 0};
-         if (order.expedited) {
-            clients[order.client]['Expedited']++;
-            clients[order.client]['Total']++;
-            clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
-         } else {
-            clients[order.client]['Non-Expedited']++;
-            clients[order.client]['Total']++;
-            clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
-         }
-      })
-   }
+   orderData.stuck_orders.forEach(order => {
+      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Non-Expedited': 0, 'Total': 0};
+      if (order.expedited) {
+         clients[order.client]['Expedited']++;
+         clients[order.client]['Total']++;
+         clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
+      } else {
+         clients[order.client]['Non-Expedited']++;
+         clients[order.client]['Total']++;
+         clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
+      }
+   })
+
    const clientsArr = [];
    for (let client in clients) {
       clientsArr.push(clients[client]);
    }
+
    return clientsArr;
 };
 
-const getHighPriorities = (orderData) => {
-   let priorities = [];
-   if (orderData) {
-      priorities = orderData.stuck_orders.filter(order => {
-         let now = moment(new Date());
-         let orderDate = moment(new Date(order.order_timestamp));
-         const difference = now.diff(orderDate, 'days');
+const getAlertCount = (orderData) => {
+   /*
+      expedited_approval_alert
+      standard_approval_alert
+      pending_order_alert
+      expedited_aged_order_alert
+      standard_aged_order_alert
+   */
+   let alerts = {
+      expedited_approval_alert: {alertName: 'Exp. Approval', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approval', 'Count': 0},
+      pending_order_alert: {alertName: 'Pending Order', 'Count': 0},
+      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', 'Count': 0},
+      standard_aged_order_alert: {alertName: 'Std. Aged Order', 'Count': 0},
+   };
+   orderData.stuck_orders.forEach(order => {
+      if (order.expedited_approval_alert) {
+         alerts.expedited_approval_alert['Count']++;
+      }
+      if (order.standard_approval_alert) {
+         alerts.standard_approval_alert['Count']++;
+      }
+      if (order.pending_order_alert) {
+         alerts.pending_order_alert['Count']++;
+      }
+      if (order.expedited_aged_order_alert) {
+         alerts.expedited_aged_order_alert['Count']++;
+      }
+      if (order.standard_aged_order_alert) {
+         alerts.standard_aged_order_alert['Count']++;
+      }
+   });
 
-         if (difference > 2) { // older than 2 days
-            return true;
-         } else {
-            return false;
-         }
-      });
+   let alertsArr = [];
+   for (let alert in alerts) {
+      alertsArr.push(alerts[alert]);
    }
-   return priorities;
+
+   return alertsArr;
 };
 
 const getStatusDayCount = (orderData) => {
@@ -70,19 +93,17 @@ const getStatusDayCount = (orderData) => {
       }
    }
 
-   if (orderData) {
-      orderData.stuck_orders.forEach(order => {
-         let now = moment(new Date());
-         let statusChange = moment(new Date(order.status_change_timestamp));
-         const difference = now.diff(statusChange, 'days');
+   orderData.stuck_orders.forEach(order => {
+      let now = moment(new Date());
+      let statusChange = moment(new Date(order.status_change_timestamp));
+      const difference = now.diff(statusChange, 'days');
 
-         if (difference >= 8) {
-            days['8+']['Day']++;
-         } else {
-            days[difference.toString()]['Day']++;
-         }
-      })
-   }
+      if (difference >= 8) {
+         days['8+']['Day']++;
+      } else {
+         days[difference.toString()]['Day']++;
+      }
+   })
 
    let statusDaysArr = [];
    for (let day in days) {
@@ -102,19 +123,17 @@ const getApprovalDayCount = (orderData) => {
       }
    }
 
-   if (orderData) {
-      orderData.stuck_orders.forEach(order => {
-         let now = moment(new Date());
-         let approvalChange = moment(new Date(order.approval_timestamp));
-         const difference = now.diff(approvalChange, 'days');
+   orderData.stuck_orders.forEach(order => {
+      let now = moment(new Date());
+      let approvalChange = moment(new Date(order.approval_timestamp));
+      const difference = now.diff(approvalChange, 'days');
 
-         if (difference >= 8) {
-            days['8+']['Day']++;
-         } else {
-            days[difference.toString()]['Day']++;
-         }
-      })
-   }
+      if (difference >= 8) {
+         days['8+']['Day']++;
+      } else {
+         days[difference.toString()]['Day']++;
+      }
+   })
    
    const approvalDaysArr = [];
    for (let day in days) {
@@ -127,7 +146,7 @@ const getApprovalDayCount = (orderData) => {
 function App() {
    const [orderData, setOrderData] = useState('');
    const [clientCount, setClientCount] = useState([])
-   const [highPriorities, setHighPriorities] = useState([]);
+   const [alertCount, setAlertCount] = useState([]);
    const [statusDayCount, setDayCount] = useState([]);
    const [approvalDayCount, setApprovalDayCount] = useState([]);
 
@@ -140,15 +159,17 @@ function App() {
    }, []);
 
    useEffect(() => {
-      const clientsArr = getClientCount(orderData);
-      const prioritiesArr = getHighPriorities(orderData);
-      const statusDaysArr = getStatusDayCount(orderData);
-      const approvalDaysArr = getApprovalDayCount(orderData);
-
-      setClientCount(clientsArr);
-      setHighPriorities(prioritiesArr);
-      setDayCount(statusDaysArr);
-      setApprovalDayCount(approvalDaysArr);
+      if (orderData) {
+         const clientsArr = getClientCount(orderData);
+         const alertsArr = getAlertCount(orderData);
+         const statusDaysArr = getStatusDayCount(orderData);
+         const approvalDaysArr = getApprovalDayCount(orderData);
+   
+         setClientCount(clientsArr);
+         setAlertCount(alertsArr);
+         setDayCount(statusDaysArr);
+         setApprovalDayCount(approvalDaysArr);
+      }
    }, [orderData]);
 
    return (
@@ -166,7 +187,7 @@ function App() {
          {
          orderData
          ?
-         <HighPriorityPanel highPriorities={highPriorities} />
+         <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
          <GridLoader size={12} loading={true} color={'#3690C0'} />
