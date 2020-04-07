@@ -12,6 +12,8 @@ import Popover from 'react-bootstrap/Popover';
 export default function DetailsView() {
 	const [orderData, setOrderData] = useState('');
 	const [filterOptions, setFilterOptions] = useState({});
+	const [search, setSearch] = useState('');
+	const [filters, setFilters] = useState({client: '', expedited: '', order_status: ''});
 
 	useEffect(() => {
 		getOrderData().then(data => {
@@ -34,8 +36,50 @@ export default function DetailsView() {
 		});
 	}, []);
 
+	useEffect(() => {
+		console.log(filters)
+	}, [filters]);
+
+	const resetFilters = () => {
+		setSearch('')
+		setFilters({client: '', expedited: '', order_status: ''});
+	};
+
 	const displayRows = () => {
-		let rows = orderData.stuck_orders.map(order => {
+		let filteredOrders = orderData.stuck_orders;
+		
+		if (filters.client || filters.expedited || filters.order_status) {
+			filteredOrders = filteredOrders.filter(order => {
+				let match = true;
+				if (filters.client && filters.client !== order.client) {
+					match = false;
+				}
+				if (filters.expedited && filters.expedited !== order.expedited.toString()) {
+					match = false;
+				}
+				if (filters.order_status && filters.order_status !== order.order_status) {
+					match = false;
+				}
+				return match;
+			});
+		}
+
+		if (search) {
+			filteredOrders = filteredOrders.filter(order => {
+				let match = false;
+				if (
+					order.client.toLowerCase().includes(search.toLowerCase()) ||
+					order.order_number.includes(parseInt(search)) ||
+					order.service_number.includes(parseInt(search))
+				) {
+					match = true;
+				}
+				return match;
+			})
+		}
+
+
+		return filteredOrders.map(order => {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
@@ -102,7 +146,6 @@ export default function DetailsView() {
 				</div>
 			)
 		});
-		return rows;
 	};
 
 	/*
@@ -168,8 +211,8 @@ export default function DetailsView() {
 					orderData && filterOptions
 					&&
 					<div className='details-view-header-right-container'>
-						<p>Reset</p>
-						<input type='text' placeholder='Search client, order number, phone' />
+						<p onClick={resetFilters}>Reset</p>
+						<input onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
 			</div>
@@ -193,17 +236,23 @@ export default function DetailsView() {
 					</div>
 					<div className='details-table-filter-row'>
 						<div className='detail-client'>
-							<select name="" id="">
+							<select name="" id="" value={filters.client} onChange={e => setFilters({ ...filters, client: e.target.value })}>
+								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="">(none)</option>
 								{ clientOptions() }
 							</select>
 						</div>
 						<div className='detail-expedited'>
-							<select name="" id="">
+							<select name="" id="" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
+								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="">(none)</option>
 								{ expeditedOptions() }
 							</select>
 						</div>
 						<div className='detail-order-status'>
-							<select name="" id="">
+							<select name="" id="" value={filters.order_status} onChange={e => setFilters({ ...filters, order_status: e.target.value })}>
+								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="">(none)</option>
 								{ orderStatusOptions() }
 							</select>
 						</div>
