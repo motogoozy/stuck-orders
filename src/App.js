@@ -124,34 +124,6 @@ const getApprovalDayCount = (orderData) => {
    return approvalDaysArr;
 };
 
-const getBusinessHours = (timestamp) => {
-   const weekendDays = ['Saturday', 'Sunday'];
-   let businessHours = 0;
-   const now = moment(new Date());
-   const givenDate = moment(new Date(timestamp));
-   let daysDifference = now.diff(givenDate, 'days');
-   let startHours = (24 - givenDate.hours());
-   let todaysHours = now.diff(givenDate, 'hours');
-   
-   if (!weekendDays.includes(now.format('dddd'))) {
-      if (daysDifference !== 0) {
-         businessHours+= startHours;
-      }
-      businessHours+= todaysHours;
-   }
-   daysDifference--;
-
-   while (daysDifference > 0) {
-      const dayName = givenDate.format('dddd');
-      if (!weekendDays.includes(dayName)) {
-         businessHours += 24;
-      }
-      daysDifference--;
-   }
-
-   return businessHours;
-};
-
 function App() {
    const [orderData, setOrderData] = useState('');
    const [clientCount, setClientCount] = useState([])
@@ -163,8 +135,8 @@ function App() {
    useEffect(() => {
       getOrderData().then(data => {
          setOrderData(data);
-         // console.log(data)
-      })
+         console.log(data.stuck_orders)
+      });
    }, []);
 
    useEffect(() => {

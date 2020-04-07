@@ -1,0 +1,149 @@
+.details-view-main {
+	width: 100vw;
+	height: 100vh;
+	background-color: black;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding: 1rem;
+	overflow: hidden;
+
+	.details-view-header {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+
+		.details-view-header-right-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			p {
+				margin: 0 1rem;
+				transition: color .15s;
+
+				&:hover {
+					cursor: pointer;
+					color: #02818A;
+					transition: color .1s;
+				}
+			}
+		}
+
+		input {
+			padding: .5rem;
+			display: inline-block;
+			border: 1px solid white;
+			background-color: transparent;
+			border-radius: 4px;
+			color: white;
+			font-size: .9rem;
+			margin: 0;
+			transition: border .25s;
+
+			&:hover {
+				// border: 1px solid #02818A;
+			}
+
+			&:focus {
+				outline: none;
+				border: 1px solid #02818A;
+				transition: border .25s;
+			}
+		}
+
+		.details-back-arrow {
+			color: white;
+			font-size: 1.25rem;
+			transition: color .15s;
+	
+			&:hover {
+				color: #02818A;
+				transition: color .15s;
+			}
+		}
+	}
+
+	.details-table {
+		width: 100%;
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		text-align: center;
+		word-wrap: break-word;
+		overflow: hidden;
+
+		p, select {
+			width: 12rem;
+			font-size: .9rem;
+			margin: 0 .1rem;
+		}
+
+		.details-table-header, .details-table-filter-row, .details-table-body, .order-detail-row {
+			width: 100%;
+		}
+
+		.details-table-header, .details-table-filter-row, .order-detail-row {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+		}
+
+		.details-table-header {
+         padding-bottom: .25rem;
+			border-bottom: 1px solid white;
+		}
+
+		.details-table-filter-row {
+			display: flex;
+			flex-direction: row;
+
+			select {
+				background-color: rgba(68, 68, 68, 0.87);
+				border: none;
+				margin: .25rem;
+				color: white;
+
+				&:focus {
+					outline-color: #02818A;
+				}
+			}
+		}
+
+		.details-table-body {
+			overflow: auto;
+
+			.order-detail-row {
+				height: auto;
+				min-height: 3rem;
+				margin-top: .25rem;
+            border-bottom: 1px solid rgb(80, 80, 80);
+			}
+		}
+
+		.detail-client, .detail-order-status, .detail-status-change, .detail-service-number, .detail-order-type, .detail-model, .detail-carrier {
+			width: 8rem;
+		}
+
+		.detail-expedited, .detail-make {
+			width: 5rem;
+		}
+	}
+}
+
+.detail-loader {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}

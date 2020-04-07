@@ -2,7 +2,6 @@ import React from 'react';
 import './ClientCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
-// import { linearGradientDef } from '@nivo/core';
 
 export default function ClientCountPanel(props) {
 	const theme = {

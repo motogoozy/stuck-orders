@@ -40,3 +40,23 @@
    height: 85%;
    width: 100%;
 }
+
+.details-link {
+   position: fixed;
+   bottom: 0;
+   right: 0;
+   margin: 1rem;
+   color: white;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+   align-items: center;
+
+   p {
+      margin: 0 0 0 .5rem;
+      &:hover {
+         text-decoration: underline;
+      }
+   }
+
+}
