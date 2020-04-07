@@ -1,15 +1,15 @@
 import React from 'react';
-import './DayCountPanel.scss';
+import './AlertPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
+export default function AlertPanel(props) {
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
-					fontSize: '.9rem',
+					fontSize: '.8rem',
 				},
 			},
 			legend: {
@@ -22,17 +22,17 @@ export default function ClientCountPanel(props) {
 	};
 
 	return (
-		<div className='dashboard-panel day-count-panel'>
-			<p className='panel-header'>Day Count</p>
+		<div className='dashboard-panel status-day-count-panel'>
+			<p className='panel-header'>Alerts</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					data={props.dayCount}
-					keys={[ 'count' ]}
-					indexBy="day"
-					margin={{ top: 5, right: 55, bottom: 80, left: 55 }}
+					data={props.alertCount}
+					keys={[ 'Count' ]}
+					indexBy="alertName"
+					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={{ scheme: 'yellow_orange_red' }}
+					colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}
@@ -42,8 +42,8 @@ export default function ClientCountPanel(props) {
 					axisBottom={{
 							tickSize: 5,
 							tickPadding: 5,
-							tickRotation: -0,
-							legend: 'Days Back',
+							tickRotation: -30,
+							legend: 'Type',
 							legendPosition: 'middle',
 							legendOffset: 70,
 					}}
@@ -51,7 +51,7 @@ export default function ClientCountPanel(props) {
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: 0,
-							legend: 'Total Orders',
+							legend: 'Count',
 							legendPosition: 'middle',
 							legendOffset: -40,
 					}}
@@ -83,7 +83,7 @@ export default function ClientCountPanel(props) {
 					// 			]
 					// 		}
 					// ]}
-										// defs={[
+					// defs={[
 					// 	{
 					// 		id: 'lines',
 					// 		type: 'patternLines',

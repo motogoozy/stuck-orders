@@ -1,0 +1,157 @@
+@import '../../App.scss';
+
+.details-view-main {
+	width: 100vw;
+	height: 100vh;
+	background-color: black;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding: 1rem;
+	overflow: hidden;
+
+	.details-view-header {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+
+		.details-view-header-right-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			p {
+				margin: 0 1rem;
+				transition: color .15s;
+
+				&:hover {
+					cursor: pointer;
+					color: $primary-accent;
+					transition: color .1s;
+				}
+			}
+		}
+
+		input {
+			padding: .5rem;
+			width: 15rem;
+			display: inline-block;
+			border: 1px solid white;
+			background-color: transparent;
+			border-radius: 4px;
+			color: white;
+			font-size: .9rem;
+			margin: 0;
+			transition: border .25s;
+
+			&:hover {
+				// border: 1px solid $primary-accent;
+			}
+
+			&:focus {
+				outline: none;
+				border: 1px solid $primary-accent;
+				transition: border .25s;
+			}
+		}
+
+		.details-back-arrow {
+			color: white;
+			font-size: 1.25rem;
+			transition: color .15s;
+	
+			&:hover {
+				color: $primary-accent;
+				transition: color .15s;
+			}
+		}
+	}
+
+	.details-table {
+		width: 100%;
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		text-align: center;
+		word-wrap: break-word;
+		overflow: hidden;
+
+		.details-table-header, .details-table-filter-row, .details-table-body, .order-detail-row {
+			width: 100%;
+		}
+
+		.details-table-header, .details-table-filter-row, .order-detail-row {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+		}
+
+		.details-table-header {
+         padding-bottom: .25rem;
+			border-bottom: 1px solid white;
+		}
+
+		.details-table-header > p, .details-table-filter-row > div, .details-table-filter-row > p, .order-detail-row > p {
+			width: 12rem;
+			margin: 0 .25rem;
+			overflow: hidden;
+		}
+
+		.details-table-filter-row {
+			div {
+				font-size: .9rem;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				
+				select {
+					background-color: rgba(68, 68, 68, 0.87);
+					border: none;
+					color: white;
+					width: 90%;
+	
+					&:focus {
+						outline-color: $primary-accent;
+					}
+				}
+			}
+		}
+
+		.details-table-body {
+			overflow: auto;
+
+			.order-detail-row {
+				height: auto;
+				min-height: 3rem;
+				margin-top: .25rem;
+            border-bottom: 1px solid rgb(80, 80, 80);
+			}
+		}
+	}
+
+	.detail-approval-order, .detail-notes {
+		width: 15rem !important;
+	}
+
+	.detail-client, .detail-expedited, .detail-status-age, .detail-make, .detail-model, .detail-carrier {
+		width: 8rem !important;
+	}
+}
+
+.detail-loader {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
