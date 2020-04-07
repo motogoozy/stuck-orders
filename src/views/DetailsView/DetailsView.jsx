@@ -112,10 +112,14 @@ export default function DetailsView() {
 				<Link to='/'>
 					<i className="fas fa-arrow-left details-back-arrow"></i>
 				</Link>
-				<div className='details-view-header-right-container'>
-					<p>Reset</p>
-					<input type='text' placeholder='Search' />
-				</div>
+				{
+					orderData
+					&&
+					<div className='details-view-header-right-container'>
+						<p>Reset</p>
+						<input type='text' placeholder='Search' />
+					</div>
+				}
 			</div>
 			{
 				orderData
