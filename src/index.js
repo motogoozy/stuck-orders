@@ -13,6 +13,7 @@ ReactDOM.render(
          <Switch>
             <Route exact path='/' component={App} />
             <Route path='/details' component={DetailsView} />
+            <Route component={App} />
          </Switch>
       </Router>
    </React.StrictMode>,
