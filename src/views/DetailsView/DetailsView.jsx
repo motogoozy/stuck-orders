@@ -11,9 +11,25 @@ import Popover from 'react-bootstrap/Popover';
 
 export default function DetailsView() {
 	const [orderData, setOrderData] = useState('');
+	const [filterOptions, setFilterOptions] = useState({});
 
 	useEffect(() => {
 		getOrderData().then(data => {
+			if (data.stuck_orders.length > 0) {
+				let options = {client: [], expedited: [], order_status: []};
+				data.stuck_orders.forEach(order => {
+					if (!options.client.includes(order.client)) {
+						options.client.push(order.client);
+					}
+					if (!options.expedited.includes(order.expedited)) {
+						options.expedited.push(order.expedited);
+					}
+					if (!options.order_status.includes(order.order_status)) {
+						options.order_status.push(order.order_status);
+					}
+				})
+				setFilterOptions(options);
+			}
 			setOrderData(data);
 		});
 	}, []);
@@ -25,7 +41,25 @@ export default function DetailsView() {
 					<p className='detail-client'>{order.client}</p>
 					<p className='detail-expedited'>{order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
-					<p className='detail-status-change'>{order.status_change_business_age} {order.status_change_business_age > 1 ? 'hrs' : 'hr'}</p>
+					<OverlayTrigger
+						trigger={['hover', 'focus']}
+						placement="right"
+						overlay={
+							<Popover id='popover-basic'>
+								<Popover.Content>
+									<strong style={{ color: '#02818A' }}>Status Age</strong>
+									<br/>
+									<span>Business Hours: {order.status_change_business_age} hours</span>
+									<br/>
+									<span>Raw Hours: {order.status_change_raw_age} hours</span>
+									<br/>
+									<span>Timestamp: {formatDate(new Date(order.status_change_timestamp))}</span>
+								</Popover.Content>
+							</Popover>
+						}
+					>
+						<p className='detail-status-age'>{order.status_change_business_age} {order.status_change_business_age > 1 ? 'hrs' : 'hr'}</p>
+					</OverlayTrigger>
 					<OverlayTrigger
 						trigger={['hover', 'focus']}
 						placement="right"
@@ -106,6 +140,24 @@ export default function DetailsView() {
 	make: "Apple"
 	*/
 
+	const clientOptions = () => {
+		return filterOptions.client.map(option => (
+			<option key={option} value={option}>{option}</option>
+		))
+	};
+
+	const expeditedOptions = () => {
+		return filterOptions.expedited.map(option => (
+			<option key={option.toString()} value={option.toString()}>{option.toString()}</option>
+		))
+	};
+
+	const orderStatusOptions = () => {
+		return filterOptions.order_status.map(option => (
+			<option key={option} value={option}>{option}</option>
+		))
+	};
+
 	return (
 		<div className='details-view-main'>
 			<div className='details-view-header'>
@@ -113,7 +165,7 @@ export default function DetailsView() {
 					<i className="fas fa-arrow-left details-back-arrow"></i>
 				</Link>
 				{
-					orderData
+					orderData && filterOptions
 					&&
 					<div className='details-view-header-right-container'>
 						<p>Reset</p>
@@ -122,15 +174,15 @@ export default function DetailsView() {
 				}
 			</div>
 			{
-				orderData
+				orderData && filterOptions
 				?
 				<div className='details-table'>
 					<div className='details-table-header'>
 						<p className='detail-client'>Client</p>
 						<p className='detail-expedited'>Expedited</p>
 						<p className='detail-order-status'>Order Status</p>
-						<p className='detail-status-change'>Status Age</p>
-						<p className='detail-approval'>Approval / Order Age</p>
+						<p className='detail-status-age'>Status Age</p>
+						<p className='detail-approval-order'>Approval / Order Age</p>
 						<p className='detail-subscriber-name'>Subscriber Name</p>
 						<p className='detail-service-number'>Service Number</p>
 						<p className='detail-order-type'>Order Type</p>
@@ -140,18 +192,30 @@ export default function DetailsView() {
 						<p className='detail-notes'>Notes</p>
 					</div>
 					<div className='details-table-filter-row'>
-						<select className='detail-client' name="" id=""></select>
-						<select className='detail-expedited' name="" id=""></select>
-						<select className='detail-order-status' name="" id=""></select>
-						<select className='detail-status-change' name="" id=""></select>
-						<select className='detail-approval' name="" id=""></select>
-						<select className='detail-subscriber-name' name="" id=""></select>
-						<select className='detail-service-number' name="" id=""></select>
-						<select className='detail-order-type' name="" id=""></select>
-						<select className='detail-make' name="" id=""></select>
-						<select className='detail-model' name="" id=""></select>
-						<select className='detail-carrier' name="" id=""></select>
-						<select className='detail-notes' name="" id=""></select>
+						<div className='detail-client'>
+							<select name="" id="">
+								{ clientOptions() }
+							</select>
+						</div>
+						<div className='detail-expedited'>
+							<select name="" id="">
+								{ expeditedOptions() }
+							</select>
+						</div>
+						<div className='detail-order-status'>
+							<select name="" id="">
+								{ orderStatusOptions() }
+							</select>
+						</div>
+						<p className='detail-status-age'></p>
+						<p className='detail-approval-order'></p>
+						<p className='detail-subscriber-name'></p>
+						<p className='detail-service-number'></p>
+						<p className='detail-order-type'></p>
+						<p className='detail-make'></p>
+						<p className='detail-model'></p>
+						<p className='detail-carrier'></p>
+						<p className='detail-notes'></p>
 					</div>
 					<div className='details-table-body'>
 						{ displayRows() }
