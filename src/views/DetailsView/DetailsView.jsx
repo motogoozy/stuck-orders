@@ -117,7 +117,7 @@ export default function DetailsView() {
 					&&
 					<div className='details-view-header-right-container'>
 						<p>Reset</p>
-						<input type='text' placeholder='Search' />
+						<input type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
 			</div>
