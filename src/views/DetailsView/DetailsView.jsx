@@ -199,7 +199,7 @@ export default function DetailsView() {
 					<div className='details-table-filter-row'>
 						<div className='detail-client'>
 							<select name="" id="" value={filters.client} onChange={e => setFilters({ ...filters, client: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ clientOptions() }
 							</select>
@@ -207,14 +207,14 @@ export default function DetailsView() {
 						<p className='detail-order-number'></p>
 						<div className='detail-expedited'>
 							<select name="" id="" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ expeditedOptions() }
 							</select>
 						</div>
 						<div className='detail-order-status'>
 							<select name="" id="" value={filters.order_status} onChange={e => setFilters({ ...filters, order_status: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ orderStatusOptions() }
 							</select>
