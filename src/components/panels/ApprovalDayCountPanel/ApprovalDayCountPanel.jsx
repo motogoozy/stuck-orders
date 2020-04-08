@@ -1,9 +1,9 @@
 import React from 'react';
-import './DayCountPanel.scss';
+import './ApprovalDayCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
+export default function ApprovalDayCountPanel(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -21,18 +21,33 @@ export default function ClientCountPanel(props) {
 		}
 	};
 
+	const colors = {
+		'0': '#FFF7FB',
+		'1': '#E7E1EF',
+		'2': '#D0D1E6',
+		'3': '#A6BDDB',
+		'4': '#67A9CF',
+		'5': '#3690C0',
+		'6': '#02818A',
+		'7': '#016C59',
+		'8+': '#014636'
+	};
+
+	const getColors = bar => colors[bar.indexValue];
+
 	return (
-		<div className='dashboard-panel day-count-panel'>
-			<p className='panel-header'>Day Count</p>
+		<div className='dashboard-panel approval-day-count-panel'>
+			<p className='panel-header'>Approval Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					data={props.dayCount}
-					keys={[ 'count' ]}
+					data={props.approvalDayCount}
+					keys={[ 'Day' ]}
 					indexBy="day"
-					margin={{ top: 5, right: 55, bottom: 80, left: 55 }}
+					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={{ scheme: 'yellow_orange_red' }}
+					// colors={{ scheme: 'purple_blue_green' }}
+					colors={getColors}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}
@@ -43,7 +58,7 @@ export default function ClientCountPanel(props) {
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: -0,
-							legend: 'Days Back',
+							legend: 'Days',
 							legendPosition: 'middle',
 							legendOffset: 70,
 					}}
@@ -83,7 +98,7 @@ export default function ClientCountPanel(props) {
 					// 			]
 					// 		}
 					// ]}
-										// defs={[
+					// defs={[
 					// 	{
 					// 		id: 'lines',
 					// 		type: 'patternLines',

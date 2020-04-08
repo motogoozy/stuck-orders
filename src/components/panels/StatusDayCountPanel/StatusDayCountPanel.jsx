@@ -1,16 +1,15 @@
 import React from 'react';
-import './ClientCountPanel.scss';
+import './StatusDayCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
+export default function StatusDayCountPanel(props) {
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
-					fontSize: '.8rem',
-					letterSpacing: '.25px',
+					fontSize: '.9rem',
 				},
 			},
 			legend: {
@@ -22,20 +21,34 @@ export default function ClientCountPanel(props) {
 		}
 	};
 
+	const colors = {
+		'0': '#FFFFCC',
+		'1': '#FFEDA0',
+		'2': '#FED976',
+		'3': '#FEB24C',
+		'4': '#FD8D3D',
+		'5': '#FC4E2A',
+		'6': '#E31A1C',
+		'7': '#BD0026',
+		'8+': '#800026'
+	};
+
+	const getColors = bar => colors[bar.indexValue];
+
 	return (
-		<div className='dashboard-panel client-count-panel'>
-			<p className='panel-header'>Stuck Orders by Client</p>
+		<div className='dashboard-panel status-day-count-panel'>
+			<p className='panel-header'>Current Status Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					data={props.clientCount}
-					keys={[ 'Non-Expedited', 'Expedited' ]}
-					indexBy="client"
-					margin={{ top: 5, right: 125, bottom: 80, left: 50 }}
+					data={props.statusDayCount}
+					keys={[ 'Day' ]}
+					indexBy="day"
+					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={[ '#4393C3', '#D6604D' ]}
-					// colors={[ '#0dc6ab', '#a5368d' ]}
-					colorBy='id'
+					// colors={{ scheme: 'yellow_orange_red' }}
+					colors={getColors}
+					colorBy='index'
 					theme={theme}
 					enableGridX={false}
 					enableGridY={true}
@@ -44,8 +57,8 @@ export default function ClientCountPanel(props) {
 					axisBottom={{
 							tickSize: 5,
 							tickPadding: 5,
-							tickRotation: -30,
-							legend: 'Client',
+							tickRotation: -0,
+							legend: 'Days',
 							legendPosition: 'middle',
 							legendOffset: 70,
 					}}
@@ -59,32 +72,32 @@ export default function ClientCountPanel(props) {
 					}}
 					labelSkipWidth={12}
 					labelSkipHeight={12}
-					labelTextColor={'white'}
-					legends={[
-							{
-								dataFrom: 'keys',
-								anchor: 'bottom-right',
-								direction: 'column',
-								justify: false,
-								translateX: 120,
-								translateY: 0,
-								itemsSpacing: 2,
-								itemWidth: 100,
-								itemHeight: 20,
-								itemDirection: 'left-to-right',
-								itemOpacity: 0.85,
-								itemTextColor: 'white',
-								symbolSize: 20,
-								effects: [
-									{
-											on: 'hover',
-											style: {
-												itemOpacity: 1
-											}
-									}
-								]
-							}
-					]}
+					labelTextColor={'black'}
+					// legends={[
+					// 		{
+					// 			dataFrom: 'keys',
+					// 			anchor: 'bottom-right',
+					// 			direction: 'column',
+					// 			justify: false,
+					// 			translateX: 120,
+					// 			translateY: 0,
+					// 			itemsSpacing: 2,
+					// 			itemWidth: 100,
+					// 			itemHeight: 20,
+					// 			itemDirection: 'left-to-right',
+					// 			itemOpacity: 0.85,
+					// 			itemTextColor: 'white',
+					// 			symbolSize: 20,
+					// 			effects: [
+					// 				{
+					// 						on: 'hover',
+					// 						style: {
+					// 							itemOpacity: 1
+					// 						}
+					// 				}
+					// 			]
+					// 		}
+					// ]}
 					// defs={[
 					// 	{
 					// 		id: 'lines',
