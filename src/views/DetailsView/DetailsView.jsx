@@ -36,10 +36,6 @@ export default function DetailsView() {
 		});
 	}, []);
 
-	useEffect(() => {
-		console.log(filters)
-	}, [filters]);
-
 	const resetFilters = () => {
 		setSearch('')
 		setFilters({client: '', expedited: '', order_status: ''});

@@ -154,7 +154,6 @@ function App() {
    useEffect(() => {
       getOrderData().then(data => {
          setOrderData(data);
-         console.log(data.stuck_orders)
       });
    }, []);
 
