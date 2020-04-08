@@ -44,18 +44,18 @@ const getClientCount = (orderData) => {
 
 const getAlertCount = (orderData) => {
    /*
-      expedited_approval_alert
-      standard_approval_alert
-      pending_order_alert
-      expedited_aged_order_alert
-      standard_aged_order_alert
+   pending_order_alert
+   standard_aged_order_alert
+   expedited_aged_order_alert
+   standard_approval_alert
+   expedited_approval_alert
    */
    let alerts = {
-      expedited_approval_alert: {alertName: 'Exp. Approval', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approval', 'Count': 0},
       pending_order_alert: {alertName: 'Pending Order', 'Count': 0},
-      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', 'Count': 0},
       standard_aged_order_alert: {alertName: 'Std. Aged Order', 'Count': 0},
+      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approval', 'Count': 0},
+      expedited_approval_alert: {alertName: 'Exp. Approval', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -87,9 +87,9 @@ const getStatusDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
+         days['8+'] = {day: '8+', 'Day': 4};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
+         days[i.toString()] = {day: i.toString(), 'Day': 4};
       }
    }
 
@@ -117,9 +117,9 @@ const getApprovalDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
+         days['8+'] = {day: '8+', 'Day': 4};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
+         days[i.toString()] = {day: i.toString(), 'Day': 4};
       }
    }
 
@@ -154,7 +154,6 @@ function App() {
    useEffect(() => {
       getOrderData().then(data => {
          setOrderData(data);
-         console.log(data.stuck_orders)
       });
    }, []);
 
@@ -190,7 +189,7 @@ function App() {
          <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#3690C0'} />
+         <GridLoader size={12} loading={true} color={'#800026'} />
          </div>
          }
          
@@ -200,7 +199,7 @@ function App() {
          <StatusDayCountPanel statusDayCount={statusDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#800026'} />
+         <GridLoader size={12} loading={true} color={'#3690C0'} />
          </div>
          }
          

@@ -36,10 +36,6 @@ export default function DetailsView() {
 		});
 	}, []);
 
-	useEffect(() => {
-		console.log(filters)
-	}, [filters]);
-
 	const resetFilters = () => {
 		setSearch('')
 		setFilters({client: '', expedited: '', order_status: ''});
@@ -78,11 +74,13 @@ export default function DetailsView() {
 			})
 		}
 
+		const splitOrderNum = orderNum => orderNum.toString().split('-')[1];
 
 		return filteredOrders.map(order => {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
+					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
 					<p className='detail-expedited'>{order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
@@ -129,7 +127,6 @@ export default function DetailsView() {
 									<span>Raw Hours: {order.order_raw_age} hours</span>
 									<br/>
 									<span>Timestamp: {formatDate(new Date(order.order_timestamp))}</span>
-									
 								</Popover.Content>
 							</Popover>
 						}
@@ -177,7 +174,7 @@ export default function DetailsView() {
 					&&
 					<div className='details-view-header-right-container'>
 						<p onClick={resetFilters}>Reset</p>
-						<input onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
+						<input value={search} onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
 			</div>
@@ -187,6 +184,7 @@ export default function DetailsView() {
 				<div className='details-table'>
 					<div className='details-table-header'>
 						<p className='detail-client'>Client</p>
+						<p className='detail-order-number'>Order Number</p>
 						<p className='detail-expedited'>Expedited</p>
 						<p className='detail-order-status'>Order Status</p>
 						<p className='detail-status-age'>Status Age</p>
@@ -202,21 +200,22 @@ export default function DetailsView() {
 					<div className='details-table-filter-row'>
 						<div className='detail-client'>
 							<select name="" id="" value={filters.client} onChange={e => setFilters({ ...filters, client: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ clientOptions() }
 							</select>
 						</div>
+						<p className='detail-order-number'></p>
 						<div className='detail-expedited'>
 							<select name="" id="" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ expeditedOptions() }
 							</select>
 						</div>
 						<div className='detail-order-status'>
 							<select name="" id="" value={filters.order_status} onChange={e => setFilters({ ...filters, order_status: e.target.value })}>
-								<option value="" disabled defaultValue>-- Filter --</option>
+								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ orderStatusOptions() }
 							</select>

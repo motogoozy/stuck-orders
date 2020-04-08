@@ -21,6 +21,34 @@ export default function ApprovalDayCountPanel(props) {
 		}
 	};
 
+	// purple_blue_green
+	// const colors = {
+	// 	'0': '#FFF7FB',
+	// 	'1': '#E7E1EF',
+	// 	'2': '#D0D1E6',
+	// 	'3': '#A6BDDB',
+	// 	'4': '#67A9CF',
+	// 	'5': '#3690C0',
+	// 	'6': '#02818A',
+	// 	'7': '#016C59',
+	// 	'8+': '#014636'
+	// };
+
+	// greens
+	const colors = {
+		'0': '#F7FCF5',
+		'1': '#E5F5E0',
+		'2': '#C7E9C0',
+		'3': '#A1D99B',
+		'4': '#74C476',
+		'5': '#41AB5D',
+		'6': '#238B44',
+		'7': '#006D2C',
+		'8+': '#00441C'
+	};
+
+	const getColors = bar => colors[bar.indexValue];
+
 	return (
 		<div className='dashboard-panel approval-day-count-panel'>
 			<p className='panel-header'>Approval Age</p>
@@ -32,7 +60,8 @@ export default function ApprovalDayCountPanel(props) {
 					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={{ scheme: 'purple_blue_green' }}
+					// colors={{ scheme: 'purple_blue_green' }}
+					colors={getColors}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}
