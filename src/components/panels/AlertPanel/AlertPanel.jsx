@@ -22,11 +22,11 @@ export default function AlertPanel(props) {
 	};
 
 	const colors = {
-		'Exp. Approval': '#FDBB84',
-		'Std. Approval': '#FC8D59',
-		'Pending Order': '#EF6548',
-		'Exp. Aged Order': '#D73020',
-		'Std. Aged Order': '#B30000',
+		'Pending Order': '#FDBB84',
+		'Std. Aged Order': '#FC8D59',
+		'Exp. Aged Order': '#EF6548',
+		'Std. Approval': '#D73020',
+		'Exp. Approval': '#B30000',
 	};
 
 	const getColors = bar => colors[bar.indexValue];

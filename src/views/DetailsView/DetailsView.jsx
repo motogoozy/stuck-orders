@@ -80,7 +80,7 @@ export default function DetailsView() {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
-					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} className='detail-order-number'>{order.order_number}</a>
+					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
 					<p className='detail-expedited'>{order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
@@ -174,7 +174,7 @@ export default function DetailsView() {
 					&&
 					<div className='details-view-header-right-container'>
 						<p onClick={resetFilters}>Reset</p>
-						<input onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
+						<input value={search} onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
 			</div>
