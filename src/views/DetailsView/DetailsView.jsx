@@ -83,6 +83,7 @@ export default function DetailsView() {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
+					<p className='detail-order-number'>{order.order_number}</p>
 					<p className='detail-expedited'>{order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
@@ -187,6 +188,7 @@ export default function DetailsView() {
 				<div className='details-table'>
 					<div className='details-table-header'>
 						<p className='detail-client'>Client</p>
+						<p className='detail-order-number'>Order Number</p>
 						<p className='detail-expedited'>Expedited</p>
 						<p className='detail-order-status'>Order Status</p>
 						<p className='detail-status-age'>Status Age</p>
@@ -207,6 +209,7 @@ export default function DetailsView() {
 								{ clientOptions() }
 							</select>
 						</div>
+						<p className='detail-order-number'></p>
 						<div className='detail-expedited'>
 							<select name="" id="" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
 								<option value="" disabled defaultValue>-- Filter --</option>
