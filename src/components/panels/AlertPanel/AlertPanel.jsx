@@ -21,6 +21,16 @@ export default function AlertPanel(props) {
 		}
 	};
 
+	const colors = {
+		'Exp. Approval': '#FDBB84',
+		'Std. Approval': '#FC8D59',
+		'Pending Order': '#EF6548',
+		'Exp. Aged Order': '#D73020',
+		'Std. Aged Order': '#B30000',
+	};
+
+	const getColors = bar => colors[bar.indexValue];
+
 	return (
 		<div className='dashboard-panel status-day-count-panel'>
 			<p className='panel-header'>Alerts</p>
@@ -32,7 +42,8 @@ export default function AlertPanel(props) {
 					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+					// colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+					colors={getColors}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}

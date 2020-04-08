@@ -74,12 +74,13 @@ export default function DetailsView() {
 			})
 		}
 
+		const splitOrderNum = orderNum => orderNum.toString().split('-')[1];
 
 		return filteredOrders.map(order => {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
-					<p className='detail-order-number'>{order.order_number}</p>
+					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} className='detail-order-number'>{order.order_number}</a>
 					<p className='detail-expedited'>{order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger

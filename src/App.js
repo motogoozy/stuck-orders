@@ -87,9 +87,9 @@ const getStatusDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
+         days['8+'] = {day: '8+', 'Day': 4};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
+         days[i.toString()] = {day: i.toString(), 'Day': 4};
       }
    }
 
@@ -117,9 +117,9 @@ const getApprovalDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
+         days['8+'] = {day: '8+', 'Day': 4};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
+         days[i.toString()] = {day: i.toString(), 'Day': 4};
       }
    }
 
@@ -189,7 +189,7 @@ function App() {
          <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#3690C0'} />
+         <GridLoader size={12} loading={true} color={'#800026'} />
          </div>
          }
          
@@ -199,7 +199,7 @@ function App() {
          <StatusDayCountPanel statusDayCount={statusDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#800026'} />
+         <GridLoader size={12} loading={true} color={'#3690C0'} />
          </div>
          }
          
