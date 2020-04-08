@@ -130,7 +130,6 @@ export default function DetailsView() {
 									<span>Raw Hours: {order.order_raw_age} hours</span>
 									<br/>
 									<span>Timestamp: {formatDate(new Date(order.order_timestamp))}</span>
-									
 								</Popover.Content>
 							</Popover>
 						}

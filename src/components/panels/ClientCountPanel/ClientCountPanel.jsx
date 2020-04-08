@@ -33,7 +33,6 @@ export default function ClientCountPanel(props) {
 					margin={{ top: 5, right: 125, bottom: 80, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					// colors={{ scheme: 'spectral' }}
 					colors={[ '#4393C3', '#D6604D' ]}
 					// colors={[ '#0dc6ab', '#a5368d' ]}
 					colorBy='id'
