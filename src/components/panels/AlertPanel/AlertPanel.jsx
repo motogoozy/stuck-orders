@@ -35,7 +35,7 @@ export default function AlertPanel(props) {
 	const getColors = bar => colors[bar.indexValue];
 
 	return (
-		<div className='dashboard-panel status-day-count-panel'>
+		<div className='dashboard-panel alert-panel'>
 			<p className='panel-header'>Alerts</p>
 			<div className='chart-container'>
 				<ResponsiveBar
