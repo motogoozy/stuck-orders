@@ -102,11 +102,6 @@
 		word-wrap: break-word;
 		overflow: hidden;
 
-		p:hover {
-			cursor: pointer;
-			text-decoration: underline;
-		}
-
 		.details-table-header, .details-table-filter-row, .details-table-body, .order-detail-row {
 			width: 100%;
 		}
@@ -121,6 +116,11 @@
 		.details-table-header {
          padding-bottom: .25rem;
 			border-bottom: 1px solid white;
+
+			p:hover {
+				text-decoration: underline;
+				cursor: pointer;
+			}
 		}
 
 		.details-table-header > p, .details-table-filter-row > div, .details-table-filter-row > p, .order-detail-row > p, .order-detail-row > a {

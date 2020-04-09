@@ -51,7 +51,7 @@ export default function DetailsView(props) {
 	}, [props.match.params.alert]);
 
 	const resetFilters = () => {
-		setSearch('')
+		setSearch('');
 		setFilters({client: '', expedited: '', order_status: '', alert: ''});
 	};
 
