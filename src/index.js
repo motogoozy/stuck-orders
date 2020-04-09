@@ -12,7 +12,7 @@ ReactDOM.render(
       <Router>
          <Switch>
             <Route exact path='/' component={App} />
-            <Route path='/details' component={DetailsView} />
+            <Route path='/details/:alert?' component={DetailsView} />
             <Route component={App} />
          </Switch>
       </Router>
