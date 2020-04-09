@@ -43,19 +43,12 @@ const getClientCount = (orderData) => {
 };
 
 const getAlertCount = (orderData) => {
-   /*
-      expedited_approval_alert
-      standard_approval_alert
-      pending_order_alert
-      expedited_aged_order_alert
-      standard_aged_order_alert
-   */
    let alerts = {
-      expedited_approval_alert: {alertName: 'Exp. Approval', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approval', 'Count': 0},
-      pending_order_alert: {alertName: 'Pending Order', 'Count': 0},
-      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', 'Count': 0},
-      standard_aged_order_alert: {alertName: 'Std. Aged Order', 'Count': 0},
+      pending_order_alert: {alertName: 'Pending Order', dbName: 'pending_order_alert', 'Count': 0},
+      standard_aged_order_alert: {alertName: 'Std. Aged Order', dbName: 'standard_aged_order_alert', 'Count': 0},
+      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', dbName: 'expedited_aged_order_alert', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approval', dbName: 'standard_approval_alert', 'Count': 0},
+      expedited_approval_alert: {alertName: 'Exp. Approval', dbName: 'expedited_approval_alert', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -154,7 +147,6 @@ function App() {
    useEffect(() => {
       getOrderData().then(data => {
          setOrderData(data);
-         console.log(data.stuck_orders)
       });
    }, []);
 
@@ -190,7 +182,7 @@ function App() {
          <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#3690C0'} />
+         <GridLoader size={12} loading={true} color={'#800026'} />
          </div>
          }
          
@@ -200,7 +192,7 @@ function App() {
          <StatusDayCountPanel statusDayCount={statusDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#800026'} />
+         <GridLoader size={12} loading={true} color={'#3690C0'} />
          </div>
          }
          

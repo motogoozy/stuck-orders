@@ -21,16 +21,30 @@ export default function ApprovalDayCountPanel(props) {
 		}
 	};
 
+	// purple_blue_green
+	// const colors = {
+	// 	'0': '#FFF7FB',
+	// 	'1': '#E7E1EF',
+	// 	'2': '#D0D1E6',
+	// 	'3': '#A6BDDB',
+	// 	'4': '#67A9CF',
+	// 	'5': '#3690C0',
+	// 	'6': '#02818A',
+	// 	'7': '#016C59',
+	// 	'8+': '#014636'
+	// };
+
+	// greens
 	const colors = {
-		'0': '#FFF7FB',
-		'1': '#E7E1EF',
-		'2': '#D0D1E6',
-		'3': '#A6BDDB',
-		'4': '#67A9CF',
-		'5': '#3690C0',
-		'6': '#02818A',
-		'7': '#016C59',
-		'8+': '#014636'
+		'0': '#F7FCF5',
+		'1': '#E5F5E0',
+		'2': '#C7E9C0',
+		'3': '#A1D99B',
+		'4': '#74C476',
+		'5': '#41AB5D',
+		'6': '#238B44',
+		'7': '#006D2C',
+		'8+': '#00441C'
 	};
 
 	const getColors = bar => colors[bar.indexValue];
@@ -73,54 +87,6 @@ export default function ApprovalDayCountPanel(props) {
 					labelSkipWidth={12}
 					labelSkipHeight={12}
 					labelTextColor={'black'}
-					// legends={[
-					// 		{
-					// 			dataFrom: 'keys',
-					// 			anchor: 'bottom-right',
-					// 			direction: 'column',
-					// 			justify: false,
-					// 			translateX: 120,
-					// 			translateY: 0,
-					// 			itemsSpacing: 2,
-					// 			itemWidth: 100,
-					// 			itemHeight: 20,
-					// 			itemDirection: 'left-to-right',
-					// 			itemOpacity: 0.85,
-					// 			itemTextColor: 'white',
-					// 			symbolSize: 20,
-					// 			effects: [
-					// 				{
-					// 						on: 'hover',
-					// 						style: {
-					// 							itemOpacity: 1
-					// 						}
-					// 				}
-					// 			]
-					// 		}
-					// ]}
-					// defs={[
-					// 	{
-					// 		id: 'lines',
-					// 		type: 'patternLines',
-					// 		background: 'white',
-					// 		color: 'inherit',
-					// 		rotation: -45,
-					// 		lineWidth: 7,
-					// 		spacing: 8,
-					// 	},
-					// 	linearGradientDef('gradientA', [
-					// 		{ offset: 0, color: 'inherit' },
-					// 		{ offset: 0, color: 'inherit', opacity: .75}
-					// 	])
-					// ]}
-					// fill={[
-					// 	{
-					// 		match: {
-					// 			id: 'Non-Expedited'
-					// 		},
-					// 		id: 'gradientA'
-					// 	}
-					// ]}
 					animate={true}
 					motionStiffness={90}
 					motionDamping={15}

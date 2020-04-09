@@ -12,6 +12,17 @@
 	padding: 1rem;
 	overflow: hidden;
 
+	select {
+		background-color: rgba(68, 68, 68, 0.87);
+		border: none;
+		color: white;
+		width: 90%;
+
+		&:focus {
+			outline-color: $primary-accent;
+		}
+	}
+
 	.details-view-header {
 		width: 100%;
 		display: flex;
@@ -25,8 +36,16 @@
 			justify-content: center;
 			align-items: center;
 
+			.alert-filter-container {
+				width: 10rem;
+			}
+
+			select, input {
+				margin: 0 0 0 1rem;
+			}
+
 			p {
-				margin: 0 1rem;
+				margin: 0;
 				transition: color .15s;
 
 				&:hover {
@@ -83,6 +102,11 @@
 		word-wrap: break-word;
 		overflow: hidden;
 
+		p:hover {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+
 		.details-table-header, .details-table-filter-row, .details-table-body, .order-detail-row {
 			width: 100%;
 		}
@@ -99,11 +123,12 @@
 			border-bottom: 1px solid white;
 		}
 
-		.details-table-header > p, .details-table-filter-row > div, .details-table-filter-row > p, .order-detail-row > p {
+		.details-table-header > p, .details-table-filter-row > div, .details-table-filter-row > p, .order-detail-row > p, .order-detail-row > a {
 			width: 12rem;
 			margin: 0 .25rem;
 			overflow: hidden;
 		}
+
 
 		.details-table-filter-row {
 			div {
@@ -112,17 +137,6 @@
 				flex-direction: row;
 				justify-content: center;
 				align-items: center;
-				
-				select {
-					background-color: rgba(68, 68, 68, 0.87);
-					border: none;
-					color: white;
-					width: 90%;
-	
-					&:focus {
-						outline-color: $primary-accent;
-					}
-				}
 			}
 		}
 
@@ -133,7 +147,16 @@
 				height: auto;
 				min-height: 3rem;
 				margin-top: .25rem;
-            border-bottom: 1px solid rgb(80, 80, 80);
+				border-bottom: 1px solid rgb(80, 80, 80);
+				
+				a {
+					color: white;
+					text-decoration: underline;
+
+					&:hover {
+						color: $primary-accent;
+					}
+				}
 			}
 		}
 	}
@@ -142,7 +165,7 @@
 		width: 15rem !important;
 	}
 
-	.detail-client, .detail-expedited, .detail-status-age, .detail-make, .detail-model, .detail-carrier {
+	.detail-client, .detail-expedited, .detail-status-age, .detail-carrier {
 		width: 8rem !important;
 	}
 }

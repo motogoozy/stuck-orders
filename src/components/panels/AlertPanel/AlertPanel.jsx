@@ -2,8 +2,11 @@ import React from 'react';
 import './AlertPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
+import { useHistory } from 'react-router-dom';
 
 export default function AlertPanel(props) {
+	const history = useHistory();
+
 	const theme = {
 		axis: {
 			ticks: {
@@ -20,19 +23,31 @@ export default function AlertPanel(props) {
 			},
 		}
 	};
+		
+	const colors = {
+		'Pending Order': '#FDBB84',
+		'Std. Aged Order': '#FC8D59',
+		'Exp. Aged Order': '#EF6548',
+		'Std. Approval': '#D73020',
+		'Exp. Approval': '#B30000',
+	};
+
+	const getColors = bar => colors[bar.indexValue];
 
 	return (
 		<div className='dashboard-panel status-day-count-panel'>
 			<p className='panel-header'>Alerts</p>
 			<div className='chart-container'>
 				<ResponsiveBar
+					onClick={event => history.push(`/details/${event.data.dbName}`)}
 					data={props.alertCount}
 					keys={[ 'Count' ]}
 					indexBy="alertName"
 					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 					padding={0.3}
 					layout="vertical"
-					colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+					// colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+					colors={getColors}
 					colorBy='index'
 					theme={theme}
 					enableGridX={false}
@@ -58,54 +73,6 @@ export default function AlertPanel(props) {
 					labelSkipWidth={12}
 					labelSkipHeight={12}
 					labelTextColor={'black'}
-					// legends={[
-					// 		{
-					// 			dataFrom: 'keys',
-					// 			anchor: 'bottom-right',
-					// 			direction: 'column',
-					// 			justify: false,
-					// 			translateX: 120,
-					// 			translateY: 0,
-					// 			itemsSpacing: 2,
-					// 			itemWidth: 100,
-					// 			itemHeight: 20,
-					// 			itemDirection: 'left-to-right',
-					// 			itemOpacity: 0.85,
-					// 			itemTextColor: 'white',
-					// 			symbolSize: 20,
-					// 			effects: [
-					// 				{
-					// 						on: 'hover',
-					// 						style: {
-					// 							itemOpacity: 1
-					// 						}
-					// 				}
-					// 			]
-					// 		}
-					// ]}
-					// defs={[
-					// 	{
-					// 		id: 'lines',
-					// 		type: 'patternLines',
-					// 		background: 'white',
-					// 		color: 'inherit',
-					// 		rotation: -45,
-					// 		lineWidth: 7,
-					// 		spacing: 8,
-					// 	},
-					// 	linearGradientDef('gradientA', [
-					// 		{ offset: 0, color: 'inherit' },
-					// 		{ offset: 0, color: 'inherit', opacity: .75}
-					// 	])
-					// ]}
-					// fill={[
-					// 	{
-					// 		match: {
-					// 			id: 'Non-Expedited'
-					// 		},
-					// 		id: 'gradientA'
-					// 	}
-					// ]}
 					animate={true}
 					motionStiffness={90}
 					motionDamping={15}
