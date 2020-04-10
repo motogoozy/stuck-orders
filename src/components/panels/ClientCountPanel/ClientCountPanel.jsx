@@ -85,29 +85,6 @@ export default function ClientCountPanel(props) {
 								]
 							}
 					]}
-					// defs={[
-					// 	{
-					// 		id: 'lines',
-					// 		type: 'patternLines',
-					// 		background: 'white',
-					// 		color: 'inherit',
-					// 		rotation: -45,
-					// 		lineWidth: 7,
-					// 		spacing: 8,
-					// 	},
-					// 	linearGradientDef('gradientA', [
-					// 		{ offset: 0, color: 'inherit' },
-					// 		{ offset: 0, color: 'inherit', opacity: .75}
-					// 	])
-					// ]}
-					// fill={[
-					// 	{
-					// 		match: {
-					// 			id: 'Non-Expedited'
-					// 		},
-					// 		id: 'gradientA'
-					// 	}
-					// ]}
 					animate={true}
 					motionStiffness={90}
 					motionDamping={15}

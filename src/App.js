@@ -43,19 +43,12 @@ const getClientCount = (orderData) => {
 };
 
 const getAlertCount = (orderData) => {
-   /*
-   pending_order_alert
-   standard_aged_order_alert
-   expedited_aged_order_alert
-   standard_approval_alert
-   expedited_approval_alert
-   */
    let alerts = {
-      pending_order_alert: {alertName: 'Pending Order', 'Count': 0},
-      standard_aged_order_alert: {alertName: 'Std. Aged Order', 'Count': 0},
-      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approval', 'Count': 0},
-      expedited_approval_alert: {alertName: 'Exp. Approval', 'Count': 0},
+      pending_order_alert: {alertName: 'Pending Order', dbName: 'pending_order_alert', 'Count': 0},
+      standard_aged_order_alert: {alertName: 'Std. Aged Order', dbName: 'standard_aged_order_alert', 'Count': 0},
+      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', dbName: 'expedited_aged_order_alert', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approval', dbName: 'standard_approval_alert', 'Count': 0},
+      expedited_approval_alert: {alertName: 'Exp. Approval', dbName: 'expedited_approval_alert', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -87,9 +80,9 @@ const getStatusDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 4};
+         days['8+'] = {day: '8+', 'Day': 0};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 4};
+         days[i.toString()] = {day: i.toString(), 'Day': 0};
       }
    }
 
@@ -117,9 +110,9 @@ const getApprovalDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 4};
+         days['8+'] = {day: '8+', 'Day': 0};
       } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 4};
+         days[i.toString()] = {day: i.toString(), 'Day': 0};
       }
    }
 

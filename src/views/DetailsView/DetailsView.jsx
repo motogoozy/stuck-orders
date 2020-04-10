@@ -9,11 +9,12 @@ import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
-export default function DetailsView() {
+export default function DetailsView(props) {
 	const [orderData, setOrderData] = useState('');
 	const [filterOptions, setFilterOptions] = useState({});
 	const [search, setSearch] = useState('');
-	const [filters, setFilters] = useState({client: '', expedited: '', order_status: ''});
+	const [filters, setFilters] = useState({client: '', expedited: '', order_status: '', alert: ''});
+	const [sort, setSort] = useState({ sortBy: '', descending: true });
 
 	useEffect(() => {
 		getOrderData().then(data => {
@@ -36,15 +37,38 @@ export default function DetailsView() {
 		});
 	}, []);
 
+	useEffect(() => {
+		const alerts = [
+			'pending_order_alert',
+			'standard_aged_order_alert',
+			'expedited_aged_order_alert',
+			'standard_approval_alert',
+			'expedited_approval_alert'
+		];
+		if (alerts.includes(props.match.params.alert)) {
+			setFilters({client: '', expedited: '', order_status: '', alert: props.match.params.alert});
+		}
+	}, [props.match.params.alert]);
+
 	const resetFilters = () => {
-		setSearch('')
-		setFilters({client: '', expedited: '', order_status: ''});
+		setSearch('');
+		setFilters({client: '', expedited: '', order_status: '', alert: ''});
+	};
+
+	const handleSort = (sortBy) => {
+		let descending = true;
+		// if user has already sorted by this property before, reverse the sort order
+		if (sortBy === sort.sortBy) {
+			descending = !sort.descending;
+		}
+		
+		setSort({ sortBy: sortBy, descending: descending });
 	};
 
 	const displayRows = () => {
 		let filteredOrders = orderData.stuck_orders;
 		
-		if (filters.client || filters.expedited || filters.order_status) {
+		if (filters.client || filters.expedited || filters.order_status || filters.alert) {
 			filteredOrders = filteredOrders.filter(order => {
 				let match = true;
 				if (filters.client && filters.client !== order.client) {
@@ -54,6 +78,9 @@ export default function DetailsView() {
 					match = false;
 				}
 				if (filters.order_status && filters.order_status !== order.order_status) {
+					match = false;
+				}
+				if (filters.alert && !order[filters.alert]) {
 					match = false;
 				}
 				return match;
@@ -71,6 +98,20 @@ export default function DetailsView() {
 					match = true;
 				}
 				return match;
+			})
+		}
+
+		if (sort.sortBy) {
+			filteredOrders = filteredOrders.sort((a, b) => {
+				if (sort.descending) {
+					if (a[sort.sortBy] < b[sort.sortBy]) return -1;
+					if (a[sort.sortBy] > b[sort.sortBy])  return 1;
+					return 0;
+				} else {
+					if (a[sort.sortBy] > b[sort.sortBy]) return -1;
+					if (a[sort.sortBy] < b[sort.sortBy])  return 1;
+					return 0;
+				}
 			})
 		}
 
@@ -136,8 +177,7 @@ export default function DetailsView() {
 					<p className='detail-subscriber-name'>{order.subscriber_name}</p>
 					<p className='detail-service-number'>{order.service_number}</p>
 					<p className='detail-order-type'>{order.order_type}</p>
-					<p className='detail-make'>{order.make}</p>
-					<p className='detail-model'>{order.model}</p>
+					<p className='detail-make-model'>{order.make} - {order.model}</p>
 					<p className='detail-carrier'>{order.carrier}</p>
 					<p className='detail-notes'>{order.notes}</p>
 				</div>
@@ -174,6 +214,17 @@ export default function DetailsView() {
 					&&
 					<div className='details-view-header-right-container'>
 						<p onClick={resetFilters}>Reset</p>
+						<div className='alert-filter-container'>
+							<select name="alert-filter" id="alert-filter" value={filters.alert} onChange={e => setFilters({ ...filters, alert: e.target.value })}>
+								<option value="" disabled defaultValue>Filter Alert</option>
+								<option value="">(none)</option>
+								<option value="pending_order_alert">Pending Order</option>
+								<option value="standard_aged_order_alert">Standard Aged Order</option>
+								<option value="expedited_aged_order_alert">Expedited Aged Order</option>
+								<option value="standard_approval_alert">Standard Approval</option>
+								<option value="expedited_approval_alert">Expedited Approval</option>
+							</select>
+						</div>
 						<input value={search} onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
@@ -183,23 +234,22 @@ export default function DetailsView() {
 				?
 				<div className='details-table'>
 					<div className='details-table-header'>
-						<p className='detail-client'>Client</p>
-						<p className='detail-order-number'>Order Number</p>
-						<p className='detail-expedited'>Expedited</p>
-						<p className='detail-order-status'>Order Status</p>
-						<p className='detail-status-age'>Status Age</p>
-						<p className='detail-approval-order'>Approval / Order Age</p>
-						<p className='detail-subscriber-name'>Subscriber Name</p>
-						<p className='detail-service-number'>Service Number</p>
-						<p className='detail-order-type'>Order Type</p>
-						<p className='detail-make'>Make</p>
-						<p className='detail-model'>Model</p>
-						<p className='detail-carrier'>Carrier</p>
-						<p className='detail-notes'>Notes</p>
+						<p onClick={() => handleSort('client')} className='detail-client'>Client</p>
+						<p onClick={() => handleSort('order_number')} className='detail-order-number'>Order Number</p>
+						<p onClick={() => handleSort('expedited')} className='detail-expedited'>Expedited</p>
+						<p onClick={() => handleSort('order_status')} className='detail-order-status'>Order Status</p>
+						<p onClick={() => handleSort('status_change_business_age')} className='detail-status-age'>Status Age</p>
+						<p onClick={() => handleSort('approval_business_age')} className='detail-approval-order'>Approval / Order Age</p>
+						<p onClick={() => handleSort('subscriber_name')} className='detail-subscriber-name'>Subscriber Name</p>
+						<p onClick={() => handleSort('service_number')} className='detail-service-number'>Service Number</p>
+						<p onClick={() => handleSort('order_type')} className='detail-order-type'>Order Type</p>
+						<p onClick={() => handleSort('make')} className='detail-make-model'>Make / Model</p>
+						<p onClick={() => handleSort('carrier')} className='detail-carrier'>Carrier</p>
+						<p onClick={() => handleSort('notes')} className='detail-notes'>Notes</p>
 					</div>
 					<div className='details-table-filter-row'>
 						<div className='detail-client'>
-							<select name="" id="" value={filters.client} onChange={e => setFilters({ ...filters, client: e.target.value })}>
+							<select name="client-filter" id="client-filter" value={filters.client} onChange={e => setFilters({ ...filters, client: e.target.value })}>
 								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ clientOptions() }
@@ -207,14 +257,14 @@ export default function DetailsView() {
 						</div>
 						<p className='detail-order-number'></p>
 						<div className='detail-expedited'>
-							<select name="" id="" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
+							<select name="expedited-filter" id="expedited-filter" value={filters.expedited} onChange={e => setFilters({ ...filters, expedited: e.target.value })}>
 								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ expeditedOptions() }
 							</select>
 						</div>
 						<div className='detail-order-status'>
-							<select name="" id="" value={filters.order_status} onChange={e => setFilters({ ...filters, order_status: e.target.value })}>
+							<select name="order-status-filter" id="order-status-filter" value={filters.order_status} onChange={e => setFilters({ ...filters, order_status: e.target.value })}>
 								<option value="" disabled defaultValue>Filter</option>
 								<option value="">(none)</option>
 								{ orderStatusOptions() }
@@ -225,8 +275,7 @@ export default function DetailsView() {
 						<p className='detail-subscriber-name'></p>
 						<p className='detail-service-number'></p>
 						<p className='detail-order-type'></p>
-						<p className='detail-make'></p>
-						<p className='detail-model'></p>
+						<p className='detail-make-model'></p>
 						<p className='detail-carrier'></p>
 						<p className='detail-notes'></p>
 					</div>
