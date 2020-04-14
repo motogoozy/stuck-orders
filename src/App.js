@@ -13,7 +13,8 @@ import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
 export const getOrderData = async () => {
    try {
-      return axios.get('/api/stuck_orders').then(res => res.data);
+      let res = await axios.get('/api/stuck_orders');
+      return res.data;
    } catch (err) {
       console.log(err);
    }
