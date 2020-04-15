@@ -173,7 +173,7 @@ function App() {
          <ClientCountPanel clientCount={clientCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#A5368D'} />
+            <GridLoader size={12} loading={true} color={'#A5368D'} />
          </div>
          }
          
@@ -183,7 +183,7 @@ function App() {
          <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#800026'} />
+            <GridLoader size={12} loading={true} color={'#800026'} />
          </div>
          }
          
@@ -193,7 +193,7 @@ function App() {
          <StatusDayCountPanel statusDayCount={statusDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#3690C0'} />
+            <GridLoader size={12} loading={true} color={'#3690C0'} />
          </div>
          }
          
@@ -203,7 +203,7 @@ function App() {
          <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#016C59'} />
+            <GridLoader size={12} loading={true} color={'#016C59'} />
          </div>
          }
          <Link to='/details'>
