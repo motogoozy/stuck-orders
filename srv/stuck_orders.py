@@ -87,7 +87,7 @@ class StuckOrders(object):
                         column('carrier'),
                         column('notes'),
                         ]
-        self.select = select(self.columns).select_from(func.stuck_orders())
+        self.select = select(self.columns).select_from(func.legacy_stuck_orders())
         
     def on_get(self, req, resp):
         def converter(thing):

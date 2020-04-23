@@ -249,9 +249,38 @@ ALTER FUNCTION public.refresh_client_dbs() OWNER TO ms;
 -- Name: stuck_orders(); Type: FUNCTION; Schema: public; Owner: ms
 --
 
-CREATE FUNCTION stuck_orders() RETURNS TABLE(client text, client_db_name text, order_number text, expedited boolean, order_status text, status_change_timestamp timestamp with time zone, status_change_business_age integer, status_change_raw_age integer, approval_timestamp timestamp with time zone, approval_business_age integer, approval_raw_age integer, order_timestamp timestamp with time zone, order_business_age integer, order_raw_age integer, report_timestamp timestamp with time zone, expedited_approval_alert boolean, standard_approval_alert boolean, pending_order_alert boolean, expedited_aged_order_alert boolean, standard_aged_order_alert boolean, service_number text, device_type text, order_type text, make text, model text, subscriber_name text, carrier text, notes text)
-    LANGUAGE plproxy
-    AS $$
+create function legacy_stuck_orders()
+returns table( client text
+             , client_db_name text
+             , order_number text
+             , expedited boolean
+             , order_status text
+             , status_change_timestamp timestamp with time zone
+             , status_change_business_age integer
+             , status_change_raw_age integer
+             , approval_timestamp timestamp with time zone
+             , approval_business_age integer
+             , approval_raw_age integer
+             , order_timestamp timestamp with time zone
+             , order_business_age integer
+             , order_raw_age integer
+             , report_timestamp timestamp with time zone
+             , expedited_approval_alert boolean
+             , standard_approval_alert boolean
+             , pending_order_alert boolean
+             , expedited_aged_order_alert boolean
+             , standard_aged_order_alert boolean
+             , service_number text
+             , device_type text
+             , order_type text
+             , make text
+             , model text
+             , subscriber_name text
+             , carrier text
+             , notes text
+             )
+language plproxy
+as $$
     cluster 'active';
     run on all;
     select client
@@ -282,11 +311,12 @@ CREATE FUNCTION stuck_orders() RETURNS TABLE(client text, client_db_name text, o
          , subscriber_name
          , carrier
          , notes
-      from stuck_orders;
-$$;
+      from legacy_stuck_orders;
+$$
+;
 
-
-ALTER FUNCTION public.stuck_orders() OWNER TO ms;
+alter function public.legacy_stuck_orders() owner to ms
+;
 
 SET search_path = plproxy, pg_catalog;
 
