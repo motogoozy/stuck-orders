@@ -249,7 +249,7 @@ ALTER FUNCTION public.refresh_client_dbs() OWNER TO ms;
 -- Name: stuck_orders(); Type: FUNCTION; Schema: public; Owner: ms
 --
 
-create function stuck_orders()
+create or replace function stuck_orders()
 returns table( client text
              , client_db_name text
              , order_number text
