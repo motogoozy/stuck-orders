@@ -315,7 +315,71 @@ as $$
 $$
 ;
 
-alter function public.legacy_stuck_orders() owner to ms
+create function stuck_orders()
+returns table( client text
+             , client_db_name text
+             , order_number text
+             , expedited boolean
+             , order_status text
+             , status_change_timestamp timestamp with time zone
+             , status_change_business_age integer
+             , status_change_raw_age integer
+             , approval_timestamp timestamp with time zone
+             , approval_business_age integer
+             , approval_raw_age integer
+             , order_timestamp timestamp with time zone
+             , order_business_age integer
+             , order_raw_age integer
+             , report_timestamp timestamp with time zone
+             , expedited_approval_alert boolean
+             , standard_approval_alert boolean
+             , aged_order_gte_72_lt_96_alert boolean
+             , aged_order_gte_96_alert boolean
+             , service_number text
+             , device_type text
+             , order_type text
+             , make text
+             , model text
+             , subscriber_name text
+             , carrier text
+             , notes text
+             )
+language plproxy
+as $$
+    cluster 'active';
+    run on all;
+    select client
+         , client_db_name
+         , order_number
+         , expedited
+         , order_status
+         , status_change_timestamp
+         , status_change_business_age
+         , status_change_raw_age
+         , approval_timestamp
+         , approval_business_age
+         , approval_raw_age
+         , order_timestamp
+         , order_business_age
+         , order_raw_age
+         , report_timestamp
+         , expedited_approval_alert
+         , standard_approval_alert
+         , aged_order_gte_72_lt_96_alert
+         , aged_order_gte_96_alert
+         , service_number
+         , device_type
+         , order_type
+         , make
+         , model
+         , subscriber_name
+         , carrier
+         , notes
+      from stuck_orders;
+$$
+;
+
+alter function public.stuck_orders() owner to ms
 ;
 
 SET search_path = plproxy, pg_catalog;
