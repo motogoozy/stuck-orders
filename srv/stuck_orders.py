@@ -75,9 +75,8 @@ class StuckOrders(object):
                         column('report_timestamp'),
                         column('expedited_approval_alert'),
                         column('standard_approval_alert'),
-                        column('pending_order_alert'),
-                        column('expedited_aged_order_alert'),
-                        column('standard_aged_order_alert'),
+                        column('aged_order_gte_72_lt_96_alert'),
+                        column('aged_order_gte_96_alert'),
                         column('service_number'),
                         column('device_type'),
                         column('order_type'),
@@ -87,7 +86,7 @@ class StuckOrders(object):
                         column('carrier'),
                         column('notes'),
                         ]
-        self.select = select(self.columns).select_from(func.legacy_stuck_orders())
+        self.select = select(self.columns).select_from(func.stuck_orders())
         
     def on_get(self, req, resp):
         def converter(thing):
