@@ -1,5 +1,7 @@
 .alert-panel {
-   rect:hover {
-      cursor: pointer;
+   div > div > div > svg > g > g:nth-child(4) > g > rect {
+      &:hover {
+         cursor: pointer;
+      }
    }
 }

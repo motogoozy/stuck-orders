@@ -1,9 +1,12 @@
 import React from 'react';
 import './ApprovalDayCountPanel.scss';
 
+import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
 export default function ApprovalDayCountPanel(props) {
+	const history = useHistory();
+
 	const theme = {
 		axis: {
 			ticks: {
@@ -54,6 +57,7 @@ export default function ApprovalDayCountPanel(props) {
 			<p className='panel-header'>Approval Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
+					onClick={event => history.push(`/details?approval_age=${event.data.day}`)}
 					data={props.approvalDayCount}
 					keys={[ 'Day' ]}
 					indexBy="day"
@@ -66,23 +70,24 @@ export default function ApprovalDayCountPanel(props) {
 					theme={theme}
 					enableGridX={false}
 					enableGridY={true}
+
 					axisTop={null}
 					axisRight={null}
 					axisBottom={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: -0,
-							legend: 'Days',
-							legendPosition: 'middle',
-							legendOffset: 70,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: -0,
+						legend: 'Days',
+						legendPosition: 'middle',
+						legendOffset: 70,
 					}}
 					axisLeft={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: 0,
-							legend: 'Total Orders',
-							legendPosition: 'middle',
-							legendOffset: -40,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: 0,
+						legend: 'Total Orders',
+						legendPosition: 'middle',
+						legendOffset: -40,
 					}}
 					labelSkipWidth={12}
 					labelSkipHeight={12}

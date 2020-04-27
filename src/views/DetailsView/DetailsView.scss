@@ -36,11 +36,12 @@
 			justify-content: center;
 			align-items: center;
 
-			.alert-filter-container {
-				width: 10rem;
+			.alert-filter {
+				width: auto;
+				margin: 0 0 0 1rem;
 			}
 
-			select, input {
+			input {
 				margin: 0 0 0 1rem;
 			}
 
@@ -156,6 +157,10 @@
 					&:hover {
 						color: $primary-accent;
 					}
+				}
+
+				.detail-expedited {
+					color: crimson;
 				}
 			}
 		}

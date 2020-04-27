@@ -2,8 +2,11 @@ import React from 'react';
 import './StatusDayCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
+import { useHistory } from 'react-router-dom';
 
 export default function StatusDayCountPanel(props) {
+	const history = useHistory();
+
 	const theme = {
 		axis: {
 			ticks: {
@@ -67,6 +70,7 @@ export default function StatusDayCountPanel(props) {
 			<p className='panel-header'>Current Status Age</p>
 			<div className='chart-container'>
 				<ResponsiveBar
+					onClick={event => history.push(`/details?status_age=${event.data.day}`)}
 					data={props.statusDayCount}
 					keys={[ 'Day' ]}
 					indexBy="day"
@@ -82,20 +86,20 @@ export default function StatusDayCountPanel(props) {
 					axisTop={null}
 					axisRight={null}
 					axisBottom={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: -0,
-							legend: 'Days',
-							legendPosition: 'middle',
-							legendOffset: 70,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: -0,
+						legend: 'Days',
+						legendPosition: 'middle',
+						legendOffset: 70,
 					}}
 					axisLeft={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: 0,
-							legend: 'Total Orders',
-							legendPosition: 'middle',
-							legendOffset: -40,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: 0,
+						legend: 'Total Orders',
+						legendPosition: 'middle',
+						legendOffset: -40,
 					}}
 					labelSkipWidth={12}
 					labelSkipHeight={12}

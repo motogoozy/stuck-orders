@@ -7,13 +7,13 @@ import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/App
 
 import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
 export const getOrderData = async () => {
    try {
-      return axios.get('/api/stuck_orders').then(res => res.data);
+      let res = await axios.get('/api/stuck_orders');
+      return res.data;
    } catch (err) {
       console.log(err);
    }
@@ -22,13 +22,13 @@ export const getOrderData = async () => {
 const getClientCount = (orderData) => {
    let clients = {};
    orderData.stuck_orders.forEach(order => {
-      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Non-Expedited': 0, 'Total': 0};
+      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Standard': 0, 'Total': 0};
       if (order.expedited) {
          clients[order.client]['Expedited']++;
          clients[order.client]['Total']++;
          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
       } else {
-         clients[order.client]['Non-Expedited']++;
+         clients[order.client]['Standard']++;
          clients[order.client]['Total']++;
          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
       }
@@ -44,11 +44,10 @@ const getClientCount = (orderData) => {
 
 const getAlertCount = (orderData) => {
    let alerts = {
-      pending_order_alert: {alertName: 'Pending Order', dbName: 'pending_order_alert', 'Count': 0},
-      standard_aged_order_alert: {alertName: 'Std. Aged Order', dbName: 'standard_aged_order_alert', 'Count': 0},
-      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', dbName: 'expedited_aged_order_alert', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approval', dbName: 'standard_approval_alert', 'Count': 0},
-      expedited_approval_alert: {alertName: 'Exp. Approval', dbName: 'expedited_approval_alert', 'Count': 0},
+      expedited_approval_alert: {alertName: 'Exp. Approved 4+', dbName: 'expedited_approval_alert', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approved 24+', dbName: 'standard_approval_alert', 'Count': 0},
+      aged_order_gte_72_lt_96_alert: {alertName: 'Pending Orders 72+', dbName: 'aged_order_gte_72_lt_96_alert', 'Count': 0},
+      aged_order_gte_96_alert: {alertName: 'Pending Orders 96+', dbName: 'aged_order_gte_96_alert', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -57,14 +56,11 @@ const getAlertCount = (orderData) => {
       if (order.standard_approval_alert) {
          alerts.standard_approval_alert['Count']++;
       }
-      if (order.pending_order_alert) {
-         alerts.pending_order_alert['Count']++;
+      if (order.aged_order_gte_72_lt_96_alert) {
+         alerts.aged_order_gte_72_lt_96_alert['Count']++;
       }
-      if (order.expedited_aged_order_alert) {
-         alerts.expedited_aged_order_alert['Count']++;
-      }
-      if (order.standard_aged_order_alert) {
-         alerts.standard_aged_order_alert['Count']++;
+      if (order.aged_order_gte_96_alert) {
+         alerts.aged_order_gte_96_alert['Count']++;
       }
    });
 
@@ -87,14 +83,12 @@ const getStatusDayCount = (orderData) => {
    }
 
    orderData.stuck_orders.forEach(order => {
-      let now = moment(new Date());
-      let statusChange = moment(new Date(order.status_change_timestamp));
-      const difference = now.diff(statusChange, 'days');
+      const statusAgeInDays = Math.floor(order.status_change_business_age / 24);
 
-      if (difference >= 8) {
+      if (statusAgeInDays >= 8) {
          days['8+']['Day']++;
       } else {
-         days[difference.toString()]['Day']++;
+         days[statusAgeInDays.toString()]['Day']++;
       }
    })
 
@@ -117,14 +111,12 @@ const getApprovalDayCount = (orderData) => {
    }
 
    orderData.stuck_orders.forEach(order => {
-      let now = moment(new Date());
-      let approvalChange = moment(new Date(order.approval_timestamp));
-      const difference = now.diff(approvalChange, 'days');
+      const approvalAgeInDays = Math.floor(order.approval_business_age / 24);
 
-      if (difference >= 8) {
+      if (approvalAgeInDays >= 8) {
          days['8+']['Day']++;
       } else {
-         days[difference.toString()]['Day']++;
+         days[approvalAgeInDays.toString()]['Day']++;
       }
    })
    
@@ -138,11 +130,11 @@ const getApprovalDayCount = (orderData) => {
 
 function App() {
    const [orderData, setOrderData] = useState('');
+   const [clientNames, setClientNames] = useState({});
    const [clientCount, setClientCount] = useState([])
    const [alertCount, setAlertCount] = useState([]);
    const [statusDayCount, setDayCount] = useState([]);
    const [approvalDayCount, setApprovalDayCount] = useState([]);
-
 
    useEffect(() => {
       getOrderData().then(data => {
@@ -156,7 +148,12 @@ function App() {
          const alertsArr = getAlertCount(orderData);
          const statusDaysArr = getStatusDayCount(orderData);
          const approvalDaysArr = getApprovalDayCount(orderData);
+         const clientNames = {};
+         orderData.stuck_orders.forEach(order => {
+            clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
+         });
    
+         setClientNames(clientNames);
          setClientCount(clientsArr);
          setAlertCount(alertsArr);
          setDayCount(statusDaysArr);
@@ -169,10 +166,10 @@ function App() {
          {
          orderData
          ?
-         <ClientCountPanel clientCount={clientCount} />
+         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#A5368D'} />
+            <GridLoader size={12} loading={true} color={'#A5368D'} />
          </div>
          }
          
@@ -182,7 +179,7 @@ function App() {
          <AlertPanel alertCount={alertCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#800026'} />
+            <GridLoader size={12} loading={true} color={'#800026'} />
          </div>
          }
          
@@ -192,7 +189,7 @@ function App() {
          <StatusDayCountPanel statusDayCount={statusDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#3690C0'} />
+            <GridLoader size={12} loading={true} color={'#3690C0'} />
          </div>
          }
          
@@ -202,7 +199,7 @@ function App() {
          <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-         <GridLoader size={12} loading={true} color={'#016C59'} />
+            <GridLoader size={12} loading={true} color={'#016C59'} />
          </div>
          }
          <Link to='/details'>
