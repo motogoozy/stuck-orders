@@ -207,7 +207,7 @@ export default function DetailsView(props) {
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
 					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
-					<p className='detail-expedited'>{order.expedited && order.expedited.toString()}</p>
+					<p className='detail-expedited'>{order.expedited && 'Expedited'}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
 						trigger={['hover', 'focus']}
@@ -282,7 +282,7 @@ export default function DetailsView(props) {
 
 	const expeditedOptions = () => {
 		return filterOptions.expedited.map(option => (
-			<option key={option.toString()} value={option.toString()}>{option.toString()}</option>
+			<option key={option.toString()} value={option.toString()}>{option === true ? 'Expedited' : 'Standard'}</option>
 		))
 	};
 

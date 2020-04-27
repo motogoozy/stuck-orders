@@ -38,7 +38,7 @@ export default function ClientCountPanel(props) {
 				<ResponsiveBar
 					onClick={event => handleClientSelection(event)}
 					data={props.clientCount}
-					keys={[ 'Non-Expedited', 'Expedited' ]}
+					keys={[ 'Standard', 'Expedited' ]}
 					indexBy="client"
 					margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
 					padding={0.3}
