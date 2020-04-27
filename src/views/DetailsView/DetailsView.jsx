@@ -39,11 +39,10 @@ export default function DetailsView(props) {
 
 	useEffect(() => {
 		const alerts = [
-			'pending_order_alert',
-			'standard_aged_order_alert',
-			'expedited_aged_order_alert',
+			'expedited_approval_alert',
 			'standard_approval_alert',
-			'expedited_approval_alert'
+			'aged_order_gte_72_lt_96_alert',
+			'aged_order_gte_96_alert',
 		];
 		if (alerts.includes(props.match.params.alert)) {
 			setFilters({client: '', expedited: '', order_status: '', alert: props.match.params.alert});
@@ -122,7 +121,7 @@ export default function DetailsView(props) {
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
 					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
-					<p className='detail-expedited'>{order.expedited.toString()}</p>
+					<p className='detail-expedited'>{order.expedited && order.expedited.toString()}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
 						trigger={['hover', 'focus']}
@@ -214,17 +213,14 @@ export default function DetailsView(props) {
 					&&
 					<div className='details-view-header-right-container'>
 						<p onClick={resetFilters}>Reset</p>
-						<div className='alert-filter-container'>
-							<select name="alert-filter" id="alert-filter" value={filters.alert} onChange={e => setFilters({ ...filters, alert: e.target.value })}>
-								<option value="" disabled defaultValue>Filter Alert</option>
-								<option value="">(none)</option>
-								<option value="pending_order_alert">Pending Order</option>
-								<option value="standard_aged_order_alert">Standard Aged Order</option>
-								<option value="expedited_aged_order_alert">Expedited Aged Order</option>
-								<option value="standard_approval_alert">Standard Approval</option>
-								<option value="expedited_approval_alert">Expedited Approval</option>
-							</select>
-						</div>
+						<select className='alert-filter' name="alert-filter" id="alert-filter" value={filters.alert} onChange={e => setFilters({ ...filters, alert: e.target.value })}>
+							<option value="" disabled defaultValue>Filter Alert</option>
+							<option value="">(none)</option>
+							<option value="expedited_approval_alert">Exp Approved 4+</option>
+							<option value="standard_approval_alert">Std Approved 24+</option>
+							<option value="aged_order_gte_72_lt_96_alert">Pending Orders 72+</option>
+							<option value="aged_order_gte_96_alert">Pending Orders 96+</option>
+						</select>
 						<input value={search} onChange={e => setSearch(e.target.value)} type='text' placeholder='Search client, order number, phone' />
 					</div>
 				}
