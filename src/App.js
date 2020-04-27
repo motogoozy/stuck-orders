@@ -7,7 +7,6 @@ import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/App
 
 import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
@@ -44,12 +43,11 @@ const getClientCount = (orderData) => {
 };
 
 const getAlertCount = (orderData) => {
-   console.log(orderData)
    let alerts = {
       expedited_approval_alert: {alertName: 'Exp. Approved 4+', dbName: 'expedited_approval_alert', 'Count': 0},
       standard_approval_alert: {alertName: 'Std. Approved 24+', dbName: 'standard_approval_alert', 'Count': 0},
-      pending_order_alert: {alertName: 'Pending Orders 72+', dbName: 'aged_order_gte_72_lt_96_alert', 'Count': 0},
-      standard_aged_order_alert: {alertName: 'Pending Orders 96+', dbName: 'aged_order_gte_96_alert', 'Count': 0},
+      aged_order_gte_72_lt_96_alert: {alertName: 'Pending Orders 72+', dbName: 'aged_order_gte_72_lt_96_alert', 'Count': 0},
+      aged_order_gte_96_alert: {alertName: 'Pending Orders 96+', dbName: 'aged_order_gte_96_alert', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -85,14 +83,12 @@ const getStatusDayCount = (orderData) => {
    }
 
    orderData.stuck_orders.forEach(order => {
-      let now = moment(new Date());
-      let statusChange = moment(new Date(order.status_change_timestamp));
-      const difference = now.diff(statusChange, 'days');
+      const statusAgeInDays = Math.floor(order.status_change_business_age / 24);
 
-      if (difference >= 8) {
+      if (statusAgeInDays >= 8) {
          days['8+']['Day']++;
       } else {
-         days[difference.toString()]['Day']++;
+         days[statusAgeInDays.toString()]['Day']++;
       }
    })
 
@@ -115,14 +111,12 @@ const getApprovalDayCount = (orderData) => {
    }
 
    orderData.stuck_orders.forEach(order => {
-      let now = moment(new Date());
-      let approvalChange = moment(new Date(order.approval_timestamp));
-      const difference = now.diff(approvalChange, 'days');
+      const approvalAgeInDays = Math.floor(order.approval_business_age / 24);
 
-      if (difference >= 8) {
+      if (approvalAgeInDays >= 8) {
          days['8+']['Day']++;
       } else {
-         days[difference.toString()]['Day']++;
+         days[approvalAgeInDays.toString()]['Day']++;
       }
    })
    
@@ -136,11 +130,11 @@ const getApprovalDayCount = (orderData) => {
 
 function App() {
    const [orderData, setOrderData] = useState('');
+   const [clientNames, setClientNames] = useState({});
    const [clientCount, setClientCount] = useState([])
    const [alertCount, setAlertCount] = useState([]);
    const [statusDayCount, setDayCount] = useState([]);
    const [approvalDayCount, setApprovalDayCount] = useState([]);
-
 
    useEffect(() => {
       getOrderData().then(data => {
@@ -154,7 +148,12 @@ function App() {
          const alertsArr = getAlertCount(orderData);
          const statusDaysArr = getStatusDayCount(orderData);
          const approvalDaysArr = getApprovalDayCount(orderData);
+         const clientNames = {};
+         orderData.stuck_orders.forEach(order => {
+            clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
+         });
    
+         setClientNames(clientNames);
          setClientCount(clientsArr);
          setAlertCount(alertsArr);
          setDayCount(statusDaysArr);
@@ -167,7 +166,7 @@ function App() {
          {
          orderData
          ?
-         <ClientCountPanel clientCount={clientCount} />
+         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <GridLoader size={12} loading={true} color={'#A5368D'} />

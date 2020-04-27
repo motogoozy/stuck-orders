@@ -38,7 +38,7 @@ export default function AlertPanel(props) {
 			<p className='panel-header'>Alerts</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					onClick={event => history.push(`/details/filter_alert/${event.data.dbName}`)}
+					onClick={event => history.push(`/details?alert=${event.data.dbName}`)}
 					data={props.alertCount}
 					keys={[ 'Count' ]}
 					indexBy="alertName"
@@ -54,21 +54,21 @@ export default function AlertPanel(props) {
 					axisTop={null}
 					axisRight={null}
 					axisBottom={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: -22,
-							legend: 'Type',
-							legendPosition: 'middle',
-							legendOffset: 70,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: -22,
+						legend: 'Type',
+						legendPosition: 'middle',
+						legendOffset: 70,
 					}}
 					axisLeft={{
-							tickSize: 5,
-							tickPadding: 5,
-							tickRotation: 0,
-							tickValues: props.alertCount.length,
-							legend: 'Count',
-							legendPosition: 'middle',
-							legendOffset: -40,
+						tickSize: 5,
+						tickPadding: 5,
+						tickRotation: 0,
+						tickValues: props.alertCount.length,
+						legend: 'Count',
+						legendPosition: 'middle',
+						legendOffset: -40,
 					}}
 					labelSkipWidth={12}
 					labelSkipHeight={12}
