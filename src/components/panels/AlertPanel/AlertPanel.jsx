@@ -23,23 +23,22 @@ export default function AlertPanel(props) {
 			},
 		}
 	};
-		
-	const colors = {
-		'Pending Order': '#FDBB84',
-		'Std. Aged Order': '#FC8D59',
-		'Exp. Aged Order': '#EF6548',
-		'Std. Approval': '#D73020',
-		'Exp. Approval': '#B30000',
+	
+	const barColors = {
+		'Exp. Approved 4+': '#B30000',
+		'Std. Approved 24+': '#D73020',
+		'Pending Orders 72+': '#EF6548',
+		'Pending Orders 96+': '#FC8D59',
 	};
 
-	const getColors = bar => colors[bar.indexValue];
+	const getColors = bar => barColors[bar.indexValue];
 
 	return (
 		<div className='dashboard-panel alert-panel'>
 			<p className='panel-header'>Alerts</p>
 			<div className='chart-container'>
 				<ResponsiveBar
-					onClick={event => history.push(`/details/${event.data.dbName}`)}
+					onClick={event => history.push(`/details/filter_alert/${event.data.dbName}`)}
 					data={props.alertCount}
 					keys={[ 'Count' ]}
 					indexBy="alertName"
@@ -57,7 +56,7 @@ export default function AlertPanel(props) {
 					axisBottom={{
 							tickSize: 5,
 							tickPadding: 5,
-							tickRotation: -30,
+							tickRotation: -22,
 							legend: 'Type',
 							legendPosition: 'middle',
 							legendOffset: 70,
@@ -66,6 +65,7 @@ export default function AlertPanel(props) {
 							tickSize: 5,
 							tickPadding: 5,
 							tickRotation: 0,
+							tickValues: props.alertCount.length,
 							legend: 'Count',
 							legendPosition: 'middle',
 							legendOffset: -40,

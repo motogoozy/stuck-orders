@@ -44,12 +44,12 @@ const getClientCount = (orderData) => {
 };
 
 const getAlertCount = (orderData) => {
+   console.log(orderData)
    let alerts = {
-      pending_order_alert: {alertName: 'Pending Order', dbName: 'pending_order_alert', 'Count': 0},
-      standard_aged_order_alert: {alertName: 'Std. Aged Order', dbName: 'standard_aged_order_alert', 'Count': 0},
-      expedited_aged_order_alert: {alertName: 'Exp. Aged Order', dbName: 'expedited_aged_order_alert', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approval', dbName: 'standard_approval_alert', 'Count': 0},
-      expedited_approval_alert: {alertName: 'Exp. Approval', dbName: 'expedited_approval_alert', 'Count': 0},
+      expedited_approval_alert: {alertName: 'Exp. Approved 4+', dbName: 'expedited_approval_alert', 'Count': 0},
+      standard_approval_alert: {alertName: 'Std. Approved 24+', dbName: 'standard_approval_alert', 'Count': 0},
+      pending_order_alert: {alertName: 'Pending Orders 72+', dbName: 'aged_order_gte_72_lt_96_alert', 'Count': 0},
+      standard_aged_order_alert: {alertName: 'Pending Orders 96+', dbName: 'aged_order_gte_96_alert', 'Count': 0},
    };
    orderData.stuck_orders.forEach(order => {
       if (order.expedited_approval_alert) {
@@ -58,14 +58,11 @@ const getAlertCount = (orderData) => {
       if (order.standard_approval_alert) {
          alerts.standard_approval_alert['Count']++;
       }
-      if (order.pending_order_alert) {
-         alerts.pending_order_alert['Count']++;
+      if (order.aged_order_gte_72_lt_96_alert) {
+         alerts.aged_order_gte_72_lt_96_alert['Count']++;
       }
-      if (order.expedited_aged_order_alert) {
-         alerts.expedited_aged_order_alert['Count']++;
-      }
-      if (order.standard_aged_order_alert) {
-         alerts.standard_aged_order_alert['Count']++;
+      if (order.aged_order_gte_96_alert) {
+         alerts.aged_order_gte_96_alert['Count']++;
       }
    });
 
