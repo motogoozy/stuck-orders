@@ -26,7 +26,6 @@ export default function ClientCountPanel(props) {
 	};
 
 	const handleClientSelection = event => {
-		console.log(event)
 		const clientName = props.clientNames[event.data.client.split(' ')[0]];
 		const expedited = event.id === 'Expedited' ? true : false;
 		history.push(`/details?client=${clientName}&expedited=${expedited}`);
