@@ -4,4 +4,10 @@
 			cursor: pointer;
 		}
 	}
+
+	div > div > div > svg > g > g:nth-child(5) {
+		* {
+			opacity: 1;
+		}
+	}
 }
