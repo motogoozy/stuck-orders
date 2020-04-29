@@ -33,12 +33,12 @@ export default function ClientCountPanel(props) {
 
 	return (
 		<div className='dashboard-panel client-count-panel'>
-			<p className='panel-header'>Stuck Orders by Client</p>
+			<p className='panel-header'>Stuck Orders by Client ({props.totalOrderCount})</p>
 			<div className='chart-container'>
 				<ResponsiveBar
 					onClick={event => handleClientSelection(event)}
 					data={props.clientCount}
-					keys={[ 'Non-Expedited', 'Expedited' ]}
+					keys={[ 'Standard', 'Expedited' ]}
 					indexBy="client"
 					margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
 					padding={0.3}

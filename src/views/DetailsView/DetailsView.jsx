@@ -66,7 +66,7 @@ export default function DetailsView(props) {
 			'aged_order_gte_72_lt_96_alert',
 			'aged_order_gte_96_alert',
 		];
-		const days = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+		const validDays = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
 		const queryValues = queryString.parse(props.location.search);
 
 		if (props.location.search) {
@@ -80,10 +80,11 @@ export default function DetailsView(props) {
 				if (age === '8') {
 					age = '8+';
 				}
-
-				setFilters(filters => {
-					return {...filters, status_age: age};
-				});
+				if (validDays.includes(age)) {
+					setFilters(filters => {
+						return {...filters, status_age: age};
+					});
+				}
 			}
 			if (queryValues.approval_age) {
 				let age = queryValues.approval_age.trim();
@@ -91,9 +92,11 @@ export default function DetailsView(props) {
 					age = '8+';
 				}
 
-				setFilters(filters => {
-					return {...filters, approval_age: age};
-				});
+				if (validDays.includes(age)) {
+					setFilters(filters => {
+						return {...filters, approval_age: age};
+					});
+				}
 			}
 			if (queryValues.client) {
 				setFilters(filters => {
@@ -207,7 +210,7 @@ export default function DetailsView(props) {
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
 					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
-					<p className='detail-expedited'>{order.expedited && order.expedited.toString()}</p>
+					<p className='detail-expedited'>{order.expedited && 'Expedited'}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
 						trigger={['hover', 'focus']}
@@ -282,7 +285,7 @@ export default function DetailsView(props) {
 
 	const expeditedOptions = () => {
 		return filterOptions.expedited.map(option => (
-			<option key={option.toString()} value={option.toString()}>{option.toString()}</option>
+			<option key={option.toString()} value={option.toString()}>{option === true ? 'Expedited' : 'Standard'}</option>
 		))
 	};
 

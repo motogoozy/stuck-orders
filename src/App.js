@@ -22,13 +22,13 @@ export const getOrderData = async () => {
 const getClientCount = (orderData) => {
    let clients = {};
    orderData.stuck_orders.forEach(order => {
-      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Non-Expedited': 0, 'Total': 0};
+      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Standard': 0, 'Total': 0};
       if (order.expedited) {
          clients[order.client]['Expedited']++;
          clients[order.client]['Total']++;
          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
       } else {
-         clients[order.client]['Non-Expedited']++;
+         clients[order.client]['Standard']++;
          clients[order.client]['Total']++;
          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
       }
@@ -166,7 +166,7 @@ function App() {
          {
          orderData
          ?
-         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} />
+         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} totalOrderCount={orderData.stuck_orders.length} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <GridLoader size={12} loading={true} color={'#A5368D'} />
