@@ -66,7 +66,7 @@ export default function DetailsView(props) {
 			'aged_order_gte_72_lt_96_alert',
 			'aged_order_gte_96_alert',
 		];
-		const days = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
+		const validDays = ['0', '1', '2', '3', '4', '5', '6', '7', '8+'];
 		const queryValues = queryString.parse(props.location.search);
 
 		if (props.location.search) {
@@ -80,10 +80,11 @@ export default function DetailsView(props) {
 				if (age === '8') {
 					age = '8+';
 				}
-
-				setFilters(filters => {
-					return {...filters, status_age: age};
-				});
+				if (validDays.includes(age)) {
+					setFilters(filters => {
+						return {...filters, status_age: age};
+					});
+				}
 			}
 			if (queryValues.approval_age) {
 				let age = queryValues.approval_age.trim();
@@ -91,9 +92,11 @@ export default function DetailsView(props) {
 					age = '8+';
 				}
 
-				setFilters(filters => {
-					return {...filters, approval_age: age};
-				});
+				if (validDays.includes(age)) {
+					setFilters(filters => {
+						return {...filters, approval_age: age};
+					});
+				}
 			}
 			if (queryValues.client) {
 				setFilters(filters => {
