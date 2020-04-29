@@ -166,7 +166,7 @@ function App() {
          {
          orderData
          ?
-         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} />
+         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} totalOrderCount={orderData.stuck_orders.length} />
          :
          <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <GridLoader size={12} loading={true} color={'#A5368D'} />
