@@ -9,6 +9,7 @@ import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import queryString from 'query-string';
 
 export const getOrderData = async () => {
    try {
@@ -128,7 +129,7 @@ const getApprovalDayCount = (orderData) => {
    return approvalDaysArr;
 };
 
-function App() {
+function App(props) {
    const [orderData, setOrderData] = useState('');
    const [clientNames, setClientNames] = useState({});
    const [clientCount, setClientCount] = useState([])
@@ -139,8 +140,25 @@ function App() {
    useEffect(() => {
       getOrderData().then(data => {
          setOrderData(data);
+
+         // if fetch interval parameter is provided (meaning it's the monitor version)
+         if (props.location.search) {
+            let queryValues = queryString.parse(props.location.search);
+            if (queryValues.fetch_interval) {
+               const interval = parseInt(queryValues.fetch_interval * 1000); // seconds
+               let orderTimer = setInterval(() => {
+                  getOrderData().then(data => {
+                     setOrderData(data);
+                  });
+               }, interval);
+         
+               return () => {
+                  clearInterval(orderTimer);
+               }
+            }
+         }
       });
-   }, []);
+   }, [props.location.search]);
 
    useEffect(() => {
       if (orderData) {
@@ -202,12 +220,17 @@ function App() {
             <GridLoader size={12} loading={true} color={'#016C59'} />
          </div>
          }
-         <Link to='/details'>
-            <div className='details-link'>
-               <i className="fas fa-info-circle"></i>
-               <p>Details</p>
-            </div>
-         </Link>
+         {
+            // don't display Details Link if fetch_interval param is provided
+            !queryString.parse(props.location.search).fetch_interval
+            &&
+            <Link to='/details'>
+               <div className='details-link'>
+                  <i className="fas fa-info-circle"></i>
+                  <p>Details</p>
+               </div>
+            </Link>
+         }
       </div>
    );
 }
