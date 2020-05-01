@@ -21,6 +21,12 @@ export default function StatusDayCountPanel(props) {
 					fontSize: '1rem',
 				}
 			},
+		},
+		labels: {
+			text: {
+				fontSize: '.9rem',
+				fontWeight: 'bold'
+			}
 		}
 	};
 
