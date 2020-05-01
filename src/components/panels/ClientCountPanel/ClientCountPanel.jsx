@@ -22,6 +22,12 @@ export default function ClientCountPanel(props) {
 					fontSize: '1rem',
 				}
 			},
+		},
+		labels: {
+			text: {
+				fontSize: '.9rem',
+				fontWeight: 'bold'
+			}
 		}
 	};
 
