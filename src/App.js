@@ -66,9 +66,16 @@ const getAlertCount = (orderData) => {
    });
 
    let alertsArr = [];
-   for (let alert in alerts) {
-      alertsArr.push(alerts[alert]);
+   for (let type in alerts) {
+      alertsArr.push(alerts[type]);
    }
+
+   if (
+      alerts.expedited_approval_alert.Count === 0 &&
+      alerts.standard_approval_alert.Count === 0 &&
+      alerts.aged_order_gte_72_lt_96_alert.Count === 0 &&
+      alerts.aged_order_gte_96_alert.Count === 0
+   ) return [];
 
    return alertsArr;
 };
@@ -181,45 +188,83 @@ function App(props) {
 
    return (
       <div className='app'>
-         {
-         orderData
-         ?
-         <ClientCountPanel clientNames={clientNames} clientCount={clientCount} totalOrderCount={orderData.stuck_orders.length} />
-         :
-         <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <GridLoader size={12} loading={true} color={'#A5368D'} />
+         <div className='dashboard-panel client-count-panel'>
+            {
+               orderData
+               ?
+               <>
+                  <p className='panel-header'>Stuck Orders by Client ({props.totalOrderCount})</p>
+                  <div className='chart-container'>
+                     <ClientCountPanel clientNames={clientNames} clientCount={clientCount} totalOrderCount={orderData.stuck_orders.length} />
+                  </div>
+               </>
+               :
+               <div className='grid-loader-container'>
+                  <GridLoader size={12} loading={true} color={'#A5368D'} />
+               </div>
+            }
          </div>
-         }
          
-         {
-         orderData
-         ?
-         <AlertPanel alertCount={alertCount} />
-         :
-         <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <GridLoader size={12} loading={true} color={'#800026'} />
+         <div className='dashboard-panel alert-panel'>
+            {
+               orderData
+               ?
+               <>
+                  <p className='panel-header'>Alerts</p>
+                  <div className='chart-container'>
+                     {
+                        orderData && alertCount.length === 0
+                        ?
+                        <div className='no-alerts-container'>
+                           <i class="far fa-check-square"></i>
+                           <p>All Caught Up!</p>
+                        </div>
+                        :
+                        <AlertPanel alertCount={alertCount} />
+                     }
+                  </div>
+               </>
+               :
+               <div className='grid-loader-container'>
+                  <GridLoader size={12} loading={true} color={'#800026'} />
+               </div>
+            }
          </div>
-         }
-         
-         {
-         orderData
-         ?
-         <StatusDayCountPanel statusDayCount={statusDayCount} />
-         :
-         <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <GridLoader size={12} loading={true} color={'#3690C0'} />
+
+         <div className='dashboard-panel status-day-count-panel'>
+            {
+               orderData
+               ?
+               <>
+                  <p className='panel-header'>Current Status Age</p>
+                  <div className='chart-container'>
+                     <StatusDayCountPanel statusDayCount={statusDayCount} />
+                  </div>
+               </>
+               :
+               <div className='grid-loader-container'>
+                  <GridLoader size={12} loading={true} color={'#3690C0'} />
+               </div>
+            }         
          </div>
-         }
-         
-         {
-         orderData
-         ?
-         <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
-         :
-         <div style={{ width: '50%', height: '50%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <GridLoader size={12} loading={true} color={'#016C59'} />
+
+         <div className='dashboard-panel approval-day-count-panel'>
+            {
+               orderData
+               ?
+               <>
+                  <p className='panel-header'>Approval Age</p>
+                  <div className='chart-container'>
+                     <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
+                  </div>
+               </>
+               :
+               <div className='grid-loader-container'>
+                  <GridLoader size={12} loading={true} color={'#016C59'} />
+               </div>
+            }
          </div>
-         }
+
          {
             // don't display Details Link if fetch_interval param is provided
             !queryString.parse(props.location.search).fetch_interval
