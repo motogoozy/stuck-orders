@@ -36,11 +36,82 @@ $primary-accent: #02818A;
       font-size: 1.25rem;
       margin-bottom: .5rem;
    }
+
+   .chart-container {
+      height: 85%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .no-alerts-container {
+         height: 100%;
+         width: 100%;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+
+         i {
+            font-size: 8rem;
+            color: #016C59;
+            margin-bottom: 1rem;
+         }
+
+         p {
+            font-size: 1.5rem;
+            color: white;
+         }
+      }
+   }
+
+   .grid-loader-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+   }
 }
 
-.chart-container {
-   height: 85%;
-   width: 100%;
+.client-count-panel {
+	div > div > div > svg > g > g:nth-child(4) > g > rect {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	div > div > div > svg > g > g:nth-child(5) {
+		* {
+			opacity: 1;
+		}
+	}
+}
+
+.alert-panel {
+   div > div > div > svg > g > g:nth-child(4) > g > rect {
+      &:hover {
+         cursor: pointer;
+      }
+   }
+}
+
+.status-day-count-panel {
+	div > div > div > svg > g > g:nth-child(4) > g > rect {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}
+
+.approval-day-count-panel {
+	div > div > div > svg > g > g:nth-child(4) > g > rect {
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }
 
 .details-link {
@@ -60,5 +131,4 @@ $primary-accent: #02818A;
          text-decoration: underline;
       }
    }
-
 }
