@@ -193,9 +193,9 @@ function App(props) {
                orderData
                ?
                <>
-                  <p className='panel-header'>Stuck Orders by Client ({props.totalOrderCount})</p>
+                  <p className='panel-header'>Stuck Orders by Client ({orderData.stuck_orders.length})</p>
                   <div className='chart-container'>
-                     <ClientCountPanel clientNames={clientNames} clientCount={clientCount} totalOrderCount={orderData.stuck_orders.length} />
+                     <ClientCountPanel clientNames={clientNames} clientCount={clientCount}/>
                   </div>
                </>
                :
