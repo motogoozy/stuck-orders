@@ -209,7 +209,15 @@ export default function DetailsView(props) {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
-					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
+					<a
+						// href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`}
+						href={`https://helpdesk.mobilsense.com/${order.client_db_name}/api#/app/Utility/order_editor/${splitOrderNum(order.order_number)}`}
+						target='_blank'
+						rel="noopener noreferrer"
+						className='detail-order-number'
+					>
+						{order.order_number}
+					</a>
 					<p className='detail-expedited'>{order.expedited && 'Expedited'}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
