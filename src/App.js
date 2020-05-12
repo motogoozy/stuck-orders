@@ -4,23 +4,14 @@ import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPa
 import AlertPanel from './components/panels/AlertPanel/AlertPanel';
 import StatusDayCountPanel from './components/panels/StatusDayCountPanel/StatusDayCountPanel';
 import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/ApprovalDayCountPanel';
+import { fetchData } from './helperFunctions';
 
-import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import queryString from 'query-string';
 
-export const getOrderData = async () => {
-   try {
-      let res = await axios.get('/api/stuck_orders');
-      return res.data;
-   } catch (err) {
-      console.log(err);
-   }
-};
-
-const getClientCount = (orderData) => {
+export const getClientCount = (orderData) => {
    let clients = {};
    orderData.stuck_orders.forEach(order => {
       clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Standard': 0, 'Total': 0};
@@ -43,7 +34,7 @@ const getClientCount = (orderData) => {
    return clientsArr;
 };
 
-const getAlertCount = (orderData) => {
+export const getAlertCount = (orderData) => {
    let alerts = {
       expedited_approval_alert: {alertName: 'Exp. Approved 4+', dbName: 'expedited_approval_alert', 'Count': 0},
       standard_approval_alert: {alertName: 'Std. Approved 24+', dbName: 'standard_approval_alert', 'Count': 0},
@@ -80,7 +71,7 @@ const getAlertCount = (orderData) => {
    return alertsArr;
 };
 
-const getStatusDayCount = (orderData) => {
+export const getStatusDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
@@ -108,7 +99,7 @@ const getStatusDayCount = (orderData) => {
    return statusDaysArr;
 };
 
-const getApprovalDayCount = (orderData) => {
+export const getApprovalDayCount = (orderData) => {
    let days = {};
    for (let i = 0; i <= 8; i++) {
       if (i === 8) {
@@ -136,7 +127,7 @@ const getApprovalDayCount = (orderData) => {
    return approvalDaysArr;
 };
 
-function App(props) {
+export default function App(props) {
    const [orderData, setOrderData] = useState('');
    const [clientNames, setClientNames] = useState({});
    const [clientCount, setClientCount] = useState([])
@@ -145,27 +136,37 @@ function App(props) {
    const [approvalDayCount, setApprovalDayCount] = useState([]);
 
    useEffect(() => {
-      getOrderData().then(data => {
-         setOrderData(data);
+      fetchData('/api/stuck_orders')
+         .then(data => {
+            setOrderData(data);
 
-         // if fetch interval parameter is provided (meaning it's the monitor version)
-         if (props.location.search) {
-            let queryValues = queryString.parse(props.location.search);
-            if (queryValues.fetch_interval) {
-               const interval = parseInt(queryValues.fetch_interval * 1000); // seconds
-               let orderTimer = setInterval(() => {
-                  getOrderData().then(data => {
-                     setOrderData(data);
-                  });
-               }, interval);
-         
-               return () => {
-                  clearInterval(orderTimer);
+            // if fetch interval parameter is provided (meaning it's the monitor version)
+            if (props.location.search) {
+               let queryValues = queryString.parse(props.location.search);
+               if (queryValues.fetch_interval) {
+                  const interval = parseInt(queryValues.fetch_interval * 1000); // seconds
+                  let orderTimer = setInterval(() => {
+                     fetchData('/api/stuck_orders').then(data => {
+                        setOrderData(data);
+                     });
+                  }, interval);
+            
+                  return () => {
+                     clearInterval(orderTimer);
+                  }
                }
+               
+               // if (queryValues.toggle_interval) {
+               //    const interval = parseInt(queryValues.toggle_interval * 1000); // seconds
+               //    const timer = setTimeout(() => {
+               //       props.history.push(`/zendesk?toggle_interval=${queryValues.toggle_interval}`);
+               //    }, 3000);
+               //    return () => clearTimeout(timer);
+               // }
             }
-         }
-      });
-   }, [props.location.search]);
+         })
+         .catch(err => console.log(err));
+   }, [props.location.search, props.history]);
 
    useEffect(() => {
       if (orderData) {
@@ -187,7 +188,7 @@ function App(props) {
    }, [orderData]);
 
    return (
-      <div className='app'>
+      <div className='dashboard'>
          <div className='dashboard-panel client-count-panel'>
             {
                orderData
@@ -216,7 +217,7 @@ function App(props) {
                         orderData && alertCount.length === 0
                         ?
                         <div className='no-alerts-container'>
-                           <i class="far fa-check-square"></i>
+                           <i className="far fa-check-square"></i>
                            <p>All Caught Up!</p>
                         </div>
                         :
@@ -269,15 +270,21 @@ function App(props) {
             // don't display Details Link if fetch_interval param is provided
             !queryString.parse(props.location.search).fetch_interval
             &&
-            <Link to='/details'>
-               <div className='details-link'>
-                  <i className="fas fa-info-circle"></i>
-                  <p>Details</p>
-               </div>
-            </Link>
+            <div className='link-container'>
+               <Link to='/zendesk'>
+                  <div className='zendesk-link dashboard-link'>
+                     <p>Zendesk</p>
+                  </div>
+               </Link>
+               <p>|</p>
+               <Link to='/details'>
+                  <div className='details-link dashboard-link'>
+                     <i className="fas fa-info-circle"></i>
+                     <p>Details</p>
+                  </div>
+               </Link>
+            </div>
          }
       </div>
    );
 }
-
-export default App;

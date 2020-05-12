@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import DetailsView from './views/DetailsView/DetailsView';
+import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
 import * as serviceWorker from './serviceWorker';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -13,6 +14,7 @@ ReactDOM.render(
          <Switch>
             <Route exact path='/' component={App} />
             <Route path='/details' component={DetailsView} />
+            <Route path='/zendesk' component={ZendeskDashboard} />
             <Route component={App} />
          </Switch>
       </Router>

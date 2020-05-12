@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './DetailsView.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { getOrderData } from '../../App.js';
+import { fetchData } from '../../helperFunctions';
 import { formatDate } from '../../utils.js';
 
 import GridLoader from 'react-spinners/GridLoader';
@@ -39,7 +39,7 @@ export default function DetailsView(props) {
 	const [sort, setSort] = useState({ sortBy: '', descending: true });
 
 	useEffect(() => {
-		getOrderData().then(data => {
+		fetchData('/api/stuck_orders').then(data => {
 			if (data.stuck_orders.length > 0) {
 				let options = {client: [], expedited: [], order_status: []};
 				data.stuck_orders.forEach(order => {
@@ -410,7 +410,7 @@ export default function DetailsView(props) {
 				</div>
 				:
 				<div className='detail-loader'>
-					<GridLoader size={12} loading={true} color={'white'} />
+					<GridLoader size={12} loading={true} color={'#02818A'} />
 				</div>
 			}
 		</div>
