@@ -5,12 +5,13 @@ import TicketCountByAgent from '../../components/panels/TicketCountByAgent/Ticke
 import TicketCountByOrganization from '../../components/panels/TicketCountByOrganization/TicketCountByOrganization';
 import TicketCountByStatus from '../../components/panels/TicketCountByStatus/TicketCountByStatus';
 import TicketCountByAge from '../../components/panels/TicketCountByAge/TicketCountByAge';
+import AgentCountByOrganization from '../../components/panels/AgentCountByOrganizationPanel/AgentCountByOrganizationPanel';
 
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import GridLoader from 'react-spinners/GridLoader';
 
-export const getCountByAgent = (ticketData) => {
+export const getTicketCountByAgent = (ticketData) => {
 	let agents = {};
 	ticketData.forEach(ticket => {
 		agents[ticket.agent] = agents[ticket.agent] || {'agent': ticket.agent, 'Count': 0};
@@ -31,7 +32,7 @@ export const getCountByAgent = (ticketData) => {
 	return sortedAgentsArr;
 };
 
-export const getCountByOrg = (ticketData) => {
+export const getTicketCountByOrg = (ticketData) => {
 	let orgs = {};
 	ticketData.forEach(ticket => {
 		orgs[ticket.organization] = orgs[ticket.organization] || {'organization': ticket.organization, 'Count': 0};
@@ -52,7 +53,7 @@ export const getCountByOrg = (ticketData) => {
 	return sortedOrgsArr;
 };
 
-export const getCountByStatus = (ticketData) => {
+export const getTicketCountByStatus = (ticketData) => {
 	let statuses = {};
 	ticketData.forEach(ticket => {
 		statuses[ticket.status] = statuses[ticket.status] || {'status': ticket.status, 'Count': 0};
@@ -73,27 +74,25 @@ export const getCountByStatus = (ticketData) => {
 	return sortedStatusesArr;
 };
 
-export const getCountByAge = (ticketData) => {
+export const getTicketCountByAge = (ticketData) => {
 	let ages = {};
-	let maxAge = 0;
 	ticketData.forEach(ticket => {
 		const now = moment();
 		const createdAt = moment(new Date(ticket.created_at));
 		const difference = now.diff(createdAt, 'days');
-		(difference > maxAge) && (maxAge = difference);
-		
-		ages[difference.toString()] = ages[difference.toString()] || {'age': difference.toString(), 'Day': 0};
-		ages[difference.toString()].Day++;
+
+		if (difference < 8) {
+			ages[difference.toString()] = ages[difference.toString()] || {'age': difference.toString(), 'Day': 0};
+			ages[difference.toString()].Day++;
+		} else {
+			ages['8+'] = ages['8+'] || {'age': '8+', 'Day': 0};
+			ages['8+'].Day++;
+		}
 	})
 
 	let agesArr = [];
 	for (let age in ages) {
 		agesArr.push(ages[age]);
-	}
-	for (let i = 0; i <= maxAge; i++) {
-		if (!ages[i.toString()]) {
-			agesArr.push({'age': i.toString(), 'Day': 0});
-		}
 	}
 
 	let sortedAgesArr = agesArr.sort((a, b) => {
@@ -105,12 +104,35 @@ export const getCountByAge = (ticketData) => {
 	return sortedAgesArr;
 };
 
+export const getAgentCountByOrg = (ticketData) => {
+	let orgs = {}; // map of organization names with array of agent names
+	ticketData.forEach(ticket => {
+		orgs[ticket.organization] = orgs[ticket.organization] || {organization: ticket.organization, agents: []};
+		orgs[ticket.organization].agents.push(ticket.agent);
+	})
+
+	let orgsArr = [];
+	for (let organization in orgs) {
+		orgsArr.push({organization: orgs[organization].organization, 'Count': parseInt(orgs[organization].agents.length)});
+	}
+
+	let sortedOrgsArr = orgsArr.sort((a, b) => {
+		if (a.organization > b.organization) return 1;
+		else if (a.organization < b.organization) return -1;
+		return 0;
+	})
+
+	return sortedOrgsArr;
+};
+
 export default function ZendeskDashboard(props) {
 	const [ticketData, setTicketData] = useState();
-	const [countByAgent, setCountByAgent] = useState();
-	const [countByOrganization, setCountByOrganization] = useState();
-	const [countByStatus, setCountByStatus] = useState();
-	const [countByAge, setCountByAge] = useState();
+	const [ticketCountByAgent, setTicketCountByAgent] = useState();
+	const [ticketCountByOrganization, setTicketCountByOrganization] = useState();
+	const [ticketCountByStatus, setTicketCountByStatus] = useState();
+	const [ticketCountByAge, setTicketCountByAge] = useState();
+	const [agentCountByOrganization, setAgentCountByOrganization] = useState();
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
 		fetchData('/svc/tickets')
@@ -122,15 +144,17 @@ export default function ZendeskDashboard(props) {
 
 	useEffect(() => {
 		if (ticketData) {
-			const agentData = getCountByAgent(ticketData);
-			const orgData = getCountByOrg(ticketData);
-			const statusData = getCountByStatus(ticketData);
-			const ageData = getCountByAge(ticketData);
+			const ticketByAgentData = getTicketCountByAgent(ticketData);
+			const ticketByOrgData = getTicketCountByOrg(ticketData);
+			const ticketByStatusData = getTicketCountByStatus(ticketData);
+			const ticketByAgeData = getTicketCountByAge(ticketData);
+			const agentByOrgData = getAgentCountByOrg(ticketData);
 
-			setCountByAgent(agentData);
-			setCountByOrganization(orgData);
-			setCountByStatus(statusData);
-			setCountByAge(ageData);
+			setTicketCountByAgent(ticketByAgentData);
+			setTicketCountByOrganization(ticketByOrgData);
+			setTicketCountByStatus(ticketByStatusData);
+			setTicketCountByAge(ticketByAgeData);
+			setAgentCountByOrganization(agentByOrgData);
 		}
 	}, [ticketData]);
 
@@ -139,73 +163,107 @@ export default function ZendeskDashboard(props) {
 			<Link to='/'>
 				<i className="fas fa-arrow-left zendesk-back-arrow"></i>
 			</Link>
-			
-			<div className='dashboard-panel'>
-				{
-               ticketData
-               ?
-               <>
-                  <p className='panel-header'>Tickets by Agent</p>
-                  <div className='chart-container'>
-                     <TicketCountByAgent countByAgent={countByAgent} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#A5368D'} />
-               </div>
-            }
-			</div>
 
-			<div className='dashboard-panel'>
-				{
-               ticketData
-               ?
-               <>
-                  <p className='panel-header'>Tickets by Organization</p>
-                  <div className='chart-container'>
-                     <TicketCountByOrganization countByOrganization={countByOrganization} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#800026'} />
-               </div>
-            }
-			</div>
+			{
+				page === 1
+				&&
+				<>
+					<div className='dashboard-panel'>
+						{
+							ticketData
+							?
+							<>
+								<p className='panel-header'>Tickets by Agent</p>
+								<div className='chart-container'>
+									<TicketCountByAgent ticketCountByAgent={ticketCountByAgent} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#A5368D'} />
+							</div>
+						}
+					</div>
 
-			<div className='dashboard-panel'>
-				{
-               ticketData
-               ?
-               <>
-                  <p className='panel-header'>Tickets by Status</p>
-                  <div className='chart-container'>
-                     <TicketCountByStatus countByStatus={countByStatus} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#3690C0'} />
-               </div>
-            }
-			</div>
+					<div className='dashboard-panel'>
+						{
+							ticketData
+							?
+							<>
+								<p className='panel-header'>Tickets by Organization</p>
+								<div className='chart-container'>
+									<TicketCountByOrganization ticketCountByOrganization={ticketCountByOrganization} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#800026'} />
+							</div>
+						}
+					</div>
+
+					<div className='dashboard-panel'>
+						{
+							ticketData
+							?
+							<>
+								<p className='panel-header'>Tickets by Status</p>
+								<div className='chart-container'>
+									<TicketCountByStatus ticketCountByStatus={ticketCountByStatus} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#3690C0'} />
+							</div>
+						}
+					</div>
+					
+					<div className='dashboard-panel'>
+						{
+							ticketData
+							?
+							<>
+								<p className='panel-header'>Tickets by Age</p>
+								<div className='chart-container'>
+									<TicketCountByAge ticketCountByAge={ticketCountByAge} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#016C59'} />
+							</div>
+						}
+					</div>
+				</>
+			}
 			
-			<div className='dashboard-panel'>
-				{
-               ticketData
-               ?
-               <>
-                  <p className='panel-header'>Tickets by Age</p>
-                  <div className='chart-container'>
-                     <TicketCountByAge countByAge={countByAge} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#016C59'} />
-               </div>
-            }
+			{
+				page === 2
+				&&
+				<>
+					<div className='dashboard-panel'>
+						{
+							ticketData
+							?
+							<>
+								<p className='panel-header'>Agents by Organization</p>
+								<div className='chart-container'>
+									<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#A5368D'} />
+							</div>
+						}
+					</div>
+				</>
+			}
+
+			<div className='zendesk-chart-page-selector'>
+				<i className={ page === 1 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(1)}></i>
+				<i className={ page === 2 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(2)}></i>
 			</div>
 		</div>
 	)

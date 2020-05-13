@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function TicketCountByAgent(props) {
+export default function AgentCountByOrganization(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -28,9 +28,9 @@ export default function TicketCountByAgent(props) {
 
 	return (
 		<ResponsiveBar
-			data={props.ticketCountByAgent}
+			data={props.agentCountByOrganization}
 			keys={[ 'Count' ]}
-			indexBy="agent"
+			indexBy="organization"
 			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 			padding={0.3}
 			layout="vertical"

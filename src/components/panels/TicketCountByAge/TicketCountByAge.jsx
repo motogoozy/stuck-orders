@@ -26,15 +26,31 @@ export default function TicketCountByAge(props) {
 		}
 	};
 
+		// purple_blue_green
+	const colors = {
+		'0': '#FFF7FB',
+		'1': '#E7E1EF',
+		'2': '#D0D1E6',
+		'3': '#A6BDDB',
+		'4': '#67A9CF',
+		'5': '#3690C0',
+		'6': '#02818A',
+		'7': '#016C59',
+		'8+': '#014636'
+	};
+
+	const getColors = bar => colors[bar.indexValue];
+
 	return (
 		<ResponsiveBar
-			data={props.countByAge}
+			data={props.ticketCountByAge}
 			keys={[ 'Day' ]}
 			indexBy="age"
 			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 			padding={0.3}
 			layout="vertical"
-			colors={{ scheme: 'nivo' }}
+			// colors={{ scheme: 'purple_blue_green' }}
+			colors={getColors}
 			colorBy='index'
 			theme={theme}
 			enableGridX={false}
