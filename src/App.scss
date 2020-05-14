@@ -124,19 +124,24 @@ $primary-accent: #02818A;
    flex-direction: row;
    justify-content: space-between;
    align-items: center;
+   color: white;
 
    p {
       margin: 0;
+   }
+   
+   a {
       color: white;
+      text-decoration: none;
    }
 
    .dashboard-link {
-      color: white;
       margin: 1rem;
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
+      
       p {
          margin: 0 0 0 .5rem;
          &:hover {
