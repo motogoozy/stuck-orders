@@ -227,7 +227,7 @@ export default function App(props) {
                </>
                :
                <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#800026'} />
+                  <GridLoader size={12} loading={true} color={'#016C59'} />
                </div>
             }
          </div>
@@ -261,7 +261,7 @@ export default function App(props) {
                </>
                :
                <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#016C59'} />
+                  <GridLoader size={12} loading={true} color={'#800026'} />
                </div>
             }
          </div>
