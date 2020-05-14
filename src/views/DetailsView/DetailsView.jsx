@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './DetailsView.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { getOrderData } from '../../App.js';
+import { fetchData } from '../../helperFunctions';
 import { formatDate } from '../../utils.js';
 
 import GridLoader from 'react-spinners/GridLoader';
@@ -39,7 +39,7 @@ export default function DetailsView(props) {
 	const [sort, setSort] = useState({ sortBy: '', descending: true });
 
 	useEffect(() => {
-		getOrderData().then(data => {
+		fetchData('/api/stuck_orders').then(data => {
 			if (data.stuck_orders.length > 0) {
 				let options = {client: [], expedited: [], order_status: []};
 				data.stuck_orders.forEach(order => {
@@ -209,7 +209,15 @@ export default function DetailsView(props) {
 			return (
 				<div className='order-detail-row' key={order.order_number}>
 					<p className='detail-client'>{order.client}</p>
-					<a href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`} target='_blank' rel="noopener noreferrer" className='detail-order-number'>{order.order_number}</a>
+					<a
+						// href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`}
+						href={`https://helpdesk.mobilsense.com/${order.client_db_name}/api#/app/Utility/order_editor/${splitOrderNum(order.order_number)}`}
+						target='_blank'
+						rel="noopener noreferrer"
+						className='detail-order-number'
+					>
+						{order.order_number}
+					</a>
 					<p className='detail-expedited'>{order.expedited && 'Expedited'}</p>
 					<p className='detail-order-status'>{order.order_status}</p>
 					<OverlayTrigger
@@ -402,7 +410,7 @@ export default function DetailsView(props) {
 				</div>
 				:
 				<div className='detail-loader'>
-					<GridLoader size={12} loading={true} color={'white'} />
+					<GridLoader size={12} loading={true} color={'#02818A'} />
 				</div>
 			}
 		</div>
