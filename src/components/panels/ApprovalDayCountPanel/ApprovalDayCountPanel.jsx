@@ -59,50 +59,45 @@ export default function ApprovalDayCountPanel(props) {
 	const getColors = bar => colors[bar.indexValue];
 
 	return (
-		<div className='dashboard-panel approval-day-count-panel'>
-			<p className='panel-header'>Approval Age</p>
-			<div className='chart-container'>
-				<ResponsiveBar
-					onClick={event => history.push(`/details?approval_age=${event.data.day}`)}
-					data={props.approvalDayCount}
-					keys={[ 'Day' ]}
-					indexBy="day"
-					margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
-					padding={0.3}
-					layout="vertical"
-					// colors={{ scheme: 'purple_blue_green' }}
-					colors={getColors}
-					colorBy='index'
-					theme={theme}
-					enableGridX={false}
-					enableGridY={true}
+		<ResponsiveBar
+			onClick={event => history.push(`/details?approval_age=${event.data.day}`)}
+			data={props.approvalDayCount}
+			keys={[ 'Day' ]}
+			indexBy="day"
+			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			padding={0.3}
+			layout="vertical"
+			// colors={{ scheme: 'purple_blue_green' }}
+			colors={getColors}
+			colorBy='index'
+			theme={theme}
+			enableGridX={false}
+			enableGridY={true}
 
-					axisTop={null}
-					axisRight={null}
-					axisBottom={{
-						tickSize: 5,
-						tickPadding: 5,
-						tickRotation: -0,
-						legend: 'Days',
-						legendPosition: 'middle',
-						legendOffset: 70,
-					}}
-					axisLeft={{
-						tickSize: 5,
-						tickPadding: 5,
-						tickRotation: 0,
-						legend: 'Total Orders',
-						legendPosition: 'middle',
-						legendOffset: -40,
-					}}
-					labelSkipWidth={12}
-					labelSkipHeight={12}
-					labelTextColor={'black'}
-					animate={true}
-					motionStiffness={90}
-					motionDamping={15}
-				/>
-			</div>
-		</div>
+			axisTop={null}
+			axisRight={null}
+			axisBottom={{
+				tickSize: 5,
+				tickPadding: 5,
+				tickRotation: -0,
+				legend: 'Days',
+				legendPosition: 'middle',
+				legendOffset: 70,
+			}}
+			axisLeft={{
+				tickSize: 5,
+				tickPadding: 5,
+				tickRotation: 0,
+				legend: 'Total Orders',
+				legendPosition: 'middle',
+				legendOffset: -40,
+			}}
+			labelSkipWidth={12}
+			labelSkipHeight={12}
+			labelTextColor={'black'}
+			animate={true}
+			motionStiffness={90}
+			motionDamping={15}
+		/>
 	)
 }

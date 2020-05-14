@@ -40,9 +40,28 @@
 				width: auto;
 				margin: 0 0 0 1rem;
 			}
-
+			
 			input {
+				padding: .5rem;
+				width: 15rem;
+				display: inline-block;
+				border: 1px solid white;
+				background-color: transparent;
+				border-radius: 4px;
+				color: white;
+				font-size: .9rem;
 				margin: 0 0 0 1rem;
+				transition: border .25s;
+	
+				&:hover {
+					// border: 1px solid $primary-accent;
+				}
+	
+				&:focus {
+					outline: none;
+					border: 1px solid $primary-accent;
+					transition: border .25s;
+				}
 			}
 
 			p {
@@ -57,28 +76,6 @@
 			}
 		}
 
-		input {
-			padding: .5rem;
-			width: 15rem;
-			display: inline-block;
-			border: 1px solid white;
-			background-color: transparent;
-			border-radius: 4px;
-			color: white;
-			font-size: .9rem;
-			margin: 0;
-			transition: border .25s;
-
-			&:hover {
-				// border: 1px solid $primary-accent;
-			}
-
-			&:focus {
-				outline: none;
-				border: 1px solid $primary-accent;
-				transition: border .25s;
-			}
-		}
 
 		.details-back-arrow {
 			color: white;

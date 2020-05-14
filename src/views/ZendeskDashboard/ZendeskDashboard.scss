@@ -1,0 +1,42 @@
+@import '../../App.scss';
+
+.zendesk-back-arrow {
+	color: white;
+	font-size: 1.25rem;
+	transition: color .15s;
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+
+	&:hover {
+		color: $primary-accent;
+		transition: color .15s;
+	}
+}
+
+.zendesk-chart-page-selector {
+	position: fixed;
+	bottom: 0;
+	height: 2rem;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	
+	i {
+		color: gray;
+		font-size: .5rem;
+		margin: 0 .5rem;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	.selected-zendesk-page {
+		color: white;
+		&:hover {
+			cursor: default;
+		}
+	}
+}

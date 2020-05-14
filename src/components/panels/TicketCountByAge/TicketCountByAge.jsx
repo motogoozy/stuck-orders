@@ -1,12 +1,8 @@
 import React from 'react';
-import './AlertPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
-import { useHistory } from 'react-router-dom';
 
-export default function AlertPanel(props) {
-	const history = useHistory();
-
+export default function TicketCountByAge(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -29,26 +25,31 @@ export default function AlertPanel(props) {
 			}
 		}
 	};
-	
-	const barColors = {
-		'Exp. Approved 4+': '#B30000',
-		'Std. Approved 24+': '#D73020',
-		'Pending Orders 72+': '#EF6548',
-		'Pending Orders 96+': '#FC8D59',
+
+		// purple_blue_green
+	const colors = {
+		'0': '#FFF7FB',
+		'1': '#E7E1EF',
+		'2': '#D0D1E6',
+		'3': '#A6BDDB',
+		'4': '#67A9CF',
+		'5': '#3690C0',
+		'6': '#02818A',
+		'7': '#016C59',
+		'8+': '#014636'
 	};
 
-	const getColors = bar => barColors[bar.indexValue];
+	const getColors = bar => colors[bar.indexValue];
 
 	return (
 		<ResponsiveBar
-			onClick={event => history.push(`/details?alert=${event.data.dbName}`)}
-			data={props.alertCount}
-			keys={[ 'Count' ]}
-			indexBy="alertName"
+			data={props.ticketCountByAge}
+			keys={[ 'Day' ]}
+			indexBy="age"
 			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 			padding={0.3}
 			layout="vertical"
-			// colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+			// colors={{ scheme: 'purple_blue_green' }}
 			colors={getColors}
 			colorBy='index'
 			theme={theme}
@@ -59,8 +60,8 @@ export default function AlertPanel(props) {
 			axisBottom={{
 				tickSize: 5,
 				tickPadding: 5,
-				tickRotation: -22,
-				legend: 'Type',
+				tickRotation: 0,
+				legend: 'Age',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -68,7 +69,6 @@ export default function AlertPanel(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: 0,
-				tickValues: props.alertCount.length,
 				legend: 'Count',
 				legendPosition: 'middle',
 				legendOffset: -40,
