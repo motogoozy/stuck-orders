@@ -5,6 +5,7 @@ export async function fetchData (url, config) {
 		let res = await axios.get(url, config);
 		return res.data;
 	} catch (err) {
+		console.log(err);
 		throw Error(`Unable to fetch data at this time.`);
 	}
 };

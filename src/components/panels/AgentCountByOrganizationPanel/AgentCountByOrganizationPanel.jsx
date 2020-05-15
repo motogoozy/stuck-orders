@@ -52,14 +52,13 @@ export default function AgentCountByOrganizationPanel(props) {
 			groupMode='grouped'
 			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
 			padding={0.3}
-			colors={{ scheme: 'set3' }}
 			layout="vertical"
+			colors={{ scheme: 'set3' }}
 			minValue='auto'
 			colorBy='id'
 			theme={theme}
 			enableGridX={false}
 			enableGridY={true}
-			// gridYValues={maxYValue}
 			axisTop={null}
 			axisRight={null}
 			axisBottom={{
@@ -74,14 +73,10 @@ export default function AgentCountByOrganizationPanel(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: 0,
-				// tickValues: maxYValue,
 				legend: 'Count',
 				legendPosition: 'middle',
 				legendOffset: -40,
 			}}
-			labelSkipWidth={12}
-			labelSkipHeight={12}
-			labelTextColor={'white'}
 			legends = {
 				[{
 					dataFrom: 'keys',
@@ -94,7 +89,7 @@ export default function AgentCountByOrganizationPanel(props) {
 					itemWidth: 100,
 					itemHeight: 20,
 					itemDirection: 'top-to-bottom',
-					itemOpacity: 0.85,
+					itemOpacity: 1,
 					itemTextColor: 'white',
 					symbolSize: 10,
 					// effects: [{
@@ -105,6 +100,9 @@ export default function AgentCountByOrganizationPanel(props) {
 					// }]
 				}]
 			}
+			labelSkipWidth={12}
+			labelSkipHeight={12}
+			labelTextColor={'white'}
 			animate={true}
 			motionStiffness={90}
 			motionDamping={15}

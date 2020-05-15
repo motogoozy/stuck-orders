@@ -14,8 +14,9 @@ import GridLoader from 'react-spinners/GridLoader';
 export const getTicketCountByAgent = (ticketData) => {
 	let agents = {};
 	ticketData.forEach(ticket => {
-		agents[ticket.agent] = agents[ticket.agent] || {'agent': ticket.agent, 'Count': 0};
-		agents[ticket.agent].Count++;
+		let capitalizedStatus = ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1);
+		agents[ticket.agent] = agents[ticket.agent] || {'agent': ticket.agent};
+		agents[ticket.agent][ticket.status] = agents[ticket.agent][ticket.status] + 1 || 1;
 	})
 
 	let agentsArr = [];
@@ -107,12 +108,22 @@ export const getTicketCountByAge = (ticketData) => {
 export const getAgentCountByOrg = (ticketData) => {
 	let orgs = {}; // map of organization names with array of agent names
 	ticketData.forEach(ticket => {
-		const agentFirstName = ticket.agent.split(' ')[0];
-		const agentLastInitial = ticket.agent.split(' ')[1].split('')[0];
-		const agentDisplayName = `${agentFirstName} ${agentLastInitial}.`
+		let agentFirstName = ''
+		let agentLastInitial = '';
+		let agentDisplayName;
+		if (ticket.agent.split(' ').length > 1) {
+			agentFirstName = ticket.agent.split(' ')[0];
+			agentLastInitial = ticket.agent.split(' ')[1].charAt(0).toUpperCase();
+			agentDisplayName = `${agentFirstName} ${agentLastInitial}.`
+		} else {
+			agentDisplayName = ticket.agent;
+		}
 
 		orgs[ticket.organization] = orgs[ticket.organization] || {organization: ticket.organization};
-		orgs[ticket.organization][agentDisplayName] = orgs[ticket.organization][agentDisplayName] + 1 || 1;
+
+		if (ticket.status !== 'solved' && ticket.status !== 'closed') {
+			orgs[ticket.organization][agentDisplayName] = orgs[ticket.organization][agentDisplayName] + 1 || 1;
+		}
 	})
 	
 	let orgsArr = [];
@@ -174,7 +185,7 @@ export default function ZendeskDashboard(props) {
 				<>
 					<div className='dashboard-panel'>
 						{
-							ticketData
+							ticketCountByAgent
 							?
 							<>
 								<p className='panel-header'>Tickets by Agent</p>
@@ -191,7 +202,7 @@ export default function ZendeskDashboard(props) {
 
 					<div className='dashboard-panel'>
 						{
-							ticketData
+							ticketCountByOrganization
 							?
 							<>
 								<p className='panel-header'>Tickets by Organization</p>
@@ -208,7 +219,7 @@ export default function ZendeskDashboard(props) {
 
 					<div className='dashboard-panel'>
 						{
-							ticketData
+							ticketCountByStatus
 							?
 							<>
 								<p className='panel-header'>Tickets by Status</p>
@@ -225,7 +236,7 @@ export default function ZendeskDashboard(props) {
 					
 					<div className='dashboard-panel'>
 						{
-							ticketData
+							ticketCountByAge
 							?
 							<>
 								<p className='panel-header'>Tickets by Age</p>
@@ -248,7 +259,7 @@ export default function ZendeskDashboard(props) {
 				<>
 					<div className='dashboard-panel'>
 						{
-							ticketData && agentCountByOrganization
+							agentCountByOrganization
 							?
 							<>
 								<p className='panel-header'>Agents by Organization</p>

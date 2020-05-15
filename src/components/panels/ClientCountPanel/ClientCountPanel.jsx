@@ -53,7 +53,6 @@ export default function ClientCountPanel(props) {
 			theme={theme}
 			enableGridX={false}
 			enableGridY={true}
-			// gridYValues={maxYValue}
 			axisTop={null}
 			axisRight={null}
 			axisBottom={{
@@ -68,7 +67,6 @@ export default function ClientCountPanel(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: 0,
-				// tickValues: maxYValue,
 				legend: 'Total Orders',
 				legendPosition: 'middle',
 				legendOffset: -40,
@@ -88,7 +86,7 @@ export default function ClientCountPanel(props) {
 					itemWidth: 100,
 					itemHeight: 20,
 					itemDirection: 'top-to-bottom',
-					itemOpacity: 0.85,
+					itemOpacity: 1,
 					itemTextColor: 'white',
 					symbolSize: 20,
 					// effects: [{

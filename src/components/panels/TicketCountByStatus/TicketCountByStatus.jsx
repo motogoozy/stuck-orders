@@ -34,7 +34,9 @@ export default function TicketCountByStatus(props) {
 			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 			padding={0.3}
 			layout="vertical"
-			colors={{ scheme: 'accent' }}
+			// colors={{ scheme: 'accent' }}
+			colors={['#FFED6F', '#FC8D62', '#8DA0CB', '#66C2A5']}
+
 			colorBy='index'
 			theme={theme}
 			enableGridX={false}

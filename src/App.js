@@ -129,11 +129,11 @@ export const getApprovalDayCount = (orderData) => {
 
 export default function App(props) {
    const [orderData, setOrderData] = useState('');
-   const [clientNames, setClientNames] = useState({});
-   const [clientCount, setClientCount] = useState([])
-   const [alertCount, setAlertCount] = useState([]);
-   const [statusDayCount, setDayCount] = useState([]);
-   const [approvalDayCount, setApprovalDayCount] = useState([]);
+   const [clientNames, setClientNames] = useState();
+   const [clientCount, setClientCount] = useState()
+   const [alertCount, setAlertCount] = useState();
+   const [statusDayCount, setDayCount] = useState();
+   const [approvalDayCount, setApprovalDayCount] = useState();
 
    useEffect(() => {
       fetchData('/api/stuck_orders')
@@ -146,9 +146,11 @@ export default function App(props) {
                if (queryValues.fetch_interval) {
                   const interval = parseInt(queryValues.fetch_interval * 1000); // seconds
                   let orderTimer = setInterval(() => {
-                     fetchData('/api/stuck_orders').then(data => {
-                        setOrderData(data);
-                     });
+                     fetchData('/api/stuck_orders')
+                        .then(data => {
+                           setOrderData(data);
+                        })
+                        .catch(err => console.log(err));
                   }, interval);
             
                   return () => {
@@ -191,7 +193,7 @@ export default function App(props) {
       <div className='dashboard'>
          <div className='dashboard-panel client-count-panel'>
             {
-               orderData
+               clientCount
                ?
                <>
                   <p className='panel-header'>Stuck Orders by Client ({orderData.stuck_orders.length})</p>
@@ -208,7 +210,7 @@ export default function App(props) {
          
          <div className='dashboard-panel alert-panel'>
             {
-               orderData
+               alertCount
                ?
                <>
                   <p className='panel-header'>Alerts</p>
@@ -234,7 +236,7 @@ export default function App(props) {
 
          <div className='dashboard-panel status-day-count-panel'>
             {
-               orderData
+               statusDayCount
                ?
                <>
                   <p className='panel-header'>Current Status Age</p>
@@ -251,7 +253,7 @@ export default function App(props) {
 
          <div className='dashboard-panel approval-day-count-panel'>
             {
-               orderData
+               approvalDayCount
                ?
                <>
                   <p className='panel-header'>Approval Age</p>
