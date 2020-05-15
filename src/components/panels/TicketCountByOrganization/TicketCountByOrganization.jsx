@@ -34,7 +34,7 @@ export default function TicketCountByOrganization(props) {
 			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
 			padding={0.3}
 			layout="vertical"
-			colors={{ scheme: 'accent' }}
+			colors={{ scheme: 'set3' }}
 			colorBy='index'
 			theme={theme}
 			enableGridX={false}

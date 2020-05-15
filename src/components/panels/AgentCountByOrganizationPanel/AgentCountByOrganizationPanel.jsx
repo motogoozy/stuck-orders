@@ -1,14 +1,18 @@
 import React from 'react';
 
+import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function AgentCountByOrganization(props) {
+export default function AgentCountByOrganizationPanel(props) {
+	const history = useHistory();
+
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
 					fontSize: '.8rem',
+					letterSpacing: '.25px',
 				},
 			},
 			legend: {
@@ -26,26 +30,43 @@ export default function AgentCountByOrganization(props) {
 		}
 	};
 
+	const getKeys = (data) => {
+		let keys = [];
+		data.forEach(org => {
+			let objKeys = Object.keys(org);
+			objKeys.forEach(objKey => {
+				if (objKey !== 'organization' && !keys.includes(objKey)) {
+					keys.push(objKey);
+				}
+			})
+		})
+
+		return keys;
+	}
+
 	return (
 		<ResponsiveBar
 			data={props.agentCountByOrganization}
-			keys={[ 'Count' ]}
-			indexBy="organization"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			keys={getKeys(props.agentCountByOrganization)}
+			indexBy='organization'
+			groupMode='grouped'
+			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
 			padding={0.3}
+			colors={{ scheme: 'set3' }}
 			layout="vertical"
-			colors={{ scheme: 'nivo' }}
-			colorBy='index'
+			minValue='auto'
+			colorBy='id'
 			theme={theme}
 			enableGridX={false}
 			enableGridY={true}
+			// gridYValues={maxYValue}
 			axisTop={null}
 			axisRight={null}
 			axisBottom={{
 				tickSize: 5,
 				tickPadding: 5,
-				tickRotation: -22,
-				legend: 'Agent',
+				tickRotation: -30,
+				legend: 'Organization',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -53,13 +74,37 @@ export default function AgentCountByOrganization(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: 0,
+				// tickValues: maxYValue,
 				legend: 'Count',
 				legendPosition: 'middle',
 				legendOffset: -40,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}
-			labelTextColor={'black'}
+			labelTextColor={'white'}
+			legends = {
+				[{
+					dataFrom: 'keys',
+					anchor: 'bottom-right',
+					direction: 'column',
+					justify: false,
+					translateX: 110,
+					translateY: -10,
+					itemsSpacing: 20,
+					itemWidth: 100,
+					itemHeight: 20,
+					itemDirection: 'top-to-bottom',
+					itemOpacity: 0.85,
+					itemTextColor: 'white',
+					symbolSize: 10,
+					// effects: [{
+					// 	on: 'hover',
+					// 	style: {
+					// 		itemOpacity: 1
+					// 	}
+					// }]
+				}]
+			}
 			animate={true}
 			motionStiffness={90}
 			motionDamping={15}

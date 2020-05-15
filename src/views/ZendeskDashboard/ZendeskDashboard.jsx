@@ -107,15 +107,19 @@ export const getTicketCountByAge = (ticketData) => {
 export const getAgentCountByOrg = (ticketData) => {
 	let orgs = {}; // map of organization names with array of agent names
 	ticketData.forEach(ticket => {
-		orgs[ticket.organization] = orgs[ticket.organization] || {organization: ticket.organization, agents: []};
-		orgs[ticket.organization].agents.push(ticket.agent);
+		const agentFirstName = ticket.agent.split(' ')[0];
+		const agentLastInitial = ticket.agent.split(' ')[1].split('')[0];
+		const agentDisplayName = `${agentFirstName} ${agentLastInitial}.`
+
+		orgs[ticket.organization] = orgs[ticket.organization] || {organization: ticket.organization};
+		orgs[ticket.organization][agentDisplayName] = orgs[ticket.organization][agentDisplayName] + 1 || 1;
 	})
-
+	
 	let orgsArr = [];
-	for (let organization in orgs) {
-		orgsArr.push({organization: orgs[organization].organization, 'Count': parseInt(orgs[organization].agents.length)});
+	for (let org in orgs) {
+		orgsArr.push(orgs[org]);
 	}
-
+	
 	let sortedOrgsArr = orgsArr.sort((a, b) => {
 		if (a.organization > b.organization) return 1;
 		else if (a.organization < b.organization) return -1;
@@ -244,7 +248,7 @@ export default function ZendeskDashboard(props) {
 				<>
 					<div className='dashboard-panel'>
 						{
-							ticketData
+							ticketData && agentCountByOrganization
 							?
 							<>
 								<p className='panel-header'>Agents by Organization</p>
