@@ -4,7 +4,7 @@ import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPa
 import AlertPanel from './components/panels/AlertPanel/AlertPanel';
 import StatusDayCountPanel from './components/panels/StatusDayCountPanel/StatusDayCountPanel';
 import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/ApprovalDayCountPanel';
-import { fetchData } from './helperFunctions';
+import { fetchData } from './utils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';

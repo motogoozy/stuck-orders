@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ZendeskDashboard.scss';
-import { fetchData } from '../../helperFunctions';
+import { fetchData } from '../../utils';
 import TicketCountByAgent from '../../components/panels/TicketCountByAgent/TicketCountByAgent';
 import TicketCountByOrganization from '../../components/panels/TicketCountByOrganization/TicketCountByOrganization';
 import TicketCountByStatus from '../../components/panels/TicketCountByStatus/TicketCountByStatus';
@@ -265,6 +265,23 @@ export default function ZendeskDashboard(props) {
 								<p className='panel-header'>Agents by Organization</p>
 								<div className='chart-container'>
 									<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} />
+								</div>
+							</>
+							:
+							<div className='grid-loader-container'>
+								<GridLoader size={12} loading={true} color={'#A5368D'} />
+							</div>
+						}
+					</div>
+
+					<div className='dashboard-panel'>
+						{
+							agentCountByOrganization
+							?
+							<>
+								<p className='panel-header'>Agents by Organization</p>
+								<div className='chart-container'>
+									<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} groupMode='stacked' />
 								</div>
 							</>
 							:

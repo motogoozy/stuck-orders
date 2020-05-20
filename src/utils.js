@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const formatDate = (dateObj) => {
    const year = dateObj.getFullYear().toString().split('').slice(2).join('');
    let month = dateObj.getMonth() + 1;
@@ -27,4 +29,14 @@ export const formatDate = (dateObj) => {
    }
 
    return `${month}/${day}/${year} at ${hour}:${minutes}${daytime}`;
+};
+
+export async function fetchData (url, config) {
+	try {
+		let res = await axios.get(url, config);
+		return res.data;
+	} catch (err) {
+		console.log(err);
+		throw Error(`Unable to fetch data at this time.`);
+	}
 };

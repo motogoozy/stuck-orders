@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './DetailsView.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { fetchData } from '../../helperFunctions';
-import { formatDate } from '../../utils.js';
+import { fetchData } from '../../utils';
+import { formatDate } from '../../utils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';

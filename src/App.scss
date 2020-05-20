@@ -87,7 +87,7 @@ $primary-accent: #02818A;
 		* {
 			opacity: 1;
 		}
-	}
+   }
 }
 
 .alert-panel {
@@ -141,7 +141,7 @@ $primary-accent: #02818A;
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
-      
+
       p {
          margin: 0 0 0 .5rem;
          &:hover {

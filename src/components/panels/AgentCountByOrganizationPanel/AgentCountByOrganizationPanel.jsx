@@ -44,12 +44,14 @@ export default function AgentCountByOrganizationPanel(props) {
 		return keys;
 	}
 
+	const groupMode = props.groupMode || 'grouped';
+
 	return (
 		<ResponsiveBar
 			data={props.agentCountByOrganization}
 			keys={getKeys(props.agentCountByOrganization)}
 			indexBy='organization'
-			groupMode='grouped'
+			groupMode={groupMode}
 			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
 			padding={0.3}
 			layout="vertical"
@@ -102,7 +104,7 @@ export default function AgentCountByOrganizationPanel(props) {
 			}
 			labelSkipWidth={12}
 			labelSkipHeight={12}
-			labelTextColor={'white'}
+			labelTextColor={'black'}
 			animate={true}
 			motionStiffness={90}
 			motionDamping={15}
