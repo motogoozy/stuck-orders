@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function TicketCountByAge(props) {
+export default function TicketCountByOrganization(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -26,31 +26,15 @@ export default function TicketCountByAge(props) {
 		}
 	};
 
-		// purple_blue_green
-	const colors = {
-		'0': '#FFF7FB',
-		'1': '#E7E1EF',
-		'2': '#D0D1E6',
-		'3': '#A6BDDB',
-		'4': '#67A9CF',
-		'5': '#3690C0',
-		'6': '#02818A',
-		'7': '#016C59',
-		'8+': '#014636'
-	};
-
-	const getColors = bar => colors[bar.indexValue];
-
 	return (
 		<ResponsiveBar
-			data={props.ticketCountByAge}
-			keys={[ 'Day' ]}
-			indexBy="age"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			data={props.ticketCountByOrganization}
+			keys={[ 'Count' ]}
+			indexBy="organization"
+			margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
 			padding={0.3}
 			layout="vertical"
-			// colors={{ scheme: 'purple_blue_green' }}
-			colors={getColors}
+			colors={{ scheme: 'set3' }}
 			colorBy='index'
 			theme={theme}
 			enableGridX={false}
@@ -60,8 +44,8 @@ export default function TicketCountByAge(props) {
 			axisBottom={{
 				tickSize: 5,
 				tickPadding: 5,
-				tickRotation: 0,
-				legend: 'Age',
+				tickRotation: -22,
+				legend: 'Organization',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -71,7 +55,7 @@ export default function TicketCountByAge(props) {
 				tickRotation: 0,
 				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}

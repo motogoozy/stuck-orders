@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './DetailsView.scss';
+import './StuckOrdersDetails.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import { fetchData } from '../../utils';
 import { formatDate } from '../../utils';
@@ -31,7 +31,7 @@ const formatAge = hrs => {
 	}
 };
 
-export default function DetailsView(props) {
+export default function StuckOrdersDetails(props) {
 	const [orderData, setOrderData] = useState('');
 	const [filterOptions, setFilterOptions] = useState({});
 	const [search, setSearch] = useState('');

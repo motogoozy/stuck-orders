@@ -45,7 +45,7 @@ export default function AlertPanel(props) {
 			data={props.alertCount}
 			keys={[ 'Count' ]}
 			indexBy="alertName"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
 			padding={0.3}
 			layout="vertical"
 			// colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
@@ -71,7 +71,7 @@ export default function AlertPanel(props) {
 				tickValues: props.alertCount.length,
 				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}

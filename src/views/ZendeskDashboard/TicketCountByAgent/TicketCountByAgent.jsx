@@ -1,18 +1,14 @@
 import React from 'react';
 
-import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function AgentCountByOrganizationPanel(props) {
-	const history = useHistory();
-
+export default function TicketCountByAgent(props) {
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
 					fontSize: '.8rem',
-					letterSpacing: '.25px',
 				},
 			},
 			legend: {
@@ -35,7 +31,7 @@ export default function AgentCountByOrganizationPanel(props) {
 		data.forEach(org => {
 			let objKeys = Object.keys(org);
 			objKeys.forEach(objKey => {
-				if (objKey !== 'organization' && !keys.includes(objKey)) {
+				if (objKey !== 'agent' && !keys.includes(objKey)) {
 					keys.push(objKey);
 				}
 			})
@@ -44,18 +40,17 @@ export default function AgentCountByOrganizationPanel(props) {
 		return keys;
 	}
 
-	const groupMode = props.groupMode || 'grouped';
-
 	return (
 		<ResponsiveBar
-			data={props.agentCountByOrganization}
-			keys={getKeys(props.agentCountByOrganization)}
-			indexBy='organization'
-			groupMode={groupMode}
-			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
+			data={props.ticketCountByAgent}
+			keys={getKeys(props.ticketCountByAgent)}
+			indexBy="agent"
+			groupMode='grouped'
+			margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
 			padding={0.3}
 			layout="vertical"
-			colors={{ scheme: 'set3' }}
+			// colors={{ scheme: 'set2' }}
+			colors={['#B2182B','#FC8D62', '#FFED6F', '#66C2A5', '#1B7837']}
 			minValue='auto'
 			colorBy='id'
 			theme={theme}
@@ -67,7 +62,7 @@ export default function AgentCountByOrganizationPanel(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: -30,
-				legend: 'Organization',
+				legend: 'Agent',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -77,7 +72,7 @@ export default function AgentCountByOrganizationPanel(props) {
 				tickRotation: 0,
 				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			legends = {
 				[{

@@ -1,14 +1,18 @@
 import React from 'react';
 
+// import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function TicketCountByAgent(props) {
+export default function AgentCountByOrganizationPanel(props) {
+	// const history = useHistory();
+
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
 					fontSize: '.8rem',
+					letterSpacing: '.25px',
 				},
 			},
 			legend: {
@@ -31,32 +35,27 @@ export default function TicketCountByAgent(props) {
 		data.forEach(org => {
 			let objKeys = Object.keys(org);
 			objKeys.forEach(objKey => {
-				if (objKey !== 'agent' && !keys.includes(objKey)) {
+				if (objKey !== 'organization' && !keys.includes(objKey)) {
 					keys.push(objKey);
 				}
 			})
 		})
 
-		const sortedKeys = keys.sort((a, b) => {
-			if (a > b) return 1;
-			else if (a < b) return -1;
-			else return 0;
-		})
-
-		return sortedKeys;
+		return keys;
 	}
+
+	const groupMode = props.groupMode || 'grouped';
 
 	return (
 		<ResponsiveBar
-			data={props.ticketCountByAgent}
-			keys={getKeys(props.ticketCountByAgent)}
-			indexBy="agent"
-			groupMode='grouped'
-			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
+			data={props.agentCountByOrganization}
+			keys={getKeys(props.agentCountByOrganization)}
+			indexBy='organization'
+			groupMode={groupMode}
+			margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
 			padding={0.3}
 			layout="vertical"
-			// colors={{ scheme: 'set2' }}
-			colors={['#FFED6F', '#FC8D62', '#8DA0CB', '#66C2A5']}
+			colors={{ scheme: 'set3' }}
 			minValue='auto'
 			colorBy='id'
 			theme={theme}
@@ -68,7 +67,7 @@ export default function TicketCountByAgent(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: -30,
-				legend: 'Agent',
+				legend: 'Organization',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -78,7 +77,7 @@ export default function TicketCountByAgent(props) {
 				tickRotation: 0,
 				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			legends = {
 				[{

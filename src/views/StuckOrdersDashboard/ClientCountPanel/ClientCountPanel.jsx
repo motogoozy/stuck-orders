@@ -43,7 +43,7 @@ export default function ClientCountPanel(props) {
 			data={props.clientCount}
 			keys={[ 'Standard', 'Expedited' ]}
 			indexBy="client"
-			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
+			margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
 			padding={0.3}
 			layout="vertical"
 			colors={[ '#4393C3', '#D6604D' ]}
@@ -69,7 +69,7 @@ export default function ClientCountPanel(props) {
 				tickRotation: 0,
 				legend: 'Total Orders',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}

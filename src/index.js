@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import DetailsView from './views/DetailsView/DetailsView';
+import StuckOrdersDetails from './views/StuckOrdersDetails/StuckOrdersDetails';
 import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
 import * as serviceWorker from './serviceWorker';
 
@@ -13,7 +13,7 @@ ReactDOM.render(
       <Router>
          <Switch>
             <Route exact path='/' component={App} />
-            <Route path='/details' component={DetailsView} />
+            <Route path='/details' component={StuckOrdersDetails} />
             <Route path='/zendesk' component={ZendeskDashboard} />
             <Route component={App} />
          </Switch>
