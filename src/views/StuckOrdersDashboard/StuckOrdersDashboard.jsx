@@ -9,7 +9,7 @@ import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import { Link } from 'react-router-dom';
 
 export default function StuckOrdersDashboard(props) {
-   const { stuckOrdersData, stuckOrdersPanelData } = props;
+   const { stuckOrdersData, stuckOrdersPanelData, isMonitorVersion } = props;
 
    return (
       <div className='dashboard'>
@@ -50,12 +50,16 @@ export default function StuckOrdersDashboard(props) {
             </div>
          </div>
 
-         <Link to='/details'>
-            <div className='details-link dashboard-link'>
-               <i className="fas fa-info-circle"></i>
-               <p>Details</p>
-            </div>
-         </Link>
+         {
+            !isMonitorVersion
+            &&
+            <Link to='/details'>
+               <div className='details-link dashboard-link'>
+                  <i className="fas fa-info-circle"></i>
+                  <p>Details</p>
+               </div>
+            </Link>
+         }
       </div>
    )
 }

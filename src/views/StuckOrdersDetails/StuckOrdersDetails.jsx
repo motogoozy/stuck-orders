@@ -323,7 +323,7 @@ export default function StuckOrdersDetails(props) {
 		<div className='details-view-main'>
 			<div className='details-view-header'>
 				<Link to='/'>
-					<i className="fas fa-arrow-left details-back-arrow"></i>
+					<i className="fas fa-arrow-left back-arrow"></i>
 				</Link>
 				{
 					orderData && filterOptions

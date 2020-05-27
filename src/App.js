@@ -8,12 +8,16 @@ import queryString from 'query-string';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import GridLoader from 'react-spinners/GridLoader';
 
+
 export default function App(props) {
    const [stuckOrdersData, setStuckOrdersData] = useState('');
    const [stuckOrdersPanelData, setStuckOrdersPanelData] = useState();
    const [zendeskData, setZendeskData] = useState('');
    const [zendeskPanelData, setZendeskPanelData] = useState();
    const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
+
+   const dashboardOrder = ['stuck_orders', 'zendesk'];
+   const isMonitorVersion = Boolean(Boolean(queryString.parse(props.location.search).toggle_interval));
 
    useEffect(() => {
       const stuckOrdersRequest = fetchData('/api/stuck_orders');
@@ -27,43 +31,37 @@ export default function App(props) {
 
              // if toggle interval parameter is provided (meaning it's the monitor version)
             if (props.location.search) {
-               let queryValues = queryString.parse(props.location.search);
+               const queryValues = queryString.parse(props.location.search);
                let toggleTimer;
-               let fetchTimer;
 
                if (queryValues.toggle_interval) {
-                  let toggleInterval = parseInt(queryValues.toggle_interval) * 1000; // seconds
-                  if (toggleInterval < 10000) {
-                     toggleInterval = 10000; // 10 second minimum
-                  }
-                  const fetchInterval = toggleInterval - 5000;
+                  const seconds = parseInt(queryValues.toggle_interval);
+                  const toggleInterval = (seconds > 10 ? seconds * 1000 : 10000); // 10 second minimum
+                  
+                  toggleTimer = setInterval(() => {
+                     const currentDashboard = dashboardOrder.shift();
+                     dashboardOrder.push(currentDashboard);
+                     const nextDashboard = dashboardOrder[0];
 
-                  fetchTimer = setInterval(() => {
-                     if (dashboardSelection !== 'stuck_orders') {
+                     if (nextDashboard === 'stuck_orders') {
                         fetchData('/api/stuck_orders')
                            .then(data => {
                               setStuckOrdersData(data);
+                              setDashboardSelection('stuck_orders');
                            })
                            .catch(err => console.log(err));
-                     }
-                     if (dashboardSelection !== 'zendesk') {
+                     } else if (nextDashboard === 'zendesk') {
                         fetchData('/svc/tickets')
                            .then(data => {
                               setZendeskData(data);
+                              setDashboardSelection('zendesk');
                            })
                            .catch(err => console.log(err));
                      }
-                  }, fetchInterval);
-                  
-                  toggleTimer = setInterval(() => {
-                     // TODO
                   }, toggleInterval);
                }
                
                return function() {
-                  if (fetchTimer) {
-                     clearInterval(fetchTimer);
-                  }
                   if (toggleTimer) {
                      clearInterval(toggleTimer);
                   }
@@ -73,7 +71,8 @@ export default function App(props) {
          .catch(err => {
             console.log(err);
          })
-   }, [props.location.search, props.history]);
+         // eslint-disable-next-line
+   }, []);
 
    useEffect(() => {
       if (stuckOrdersData) {
@@ -119,12 +118,13 @@ export default function App(props) {
       <div className='app'>
          {
             dashboardSelection === 'stuck_orders' &&
-            zendeskData &&
-            zendeskPanelData
+            stuckOrdersData &&
+            stuckOrdersPanelData
             &&
             <StuckOrdersDashboard
                stuckOrdersData={stuckOrdersData}
                stuckOrdersPanelData={stuckOrdersPanelData}
+               isMonitorVersion={isMonitorVersion}
             />
          }
 
@@ -133,12 +133,15 @@ export default function App(props) {
             zendeskData &&
             zendeskPanelData
             &&
-            <ZendeskDashboard zendeskPanelData={zendeskPanelData} />
+            <ZendeskDashboard
+               zendeskPanelData={zendeskPanelData}
+               isMonitorVersion={isMonitorVersion}
+            />
          }
 
          {
-            !zendeskData &&
-            !zendeskPanelData &&
+            !stuckOrdersData &&
+            !stuckOrdersPanelData &&
             !zendeskData &&
             !zendeskPanelData
             &&
@@ -148,8 +151,11 @@ export default function App(props) {
          }
 
          {
-            // don't display Details Link if fetch_interval param is provided
-            !queryString.parse(props.location.search).fetch_interval
+            !isMonitorVersion &&
+            stuckOrdersData &&
+            stuckOrdersPanelData &&
+            zendeskData &&
+            zendeskPanelData
             &&
             <div className='dashboard-tab-container'>
                <p

@@ -42,6 +42,19 @@ export const formatDate = (dateObj) => {
    return `${month}/${day}/${year} at ${hour}:${minutes}${daytime}`;
 };
 
+export const randomizePanels = (panelNames) => {
+   let displayPanels = [];
+   
+   while (displayPanels.length < 4) {
+      let remainingIndexes = panelNames.length;
+      let randomIndex = Math.floor(Math.random() * Math.floor(remainingIndexes));
+      let removed = panelNames.splice(randomIndex, 1)[0];
+      displayPanels.push(removed);
+   }
+   
+   return displayPanels;
+};
+
 export const stuckOrdersUtils = {
    getClientCount: (orderData) => {
       let clients = {};

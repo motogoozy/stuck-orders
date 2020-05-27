@@ -5,14 +5,13 @@ import TicketCountByOrganization from './TicketCountByOrganization/TicketCountBy
 import TicketCountByStatus from './TicketCountByStatus/TicketCountByStatus';
 import TicketCountByAge from './TicketCountByAge/TicketCountByAge';
 import AgentCountByOrganization from './AgentCountByOrganizationPanel/AgentCountByOrganizationPanel';
+import { randomizePanels } from '../../utils';
 
-import { Link } from 'react-router-dom';
-import GridLoader from 'react-spinners/GridLoader';
 
 export default function ZendeskDashboard(props) {
 	const [page, setPage] = useState(1);
 	
-	const { zendeskPanelData } = props;
+	const { zendeskPanelData, isMonitorVersion } = props;
 	const {
 		ticketCountByAgent,
 		ticketCountByOrganization,
@@ -20,131 +19,138 @@ export default function ZendeskDashboard(props) {
 		ticketCountByAge,
 		agentCountByOrganization,
 	} = zendeskPanelData;
+	let panelsToDisplay = randomizePanels([
+		'ticketCountByAgent',
+		'ticketCountByOrganization',
+		'ticketCountByStatus',
+		'ticketCountByAge',
+		'agentCountByOrganization'
+	]);
 
 	return (
 		<div className='dashboard'>
-			<Link to='/'>
-				<i className="fas fa-arrow-left zendesk-back-arrow"></i>
-			</Link>
-
 			{
-				page === 1
-				&&
+				!isMonitorVersion
+				?
 				<>
-					<div className='dashboard-panel'>
-						{
-							ticketCountByAgent
-							?
-							<>
+					{
+						page === 1
+						&&
+						<>
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Tickets by Agent</p>
 								<div className='chart-container'>
 									<TicketCountByAgent ticketCountByAgent={ticketCountByAgent} />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#A5368D'} />
 							</div>
-						}
-					</div>
 
-					<div className='dashboard-panel'>
-						{
-							ticketCountByOrganization
-							?
-							<>
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Tickets by Organization</p>
 								<div className='chart-container'>
 									<TicketCountByOrganization ticketCountByOrganization={ticketCountByOrganization} />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#016C59'} />
 							</div>
-						}
-					</div>
 
-					<div className='dashboard-panel'>
-						{
-							ticketCountByStatus
-							?
-							<>
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Tickets by Status</p>
 								<div className='chart-container'>
 									<TicketCountByStatus ticketCountByStatus={ticketCountByStatus} />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#3690C0'} />
 							</div>
-						}
-					</div>
-					
-					<div className='dashboard-panel'>
-						{
-							ticketCountByAge
-							?
-							<>
+							
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Tickets by Age</p>
 								<div className='chart-container'>
 									<TicketCountByAge ticketCountByAge={ticketCountByAge} />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#800026'} />
 							</div>
-						}
-					</div>
-				</>
-			}
-			
-			{
-				page === 2
-				&&
-				<>
-					<div className='dashboard-panel'>
-						{
-							agentCountByOrganization
-							?
-							<>
+						</>
+					}
+					
+					{
+						page === 2
+						&&
+						<>
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Agents by Organization</p>
 								<div className='chart-container'>
 									<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#A5368D'} />
 							</div>
-						}
-					</div>
 
-					<div className='dashboard-panel'>
-						{
-							agentCountByOrganization
-							?
-							<>
+							<div className='dashboard-panel'>
 								<p className='panel-header'>Agents by Organization</p>
 								<div className='chart-container'>
 									<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} groupMode='stacked' />
 								</div>
-							</>
-							:
-							<div className='grid-loader-container'>
-								<GridLoader size={12} loading={true} color={'#A5368D'} />
 							</div>
-						}
+						</>
+					}
+
+					<div className='zendesk-chart-page-selector'>
+						<i className={ page === 1 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(1)}></i>
+						<i className={ page === 2 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(2)}></i>
 					</div>
 				</>
-			}
+				:
+				// For Monitor Version
+				<>
+					{
+						panelsToDisplay.includes('ticketCountByAgent')
+						&&
+						<div className='dashboard-panel'>
+							<p className='panel-header'>Tickets by Agent</p>
+							<div className='chart-container'>
+								<TicketCountByAgent ticketCountByAgent={ticketCountByAgent} />
+							</div>
+						</div>
+					}
 
-			<div className='zendesk-chart-page-selector'>
-				<i className={ page === 1 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(1)}></i>
-				<i className={ page === 2 ? 'selected-zendesk-page fas fa-circle' : 'fas fa-circle' } onClick={() => setPage(2)}></i>
-			</div>
+					{
+						panelsToDisplay.includes('ticketCountByOrganization')
+						&&
+						<div className='dashboard-panel'>
+							<p className='panel-header'>Tickets by Organization</p>
+							<div className='chart-container'>
+								<TicketCountByOrganization ticketCountByOrganization={ticketCountByOrganization} />
+							</div>
+						</div>
+					}
+
+					{
+						panelsToDisplay.includes('ticketCountByStatus')
+						&&
+						<div className='dashboard-panel'>
+							<p className='panel-header'>Tickets by Status</p>
+							<div className='chart-container'>
+								<TicketCountByStatus ticketCountByStatus={ticketCountByStatus} />
+							</div>
+						</div>
+					}
+
+					{
+						panelsToDisplay.includes('ticketCountByAge')
+						&&
+						<div className='dashboard-panel'>
+							<p className='panel-header'>Tickets by Age</p>
+							<div className='chart-container'>
+								<TicketCountByAge ticketCountByAge={ticketCountByAge} />
+							</div>
+						</div>
+					}
+					
+					{
+						panelsToDisplay.includes('agentCountByOrganization')
+						&&
+						<div className='dashboard-panel'>
+							<p className='panel-header'>Agents by Organization</p>
+							<div className='chart-container'>
+								<AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} groupMode='stacked' />
+							</div>
+						</div>
+					}
+				</>
+			}
 		</div>
 	)
 };
