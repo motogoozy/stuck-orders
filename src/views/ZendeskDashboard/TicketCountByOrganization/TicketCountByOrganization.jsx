@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function TicketCountByStatus(props) {
+export default function TicketCountByOrganization(props) {
 	const theme = {
 		axis: {
 			ticks: {
@@ -28,13 +28,13 @@ export default function TicketCountByStatus(props) {
 
 	return (
 		<ResponsiveBar
-			data={props.ticketCountByStatus}
+			data={props.ticketCountByOrganization}
 			keys={[ 'Count' ]}
-			indexBy="status"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			indexBy="organization"
+			margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
 			padding={0.3}
 			layout="vertical"
-			colors={{ scheme: 'set2' }}
+			colors={{ scheme: 'set3' }}
 			colorBy='index'
 			theme={theme}
 			enableGridX={false}
@@ -45,7 +45,7 @@ export default function TicketCountByStatus(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: -22,
-				legend: 'Status',
+				legend: 'Organization',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -55,7 +55,7 @@ export default function TicketCountByStatus(props) {
 				tickRotation: 0,
 				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}

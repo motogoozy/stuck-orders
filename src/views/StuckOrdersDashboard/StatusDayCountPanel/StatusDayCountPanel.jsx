@@ -77,7 +77,7 @@ export default function StatusDayCountPanel(props) {
 			data={props.statusDayCount}
 			keys={[ 'Day' ]}
 			indexBy="day"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
 			padding={0.3}
 			layout="vertical"
 			// colors={{ scheme: 'yellow_orange_red' }}
@@ -102,7 +102,7 @@ export default function StatusDayCountPanel(props) {
 				tickRotation: 0,
 				legend: 'Total Orders',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}
