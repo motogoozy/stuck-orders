@@ -1,290 +1,174 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import ClientCountPanel from './components/panels/ClientCountPanel/ClientCountPanel';
-import AlertPanel from './components/panels/AlertPanel/AlertPanel';
-import StatusDayCountPanel from './components/panels/StatusDayCountPanel/StatusDayCountPanel';
-import ApprovalDayCountPanel from './components/panels/ApprovalDayCountPanel/ApprovalDayCountPanel';
-import { fetchData } from './helperFunctions';
+import { fetchData, stuckOrdersUtils, zendeskUtils } from './utils';
+import StuckOrdersDashboard from './views/StuckOrdersDashboard/StuckOrdersDashboard';
+import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
 
-import GridLoader from 'react-spinners/GridLoader';
-import { Link } from 'react-router-dom';
-import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import queryString from 'query-string';
+import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import GridLoader from 'react-spinners/GridLoader';
 
-export const getClientCount = (orderData) => {
-   let clients = {};
-   orderData.stuck_orders.forEach(order => {
-      clients[order.client] = clients[order.client] || {client: order.client_db_name, 'Expedited': 0, 'Standard': 0, 'Total': 0};
-      if (order.expedited) {
-         clients[order.client]['Expedited']++;
-         clients[order.client]['Total']++;
-         clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
-      } else {
-         clients[order.client]['Standard']++;
-         clients[order.client]['Total']++;
-         clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`
-      }
-   })
-
-   const clientsArr = [];
-   for (let client in clients) {
-      clientsArr.push(clients[client]);
-   }
-
-   return clientsArr;
-};
-
-export const getAlertCount = (orderData) => {
-   let alerts = {
-      expedited_approval_alert: {alertName: 'Exp. Approved 4+', dbName: 'expedited_approval_alert', 'Count': 0},
-      standard_approval_alert: {alertName: 'Std. Approved 24+', dbName: 'standard_approval_alert', 'Count': 0},
-      aged_order_gte_72_lt_96_alert: {alertName: 'Pending Orders 72+', dbName: 'aged_order_gte_72_lt_96_alert', 'Count': 0},
-      aged_order_gte_96_alert: {alertName: 'Pending Orders 96+', dbName: 'aged_order_gte_96_alert', 'Count': 0},
-   };
-   orderData.stuck_orders.forEach(order => {
-      if (order.expedited_approval_alert) {
-         alerts.expedited_approval_alert['Count']++;
-      }
-      if (order.standard_approval_alert) {
-         alerts.standard_approval_alert['Count']++;
-      }
-      if (order.aged_order_gte_72_lt_96_alert) {
-         alerts.aged_order_gte_72_lt_96_alert['Count']++;
-      }
-      if (order.aged_order_gte_96_alert) {
-         alerts.aged_order_gte_96_alert['Count']++;
-      }
-   });
-
-   let alertsArr = [];
-   for (let type in alerts) {
-      alertsArr.push(alerts[type]);
-   }
-
-   if (
-      alerts.expedited_approval_alert.Count === 0 &&
-      alerts.standard_approval_alert.Count === 0 &&
-      alerts.aged_order_gte_72_lt_96_alert.Count === 0 &&
-      alerts.aged_order_gte_96_alert.Count === 0
-   ) return [];
-
-   return alertsArr;
-};
-
-export const getStatusDayCount = (orderData) => {
-   let days = {};
-   for (let i = 0; i <= 8; i++) {
-      if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
-      } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
-      }
-   }
-
-   orderData.stuck_orders.forEach(order => {
-      const statusAgeInDays = Math.floor(order.status_change_business_age / 24);
-
-      if (statusAgeInDays >= 8) {
-         days['8+']['Day']++;
-      } else {
-         days[statusAgeInDays.toString()]['Day']++;
-      }
-   })
-
-   let statusDaysArr = [];
-   for (let day in days) {
-      statusDaysArr.push(days[day]);
-   }
-
-   return statusDaysArr;
-};
-
-export const getApprovalDayCount = (orderData) => {
-   let days = {};
-   for (let i = 0; i <= 8; i++) {
-      if (i === 8) {
-         days['8+'] = {day: '8+', 'Day': 0};
-      } else {
-         days[i.toString()] = {day: i.toString(), 'Day': 0};
-      }
-   }
-
-   orderData.stuck_orders.forEach(order => {
-      const approvalAgeInDays = Math.floor(order.approval_business_age / 24);
-
-      if (approvalAgeInDays >= 8) {
-         days['8+']['Day']++;
-      } else {
-         days[approvalAgeInDays.toString()]['Day']++;
-      }
-   })
-   
-   const approvalDaysArr = [];
-   for (let day in days) {
-      approvalDaysArr.push(days[day]);
-   }
-
-   return approvalDaysArr;
-};
 
 export default function App(props) {
-   const [orderData, setOrderData] = useState('');
-   const [clientNames, setClientNames] = useState({});
-   const [clientCount, setClientCount] = useState([])
-   const [alertCount, setAlertCount] = useState([]);
-   const [statusDayCount, setDayCount] = useState([]);
-   const [approvalDayCount, setApprovalDayCount] = useState([]);
+   const [stuckOrdersData, setStuckOrdersData] = useState('');
+   const [stuckOrdersPanelData, setStuckOrdersPanelData] = useState();
+   const [zendeskData, setZendeskData] = useState('');
+   const [zendeskPanelData, setZendeskPanelData] = useState();
+   const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
+
+   const dashboardOrder = ['stuck_orders', 'zendesk'];
+   const isMonitorVersion = Boolean(Boolean(queryString.parse(props.location.search).toggle_interval));
 
    useEffect(() => {
-      fetchData('/api/stuck_orders')
-         .then(data => {
-            setOrderData(data);
+      const stuckOrdersRequest = fetchData('/api/stuck_orders');
+      const zendeskRequest = fetchData('/svc/tickets');
 
-            // if fetch interval parameter is provided (meaning it's the monitor version)
+      Promise.all([stuckOrdersRequest, zendeskRequest])
+         .then(results => {
+            const [stuckOrdersResponse, zendeskResponse] = results;
+            setStuckOrdersData(stuckOrdersResponse);
+            setZendeskData(zendeskResponse);
+
+             // if toggle interval parameter is provided (meaning it's the monitor version)
             if (props.location.search) {
-               let queryValues = queryString.parse(props.location.search);
-               if (queryValues.fetch_interval) {
-                  const interval = parseInt(queryValues.fetch_interval * 1000); // seconds
-                  let orderTimer = setInterval(() => {
-                     fetchData('/api/stuck_orders').then(data => {
-                        setOrderData(data);
-                     });
-                  }, interval);
-            
-                  return () => {
-                     clearInterval(orderTimer);
-                  }
+               const queryValues = queryString.parse(props.location.search);
+               let toggleTimer;
+
+               if (queryValues.toggle_interval) {
+                  const seconds = parseInt(queryValues.toggle_interval);
+                  const toggleInterval = (seconds > 10 ? seconds * 1000 : 10000); // 10 second minimum
+                  
+                  toggleTimer = setInterval(() => {
+                     const currentDashboard = dashboardOrder.shift();
+                     dashboardOrder.push(currentDashboard);
+                     const nextDashboard = dashboardOrder[0];
+
+                     if (nextDashboard === 'stuck_orders') {
+                        fetchData('/api/stuck_orders')
+                           .then(data => {
+                              setStuckOrdersData(data);
+                              setDashboardSelection('stuck_orders');
+                           })
+                           .catch(err => console.log(err));
+                     } else if (nextDashboard === 'zendesk') {
+                        fetchData('/svc/tickets')
+                           .then(data => {
+                              setZendeskData(data);
+                              setDashboardSelection('zendesk');
+                           })
+                           .catch(err => console.log(err));
+                     }
+                  }, toggleInterval);
                }
                
-               // if (queryValues.toggle_interval) {
-               //    const interval = parseInt(queryValues.toggle_interval * 1000); // seconds
-               //    const timer = setTimeout(() => {
-               //       props.history.push(`/zendesk?toggle_interval=${queryValues.toggle_interval}`);
-               //    }, 3000);
-               //    return () => clearTimeout(timer);
-               // }
+               return function() {
+                  if (toggleTimer) {
+                     clearInterval(toggleTimer);
+                  }
+               };
             }
          })
-         .catch(err => console.log(err));
-   }, [props.location.search, props.history]);
+         .catch(err => {
+            console.log(err);
+         })
+         // eslint-disable-next-line
+   }, []);
 
    useEffect(() => {
-      if (orderData) {
-         const clientsArr = getClientCount(orderData);
-         const alertsArr = getAlertCount(orderData);
-         const statusDaysArr = getStatusDayCount(orderData);
-         const approvalDaysArr = getApprovalDayCount(orderData);
+      if (stuckOrdersData) {
+         const clientsArr = stuckOrdersUtils.getClientCount(stuckOrdersData);
+         const alertsArr = stuckOrdersUtils.getAlertCount(stuckOrdersData);
+         const statusDaysArr = stuckOrdersUtils.getStatusDayCount(stuckOrdersData);
+         const approvalDaysArr = stuckOrdersUtils.getApprovalDayCount(stuckOrdersData);
          const clientNames = {};
-         orderData.stuck_orders.forEach(order => {
+         stuckOrdersData.stuck_orders.forEach(order => {
             clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
          });
    
-         setClientNames(clientNames);
-         setClientCount(clientsArr);
-         setAlertCount(alertsArr);
-         setDayCount(statusDaysArr);
-         setApprovalDayCount(approvalDaysArr);
+         setStuckOrdersPanelData({
+            clientNames: clientNames,
+            clientCount: clientsArr,
+            alertCount: alertsArr,
+            statusDayCount: statusDaysArr,
+            approvalDayCount: approvalDaysArr,
+         });
       }
-   }, [orderData]);
+   }, [stuckOrdersData]);
+
+   useEffect(() => {
+      if (zendeskData) {
+         const ticketData = zendeskData.tickets;
+         const ticketByAgentData = zendeskUtils.getTicketCountByAgent(ticketData);
+         const ticketByOrgData = zendeskUtils.getTicketCountByOrg(ticketData);
+         const ticketByStatusData = zendeskUtils.getTicketCountByStatus(ticketData);
+         const ticketByAgeData = zendeskUtils.getTicketCountByAge(ticketData);
+         const agentByOrgData = zendeskUtils.getAgentCountByOrg(ticketData);
+
+         setZendeskPanelData({
+            ticketCountByAgent: ticketByAgentData,
+            ticketCountByOrganization: ticketByOrgData,
+            ticketCountByStatus: ticketByStatusData,
+            ticketCountByAge: ticketByAgeData,
+            agentCountByOrganization: agentByOrgData,
+         })
+      }
+   }, [zendeskData]);
 
    return (
-      <div className='dashboard'>
-         <div className='dashboard-panel client-count-panel'>
-            {
-               orderData
-               ?
-               <>
-                  <p className='panel-header'>Stuck Orders by Client ({orderData.stuck_orders.length})</p>
-                  <div className='chart-container'>
-                     <ClientCountPanel clientNames={clientNames} clientCount={clientCount}/>
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#A5368D'} />
-               </div>
-            }
-         </div>
-         
-         <div className='dashboard-panel alert-panel'>
-            {
-               orderData
-               ?
-               <>
-                  <p className='panel-header'>Alerts</p>
-                  <div className='chart-container'>
-                     {
-                        orderData && alertCount.length === 0
-                        ?
-                        <div className='no-alerts-container'>
-                           <i className="far fa-check-square"></i>
-                           <p>All Caught Up!</p>
-                        </div>
-                        :
-                        <AlertPanel alertCount={alertCount} />
-                     }
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#016C59'} />
-               </div>
-            }
-         </div>
-
-         <div className='dashboard-panel status-day-count-panel'>
-            {
-               orderData
-               ?
-               <>
-                  <p className='panel-header'>Current Status Age</p>
-                  <div className='chart-container'>
-                     <StatusDayCountPanel statusDayCount={statusDayCount} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#3690C0'} />
-               </div>
-            }         
-         </div>
-
-         <div className='dashboard-panel approval-day-count-panel'>
-            {
-               orderData
-               ?
-               <>
-                  <p className='panel-header'>Approval Age</p>
-                  <div className='chart-container'>
-                     <ApprovalDayCountPanel approvalDayCount={approvalDayCount} />
-                  </div>
-               </>
-               :
-               <div className='grid-loader-container'>
-                  <GridLoader size={12} loading={true} color={'#800026'} />
-               </div>
-            }
-         </div>
+      <div className='app'>
+         {
+            dashboardSelection === 'stuck_orders' &&
+            stuckOrdersData &&
+            stuckOrdersPanelData
+            &&
+            <StuckOrdersDashboard
+               stuckOrdersData={stuckOrdersData}
+               stuckOrdersPanelData={stuckOrdersPanelData}
+               isMonitorVersion={isMonitorVersion}
+            />
+         }
 
          {
-            // don't display Details Link if fetch_interval param is provided
-            !queryString.parse(props.location.search).fetch_interval
+            dashboardSelection === 'zendesk' &&
+            zendeskData &&
+            zendeskPanelData
             &&
-            <div className='link-container'>
-               <Link to='/zendesk'>
-                  <div className='zendesk-link dashboard-link'>
-                     <p>Zendesk</p>
-                  </div>
-               </Link>
+            <ZendeskDashboard
+               zendeskPanelData={zendeskPanelData}
+               isMonitorVersion={isMonitorVersion}
+            />
+         }
+
+         {
+            !stuckOrdersData &&
+            !stuckOrdersPanelData &&
+            !zendeskData &&
+            !zendeskPanelData
+            &&
+            <div className='grid-loader-container'>
+               <GridLoader size={12} loading={true} color={'#02818A'} />
+            </div>
+         }
+
+         {
+            !isMonitorVersion &&
+            stuckOrdersData &&
+            stuckOrdersPanelData &&
+            zendeskData &&
+            zendeskPanelData
+            &&
+            <div className='dashboard-tab-container'>
+               <p
+                  className={dashboardSelection === 'stuck_orders' ? 'selected-dashboard-tab' : 'dashboard-tab'}
+                  onClick={() => setDashboardSelection('stuck_orders')}
+               >Stuck Orders</p>
                <p>|</p>
-               <Link to='/details'>
-                  <div className='details-link dashboard-link'>
-                     <i className="fas fa-info-circle"></i>
-                     <p>Details</p>
-                  </div>
-               </Link>
+               <p
+                  className={dashboardSelection === 'zendesk' ? 'selected-dashboard-tab' : 'dashboard-tab'}
+                  onClick={() => setDashboardSelection('zendesk')}
+               >Zendesk</p>
             </div>
          }
       </div>
-   );
+   )
 }

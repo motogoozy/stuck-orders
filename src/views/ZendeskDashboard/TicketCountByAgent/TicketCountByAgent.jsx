@@ -1,19 +1,14 @@
 import React from 'react';
-import './ClientCountPanel.scss';
 
-import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
-	const history = useHistory();
-
+export default function TicketCountByAgent(props) {
 	const theme = {
 		axis: {
 			ticks: {
 				text: {
 					fill: 'white',
 					fontSize: '.8rem',
-					letterSpacing: '.25px',
 				},
 			},
 			legend: {
@@ -31,36 +26,43 @@ export default function ClientCountPanel(props) {
 		}
 	};
 
-	const handleClientSelection = event => {
-		const clientName = props.clientNames[event.data.client.split(' ')[0]];
-		const expedited = event.id === 'Expedited' ? true : false;
-		history.push(`/details?client=${clientName}&expedited=${expedited}`);
-	};
+	const getKeys = (data) => {
+		let keys = [];
+		data.forEach(org => {
+			let objKeys = Object.keys(org);
+			objKeys.forEach(objKey => {
+				if (objKey !== 'agent' && !keys.includes(objKey)) {
+					keys.push(objKey);
+				}
+			})
+		})
+
+		return keys;
+	}
 
 	return (
 		<ResponsiveBar
-			onClick={event => handleClientSelection(event)}
-			data={props.clientCount}
-			keys={[ 'Standard', 'Expedited' ]}
-			indexBy="client"
-			margin={{ top: 5, right: 100, bottom: 80, left: 50 }}
+			data={props.ticketCountByAgent}
+			keys={getKeys(props.ticketCountByAgent)}
+			indexBy="agent"
+			groupMode='grouped'
+			margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
 			padding={0.3}
 			layout="vertical"
-			colors={[ '#4393C3', '#D6604D' ]}
+			// colors={{ scheme: 'set2' }}
+			colors={['#B2182B','#FC8D62', '#FFED6F', '#66C2A5', '#1B7837']}
 			minValue='auto'
-			// colors={[ '#0dc6ab', '#a5368d' ]}
 			colorBy='id'
 			theme={theme}
 			enableGridX={false}
 			enableGridY={true}
-			// gridYValues={maxYValue}
 			axisTop={null}
 			axisRight={null}
 			axisBottom={{
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: -30,
-				legend: 'Client',
+				legend: 'Agent',
 				legendPosition: 'middle',
 				legendOffset: 70,
 			}}
@@ -68,14 +70,10 @@ export default function ClientCountPanel(props) {
 				tickSize: 5,
 				tickPadding: 5,
 				tickRotation: 0,
-				// tickValues: maxYValue,
-				legend: 'Total Orders',
+				legend: 'Count',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
-			labelSkipWidth={12}
-			labelSkipHeight={12}
-			labelTextColor={'white'}
 			legends = {
 				[{
 					dataFrom: 'keys',
@@ -83,14 +81,14 @@ export default function ClientCountPanel(props) {
 					direction: 'column',
 					justify: false,
 					translateX: 110,
-					translateY: -20,
-					itemsSpacing: 35,
+					translateY: -10,
+					itemsSpacing: 20,
 					itemWidth: 100,
 					itemHeight: 20,
 					itemDirection: 'top-to-bottom',
-					itemOpacity: 0.85,
+					itemOpacity: 1,
 					itemTextColor: 'white',
-					symbolSize: 20,
+					symbolSize: 10,
 					// effects: [{
 					// 	on: 'hover',
 					// 	style: {
@@ -99,6 +97,9 @@ export default function ClientCountPanel(props) {
 					// }]
 				}]
 			}
+			labelSkipWidth={12}
+			labelSkipHeight={12}
+			labelTextColor={'black'}
 			animate={true}
 			motionStiffness={90}
 			motionDamping={15}

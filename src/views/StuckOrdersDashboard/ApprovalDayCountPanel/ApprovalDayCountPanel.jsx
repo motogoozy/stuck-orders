@@ -64,7 +64,7 @@ export default function ApprovalDayCountPanel(props) {
 			data={props.approvalDayCount}
 			keys={[ 'Day' ]}
 			indexBy="day"
-			margin={{ top: 5, right: 0, bottom: 85, left: 50 }}
+			margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
 			padding={0.3}
 			layout="vertical"
 			// colors={{ scheme: 'purple_blue_green' }}
@@ -90,7 +90,7 @@ export default function ApprovalDayCountPanel(props) {
 				tickRotation: 0,
 				legend: 'Total Orders',
 				legendPosition: 'middle',
-				legendOffset: -40,
+				legendOffset: -50,
 			}}
 			labelSkipWidth={12}
 			labelSkipHeight={12}

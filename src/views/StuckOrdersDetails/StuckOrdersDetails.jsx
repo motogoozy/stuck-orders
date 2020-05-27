@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './DetailsView.scss';
+import './StuckOrdersDetails.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { fetchData } from '../../helperFunctions';
-import { formatDate } from '../../utils.js';
+import { fetchData } from '../../utils';
+import { formatDate } from '../../utils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
@@ -31,7 +31,7 @@ const formatAge = hrs => {
 	}
 };
 
-export default function DetailsView(props) {
+export default function StuckOrdersDetails(props) {
 	const [orderData, setOrderData] = useState('');
 	const [filterOptions, setFilterOptions] = useState({});
 	const [search, setSearch] = useState('');
@@ -323,7 +323,7 @@ export default function DetailsView(props) {
 		<div className='details-view-main'>
 			<div className='details-view-header'>
 				<Link to='/'>
-					<i className="fas fa-arrow-left details-back-arrow"></i>
+					<i className="fas fa-arrow-left back-arrow"></i>
 				</Link>
 				{
 					orderData && filterOptions
