@@ -1,19 +1,5 @@
 @import '../../App.scss';
 
-.zendesk-back-arrow {
-	color: white;
-	font-size: 1.25rem;
-	transition: color .15s;
-	position: fixed;
-	top: 1rem;
-	left: 1rem;
-
-	&:hover {
-		color: $primary-accent;
-		transition: color .15s;
-	}
-}
-
 .zendesk-chart-page-selector {
 	position: fixed;
 	bottom: 0;
