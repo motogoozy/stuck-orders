@@ -1,35 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './StuckOrdersDetails.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { fetchData } from '../../utils';
-import { formatDate } from '../../utils';
+import { fetchData, formatDate, formatAge, stuckOrdersUtils } from '../../utils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import moment from 'moment';
 import 'moment-duration-format';
 import queryString from 'query-string';
-
-const formatAge = hrs => {
-	let days = Math.floor(hrs / 24);
-	let hoursMinutes;
-
-	if (hrs === 0) {
-		return '00:00 hrs';
-	}
-
-	if (days > 0) {
-		let remainder = hrs % 24;
-		let plural = days > 1;
-		hoursMinutes = moment.duration(remainder, 'hours').format('hh:mm');
-		return `${days} ${plural ? 'days' : 'day'} ${remainder !== 0 ? hoursMinutes : ''}`;
-	} else {
-		hoursMinutes = moment.duration(hrs, 'hours').format('hh:mm');
-		return `${hoursMinutes} hrs`;
-	}
-};
+import { CSVLink } from 'react-csv';
+import { Tooltip } from '@material-ui/core';
 
 export default function StuckOrdersDetails(props) {
 	const [orderData, setOrderData] = useState('');
@@ -329,7 +310,14 @@ export default function StuckOrdersDetails(props) {
 					orderData && filterOptions
 					&&
 					<div className='details-view-header-right-container'>
-						<p onClick={resetFilters}>Reset</p>
+						<Tooltip title='Export Data'>
+							<CSVLink data={stuckOrdersUtils.exportDataToCSV(orderData)} filename={stuckOrdersUtils.getFileName()}>
+								<i className="fas fa-file-download"></i>
+							</CSVLink>
+						</Tooltip>
+						<Tooltip title='Reset All Filters'>
+							<p onClick={resetFilters}>Reset</p>
+						</Tooltip>
 						<select className='alert-filter' name="alert-filter" id="alert-filter" value={filters.alert} onChange={e => setFilters({ ...filters, alert: e.target.value })}>
 							<option value="" disabled defaultValue>Filter Alert</option>
 							<option value="">(none)</option>
