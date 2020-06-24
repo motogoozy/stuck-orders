@@ -42,6 +42,25 @@ export const formatDate = (dateObj) => {
    return `${month}/${day}/${year} at ${hour}:${minutes}${daytime}`;
 };
 
+export const formatAge = hrs => {
+	let days = Math.floor(hrs / 24);
+	let hoursMinutes;
+
+	if (hrs === 0) {
+		return '00:00 hrs';
+	}
+
+	if (days > 0) {
+		let remainder = hrs % 24;
+		let plural = days > 1;
+		hoursMinutes = moment.duration(remainder, 'hours').format('hh:mm');
+		return `${days} ${plural ? 'days' : 'day'} ${remainder !== 0 ? hoursMinutes : ''}`;
+	} else {
+		hoursMinutes = moment.duration(hrs, 'hours').format('hh:mm');
+		return `${hoursMinutes} hrs`;
+	}
+};
+
 export const randomizePanels = (panelNames) => {
    let displayPanels = [];
    
@@ -170,6 +189,28 @@ export const stuckOrdersUtils = {
       }
    
       return approvalDaysArr;
+   },
+
+   exportDataToCSV: orderData => {
+      const headers = Object.keys(orderData.stuck_orders[0])
+         .sort((a, b) => {
+            if (a < b) return -1;
+            else if (a > b) return 1;
+            else return 0;
+         })
+      const rows = orderData.stuck_orders.map(order => headers.map(header => order[header]));
+
+      return [headers, ...rows];
+   },
+
+   getFileName: () => {
+      const date = new Date();
+		const month = date.getMonth() + 1;
+		const day = date.getDate();
+		const year = date.getFullYear();
+		const time = date.toLocaleTimeString().split(' ').join('')
+
+		return `stuck_orders_${month}_${day}_${year}_${time}.csv`;
    }
 };
 
