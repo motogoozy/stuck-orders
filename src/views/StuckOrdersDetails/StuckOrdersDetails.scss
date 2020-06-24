@@ -89,8 +89,18 @@
 		word-wrap: break-word;
 		overflow: hidden;
 
-		.details-table-header, .details-table-filter-row, .order-detail-row {
+		.details-table-header, .details-table-filter-row {
 			width: calc(100% - 1rem);
+			padding-right: .25rem;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+		}
+
+		.order-detail-row {
+			width: calc(100% - .5rem);
+			padding-right: .25rem;
 			display: flex;
 			flex-direction: row;
 			justify-content: space-around;
@@ -130,11 +140,11 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
-			align-items: center;
+			align-items: flex-start;
 
 			/* width */
 			&::-webkit-scrollbar {
-				width: .75rem;
+				width: .5rem;
 			}
 			
 			/* Track */
