@@ -44,14 +44,12 @@ export default function AgentCountByOrganizationPanel(props) {
     return keys;
   };
 
-  const groupMode = props.groupMode || 'grouped';
-
   return (
     <ResponsiveBar
       data={props.agentCountByOrganization}
       keys={getKeys(props.agentCountByOrganization)}
       indexBy='organization'
-      groupMode={groupMode}
+      groupMode={props.groupMode || 'stacked'}
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
       padding={0.3}
       layout='vertical'

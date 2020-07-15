@@ -71,16 +71,6 @@ export default function ZendeskDashboard(props) {
                   <AgentCountByOrganizationPanel agentCountByOrganization={agentCountByOrganization} />
                 </div>
               </div>
-
-              <div className='dashboard-panel'>
-                <p className='panel-header'>Agents by Organization</p>
-                <div className='chart-container'>
-                  <AgentCountByOrganizationPanel
-                    agentCountByOrganization={agentCountByOrganization}
-                    groupMode='stacked'
-                  />
-                </div>
-              </div>
             </>
           )}
 
