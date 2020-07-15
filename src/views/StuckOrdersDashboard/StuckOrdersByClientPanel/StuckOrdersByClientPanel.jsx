@@ -1,10 +1,10 @@
 import React from 'react';
-import './ClientCountPanel.scss';
+import './StuckOrdersByClientPanel.scss';
 
 import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function ClientCountPanel(props) {
+export default function StuckOrdersByClientPanel(props) {
   const history = useHistory();
 
   const theme = {
@@ -40,7 +40,7 @@ export default function ClientCountPanel(props) {
   return (
     <ResponsiveBar
       onClick={event => handleClientSelection(event)}
-      data={props.clientCount}
+      data={props.stuckOrdersByClient}
       keys={['Standard', 'Expedited']}
       indexBy='client'
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}

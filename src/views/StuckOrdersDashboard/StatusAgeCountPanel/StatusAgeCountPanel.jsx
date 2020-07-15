@@ -1,10 +1,10 @@
 import React from 'react';
-import './StatusDayCountPanel.scss';
+import './StatusAgeCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 import { useHistory } from 'react-router-dom';
 
-export default function StatusDayCountPanel(props) {
+export default function StatusAgeCountPanel(props) {
   const history = useHistory();
 
   const theme = {
@@ -74,7 +74,7 @@ export default function StatusDayCountPanel(props) {
   return (
     <ResponsiveBar
       onClick={event => history.push(`/details?status_age=${event.data.day}`)}
-      data={props.statusDayCount}
+      data={props.statusAgeCount}
       keys={['Day']}
       indexBy='day'
       margin={{ top: 5, right: 0, bottom: 85, left: 60 }}

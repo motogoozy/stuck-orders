@@ -4,7 +4,7 @@ import TicketCountByAgent from './TicketCountByAgent/TicketCountByAgent';
 import TicketCountByOrganization from './TicketCountByOrganization/TicketCountByOrganization';
 import TicketCountByStatus from './TicketCountByStatus/TicketCountByStatus';
 import TicketCountByAge from './TicketCountByAge/TicketCountByAge';
-import AgentCountByOrganization from './AgentCountByOrganizationPanel/AgentCountByOrganizationPanel';
+import AgentCountByOrganizationPanel from './AgentCountByOrganizationPanel/AgentCountByOrganizationPanel';
 import { randomizePanels } from '../../utils';
 
 export default function ZendeskDashboard(props) {
@@ -18,7 +18,7 @@ export default function ZendeskDashboard(props) {
     ticketCountByAge,
     agentCountByOrganization,
   } = zendeskPanelData;
-  
+
   let panelsToDisplay = randomizePanels([
     'ticketCountByAgent',
     'ticketCountByOrganization',
@@ -43,9 +43,7 @@ export default function ZendeskDashboard(props) {
               <div className='dashboard-panel'>
                 <p className='panel-header'>Tickets by Organization</p>
                 <div className='chart-container'>
-                  <TicketCountByOrganization
-                    ticketCountByOrganization={ticketCountByOrganization}
-                  />
+                  <TicketCountByOrganization ticketCountByOrganization={ticketCountByOrganization} />
                 </div>
               </div>
 
@@ -70,14 +68,14 @@ export default function ZendeskDashboard(props) {
               <div className='dashboard-panel'>
                 <p className='panel-header'>Agents by Organization</p>
                 <div className='chart-container'>
-                  <AgentCountByOrganization agentCountByOrganization={agentCountByOrganization} />
+                  <AgentCountByOrganizationPanel agentCountByOrganization={agentCountByOrganization} />
                 </div>
               </div>
 
               <div className='dashboard-panel'>
                 <p className='panel-header'>Agents by Organization</p>
                 <div className='chart-container'>
-                  <AgentCountByOrganization
+                  <AgentCountByOrganizationPanel
                     agentCountByOrganization={agentCountByOrganization}
                     groupMode='stacked'
                   />
@@ -140,7 +138,7 @@ export default function ZendeskDashboard(props) {
             <div className='dashboard-panel'>
               <p className='panel-header'>Agents by Organization</p>
               <div className='chart-container'>
-                <AgentCountByOrganization
+                <AgentCountByOrganizationPanel
                   agentCountByOrganization={agentCountByOrganization}
                   groupMode='stacked'
                 />

@@ -1,26 +1,30 @@
 import React from 'react';
 import './StuckOrdersDashboard.scss';
-import ClientCountPanel from './ClientCountPanel/ClientCountPanel';
+import StuckOrdersByClientPanel from './StuckOrdersByClientPanel/StuckOrdersByClientPanel';
 import AlertPanel from './AlertPanel/AlertPanel';
-import StatusDayCountPanel from './StatusDayCountPanel/StatusDayCountPanel';
-import ApprovalDayCountPanel from './ApprovalDayCountPanel/ApprovalDayCountPanel';
+import ApprovedOrdersByClientPanel from './ApprovedOrdersByClientPanel/ApprovedOrdersByClientPanel';
+import StatusAgeCountPanel from './StatusAgeCountPanel/StatusAgeCountPanel';
 
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import { Link } from 'react-router-dom';
 
 export default function StuckOrdersDashboard(props) {
   const { stuckOrdersData, stuckOrdersPanelData, isMonitorVersion } = props;
+  let approvedOrdersCount = 0;
+  stuckOrdersData.stuck_orders.forEach(order => {
+    if (order.order_status === 'Approved') {
+      approvedOrdersCount++;
+    }
+  });
 
   return (
     <div className='dashboard'>
       <div className='dashboard-panel client-count-panel'>
-        <p className='panel-header'>
-          Stuck Orders by Client ({stuckOrdersData.stuck_orders.length})
-        </p>
+        <p className='panel-header'>Stuck Orders by Client ({stuckOrdersData.stuck_orders.length})</p>
         <div className='chart-container'>
-          <ClientCountPanel
+          <StuckOrdersByClientPanel
             clientNames={stuckOrdersPanelData.clientNames}
-            clientCount={stuckOrdersPanelData.clientCount}
+            stuckOrdersByClient={stuckOrdersPanelData.stuckOrdersByClient}
           />
         </div>
       </div>
@@ -39,17 +43,20 @@ export default function StuckOrdersDashboard(props) {
         </div>
       </div>
 
-      <div className='dashboard-panel status-day-count-panel'>
-        <p className='panel-header'>Current Status Age</p>
+      <div className='dashboard-panel client-count-panel'>
+        <p className='panel-header'>Approved Orders by Client ({approvedOrdersCount})</p>
         <div className='chart-container'>
-          <StatusDayCountPanel statusDayCount={stuckOrdersPanelData.statusDayCount} />
+          <ApprovedOrdersByClientPanel
+            clientNames={stuckOrdersPanelData.clientNames}
+            approvedOrdersByClient={stuckOrdersPanelData.approvedOrdersByClient}
+          />
         </div>
       </div>
 
-      <div className='dashboard-panel approval-day-count-panel'>
-        <p className='panel-header'>Approval Age</p>
+      <div className='dashboard-panel status-day-count-panel'>
+        <p className='panel-header'>Current Status Age</p>
         <div className='chart-container'>
-          <ApprovalDayCountPanel approvalDayCount={stuckOrdersPanelData.approvalDayCount} />
+          <StatusAgeCountPanel statusAgeCount={stuckOrdersPanelData.statusAgeCount} />
         </div>
       </div>
 

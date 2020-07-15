@@ -33,6 +33,7 @@ $primary-accent: #02818a;
 .dashboard-panel {
   height: 50%;
   width: 50%;
+  min-width: 30rem;
   overflow: hidden;
   padding: 1rem;
   display: flex;

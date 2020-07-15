@@ -75,7 +75,7 @@ export const randomizePanels = panelNames => {
 };
 
 export const stuckOrdersUtils = {
-  getClientCount: orderData => {
+  getStuckOrdersByClient: orderData => {
     let clients = {};
     orderData.stuck_orders.forEach(order => {
       clients[order.client] = clients[order.client] || {
@@ -87,15 +87,11 @@ export const stuckOrdersUtils = {
       if (order.expedited) {
         clients[order.client]['Expedited']++;
         clients[order.client]['Total']++;
-        clients[order.client].client = `${order.client_db_name} (${
-          clients[order.client]['Total']
-        })`;
+        clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`;
       } else {
         clients[order.client]['Standard']++;
         clients[order.client]['Total']++;
-        clients[order.client].client = `${order.client_db_name} (${
-          clients[order.client]['Total']
-        })`;
+        clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`;
       }
     });
 
@@ -161,7 +157,39 @@ export const stuckOrdersUtils = {
     return alertsArr;
   },
 
-  getStatusDayCount: orderData => {
+  getApprovedOrdersByClient: orderData => {
+    let clients = {};
+
+    orderData.stuck_orders.forEach(order => {
+      clients[order.client] = clients[order.client] || {
+        client: order.client_db_name,
+        Expedited: 0,
+        Standard: 0,
+        Total: 0,
+      };
+
+      if (order.order_status === 'Approved') {
+        if (order.expedited) {
+          clients[order.client]['Expedited']++;
+          clients[order.client]['Total']++;
+          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`;
+        } else {
+          clients[order.client]['Standard']++;
+          clients[order.client]['Total']++;
+          clients[order.client].client = `${order.client_db_name} (${clients[order.client]['Total']})`;
+        }
+      }
+    });
+
+    const clientsArr = [];
+    for (let client in clients) {
+      clientsArr.push(clients[client]);
+    }
+
+    return clientsArr;
+  },
+
+  getStatusAgeCount: orderData => {
     let days = {};
     for (let i = 0; i <= 8; i++) {
       if (i === 8) {
@@ -366,8 +394,7 @@ export const zendeskUtils = {
       };
 
       if (ticket.status !== 'solved' && ticket.status !== 'closed') {
-        orgs[ticket.organization][agentDisplayName] =
-          orgs[ticket.organization][agentDisplayName] + 1 || 1;
+        orgs[ticket.organization][agentDisplayName] = orgs[ticket.organization][agentDisplayName] + 1 || 1;
       }
     });
 

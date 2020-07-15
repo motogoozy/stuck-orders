@@ -343,10 +343,7 @@ export default function StuckOrdersDetails(props) {
         {orderData && filterOptions && (
           <div className='details-view-header-right-container'>
             <Tooltip title='Export Data'>
-              <CSVLink
-                data={stuckOrdersUtils.exportDataToCSV(orderData)}
-                filename={stuckOrdersUtils.getFileName()}
-              >
+              <CSVLink data={stuckOrdersUtils.exportDataToCSV(orderData)} filename={stuckOrdersUtils.getFileName()}>
                 <i className='fas fa-file-download'></i>
               </CSVLink>
             </Tooltip>
@@ -393,16 +390,10 @@ export default function StuckOrdersDetails(props) {
             <p onClick={() => handleSort('order_status')} className='detail-order-status'>
               Order Status
             </p>
-            <p
-              onClick={() => handleSort('status_change_business_age')}
-              className='detail-status-age'
-            >
+            <p onClick={() => handleSort('status_change_business_age')} className='detail-status-age'>
               Status Age
             </p>
-            <p
-              onClick={() => handleSort('approval_business_age')}
-              className='detail-approval-order'
-            >
+            <p onClick={() => handleSort('approval_business_age')} className='detail-approval-order'>
               Approval / Order Age
             </p>
             <p onClick={() => handleSort('subscriber_name')} className='detail-subscriber-name'>
