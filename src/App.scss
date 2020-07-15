@@ -25,7 +25,7 @@ $primary-accent: #02818a;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   align-content: flex-start;
 }
@@ -121,7 +121,9 @@ $primary-accent: #02818a;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: black;
   color: white;
+  z-index: 2;
 
   p {
     margin: 0;
@@ -149,8 +151,16 @@ $primary-accent: #02818a;
 }
 
 @media (max-width: 1200px) {
+  .dashboard {
+    justify-content: center;
+  }
+
   .dashboard-panel {
     width: 80%;
     min-height: 27rem;
+  }
+
+  .details-link {
+    right: 2rem;
   }
 }
