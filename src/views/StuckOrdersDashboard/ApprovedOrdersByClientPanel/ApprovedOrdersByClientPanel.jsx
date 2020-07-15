@@ -46,9 +46,8 @@ export default function ApprovedOrdersByClientPanel(props) {
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
       padding={0.3}
       layout='vertical'
-      colors={['#4393C3', '#D6604D']}
+      colors={['#008568', '#D6604D']}
       minValue='auto'
-      // colors={[ '#0dc6ab', '#a5368d' ]}
       colorBy='id'
       theme={theme}
       enableGridX={false}
