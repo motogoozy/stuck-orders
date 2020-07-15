@@ -1,155 +1,155 @@
-$primary-accent: #02818A;
+$primary-accent: #02818a;
 
 * {
-   box-sizing: border-box;
-   margin: 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .app {
-   height: 100vh;
-   width: 100vw;
-   background-color: black;
-   padding: 1rem;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .dashboard {
-   height: 100%;
-   width: 100%;
-   overflow: auto;
-   text-align: center;
-   box-sizing: border-box;
-   display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: flex-start;
-	align-content: flex-start;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 
 .dashboard-panel {
-   height: 50%;
-   width: 50%;
-   overflow: hidden;
-   padding: 1rem;
-   display: flex;
-	flex-direction: column;
-   justify-content: space-between;
-   align-items: center;
+  height: 50%;
+  width: 50%;
+  overflow: hidden;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 
-   .panel-header {
-      color: white;
-      font-size: 1.25rem;
-      margin: 1rem 0;
-   }
+  .panel-header {
+    color: white;
+    font-size: 1.25rem;
+    margin: 1rem 0;
+  }
 
-   .chart-container {
-      height: 85%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-   }
+  .chart-container {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-   .grid-loader-container {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-   }
+  .grid-loader-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .dashboard-tab-container {
-   width: 100%;
-   background-color: black;
-   z-index: 2;
-   position: fixed;
-   top: 0;
-   left: 0;
-   display: flex;
-   flex-direction: row;
-   margin: 1rem;
+  width: 100%;
+  background-color: black;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
 
-   p {
+  p {
+    color: white;
+    margin: 0 1rem 0 0;
+  }
+
+  .dashboard-tab {
+    color: gray;
+    &:hover {
+      text-decoration: underline;
       color: white;
-      margin: 0 1rem 0 0;
-   }
+      cursor: pointer;
+    }
+  }
 
-   .dashboard-tab {
-      color: gray;
-      &:hover {
-         text-decoration: underline;
-         color: white;
-         cursor: pointer;
-      }
-   }
-
-   .selected-dashboard-tab {
-      color: white;
-   }
+  .selected-dashboard-tab {
+    color: white;
+  }
 }
 
 .dashboard-link {
-   margin: 1rem;
-   display: flex;
-   flex-direction: row;
-   justify-content: flex-end;
-   align-items: center;
+  margin: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 
-   p {
-      margin: 0 0 0 .5rem;
-      &:hover {
-         text-decoration: underline;
-      }
-   }
+  p {
+    margin: 0 0 0 0.5rem;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .details-link {
-   position: fixed;
-   bottom: 0;
-   right: 0;
-   width: auto;
-   height: auto;
-   display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-   align-items: center;
-   color: white;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
 
-   p {
-      margin: 0;
-   }
+  p {
+    margin: 0;
+  }
 
-   i {
-      margin-right: .5rem;
-   }
-   
-   a {
-      color: white;
-      text-decoration: none;
-   }
+  i {
+    margin-right: 0.5rem;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
 }
 
 .back-arrow {
-   color: white;
-   font-size: 1.25rem;
-   transition: color .15s;
+  color: white;
+  font-size: 1.25rem;
+  transition: color 0.15s;
 
-   &:hover {
-      color: $primary-accent;
-      transition: color .15s;
-   }
+  &:hover {
+    color: $primary-accent;
+    transition: color 0.15s;
+  }
 }
 
-@media(max-width: 1200px) {
-   .dashboard-panel {
-      width: 80%;
-      min-height: 27rem;
-   }
+@media (max-width: 1200px) {
+  .dashboard-panel {
+    width: 80%;
+    min-height: 27rem;
+  }
 }
