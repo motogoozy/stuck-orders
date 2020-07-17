@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './StuckOrdersDetails.scss';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-import { fetchData, formatDate, formatAge, stuckOrdersUtils } from '../../utils';
+import { fetchData, formatDate, formatAge } from '../../utils/utils';
+import { exportDataToCSV, createFileName } from '../../utils/stuckOrdersUtils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
@@ -343,7 +344,7 @@ export default function StuckOrdersDetails(props) {
         {orderData && filterOptions && (
           <div className='details-view-header-right-container'>
             <Tooltip title='Export Data'>
-              <CSVLink data={stuckOrdersUtils.exportDataToCSV(orderData)} filename={stuckOrdersUtils.getFileName()}>
+              <CSVLink data={exportDataToCSV(orderData)} filename={createFileName()}>
                 <i className='fas fa-file-download'></i>
               </CSVLink>
             </Tooltip>

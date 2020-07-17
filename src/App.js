@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { fetchData, stuckOrdersUtils, zendeskUtils } from './utils';
+import { fetchData } from './utils/utils';
+import {
+  getStuckOrdersByClient,
+  getAlertCount,
+  getApprovedOrdersByClient,
+  getStatusAgeCount,
+} from './utils/stuckOrdersUtils';
+import {
+  getTicketCountByAgent,
+  getTicketCountByOrg,
+  getTicketCountByStatus,
+  getTicketCountByAge,
+  getAgentCountByOrg,
+} from './utils/zendeskUtils';
 import StuckOrdersDashboard from './views/StuckOrdersDashboard/StuckOrdersDashboard';
 import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
 
@@ -74,10 +87,10 @@ export default function App(props) {
 
   useEffect(() => {
     if (stuckOrdersData) {
-      const clientsArr = stuckOrdersUtils.getStuckOrdersByClient(stuckOrdersData);
-      const alertsArr = stuckOrdersUtils.getAlertCount(stuckOrdersData);
-      const approvedArr = stuckOrdersUtils.getApprovedOrdersByClient(stuckOrdersData);
-      const statusDaysArr = stuckOrdersUtils.getStatusAgeCount(stuckOrdersData);
+      const clientsArr = getStuckOrdersByClient(stuckOrdersData);
+      const alertsArr = getAlertCount(stuckOrdersData);
+      const approvedArr = getApprovedOrdersByClient(stuckOrdersData);
+      const statusDaysArr = getStatusAgeCount(stuckOrdersData);
       const clientNames = {};
       stuckOrdersData.stuck_orders.forEach(order => {
         clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
@@ -96,11 +109,11 @@ export default function App(props) {
   useEffect(() => {
     if (zendeskData) {
       const ticketData = zendeskData.tickets;
-      const ticketByAgentData = zendeskUtils.getTicketCountByAgent(ticketData);
-      const ticketByOrgData = zendeskUtils.getTicketCountByOrg(ticketData);
-      const ticketByStatusData = zendeskUtils.getTicketCountByStatus(ticketData);
-      const ticketByAgeData = zendeskUtils.getTicketCountByAge(ticketData);
-      const agentByOrgData = zendeskUtils.getAgentCountByOrg(ticketData);
+      const ticketByAgentData = getTicketCountByAgent(ticketData);
+      const ticketByOrgData = getTicketCountByOrg(ticketData);
+      const ticketByStatusData = getTicketCountByStatus(ticketData);
+      const ticketByAgeData = getTicketCountByAge(ticketData);
+      const agentByOrgData = getAgentCountByOrg(ticketData);
 
       setZendeskPanelData({
         ticketCountByAgent: ticketByAgentData,

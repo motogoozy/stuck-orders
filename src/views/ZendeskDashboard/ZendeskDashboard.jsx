@@ -5,7 +5,7 @@ import TicketCountByOrganization from './TicketCountByOrganization/TicketCountBy
 import TicketCountByStatus from './TicketCountByStatus/TicketCountByStatus';
 import TicketCountByAge from './TicketCountByAge/TicketCountByAge';
 import AgentCountByOrganizationPanel from './AgentCountByOrganizationPanel/AgentCountByOrganizationPanel';
-import { randomizePanels } from '../../utils';
+import { randomizePanels } from '../../utils/utils';
 
 export default function ZendeskDashboard(props) {
   const [page, setPage] = useState(1);
