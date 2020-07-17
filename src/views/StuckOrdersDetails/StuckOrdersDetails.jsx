@@ -97,6 +97,11 @@ export default function StuckOrdersDetails(props) {
           return { ...filters, expedited: queryValues.expedited };
         });
       }
+      if (queryValues.order_status) {
+        setFilters(filters => {
+          return { ...filters, order_status: queryValues.order_status };
+        });
+      }
     }
   }, [props.location.search]);
 

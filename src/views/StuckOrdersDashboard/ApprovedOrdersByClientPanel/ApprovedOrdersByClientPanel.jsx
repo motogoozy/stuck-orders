@@ -34,7 +34,7 @@ export default function ApprovedOrdersByClientPanel(props) {
   const handleClientSelection = event => {
     const clientName = props.clientNames[event.data.client.split(' ')[0]];
     const expedited = event.id === 'Expedited' ? true : false;
-    history.push(`/details?client=${clientName}&expedited=${expedited}`);
+    history.push(`/details?client=${clientName}&expedited=${expedited}&order_status=Approved`);
   };
 
   return (
