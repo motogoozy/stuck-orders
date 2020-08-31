@@ -9,6 +9,7 @@ export const getTicketCountByAgent = ticketData => {
       New: 0,
       Open: 0,
       Pending: 0,
+      Hold: 0,
       Solved: 0,
       Closed: 0,
     };
@@ -58,6 +59,7 @@ export const getTicketCountByStatus = ticketData => {
     new: { status: 'New', Count: 0 },
     open: { status: 'Open', Count: 0 },
     pending: { status: 'Pending', Count: 0 },
+    hold: { status: 'Hold', Count: 0 },
     solved: { status: 'Solved', Count: 0 },
     closed: { status: 'Closed', Count: 0 },
   };
@@ -142,4 +144,29 @@ export const getAgentCountByOrg = ticketData => {
   });
 
   return sortedOrgsArr;
+};
+
+export const formatOrganization = org => {
+  if (org.organization.length > 13) {
+    org.formattedOrgName = `${org.organization.slice(0, 13)}...`;
+  } else {
+    org.formattedOrgName = org.organization;
+  }
+
+  return org;
+};
+
+export const formatAgent = agent => {
+  const nameArr = agent.agent.split(' ');
+
+  if (nameArr.length > 1) {
+    const firstName = nameArr[0];
+    const lastName = nameArr[1];
+    const lastInitial = lastName.split('')[0].toUpperCase();
+    agent.formattedAgentName = `${firstName} ${lastInitial}.`;
+  } else {
+    agent.formattedAgentName = agent.agent;
+  }
+
+  return agent;
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatOrganization } from '../../../utils/zendeskUtils';
 
 import { ResponsiveBar } from '@nivo/bar';
 
@@ -28,9 +29,9 @@ export default function TicketCountByOrganization(props) {
 
   return (
     <ResponsiveBar
-      data={props.ticketCountByOrganization}
+      data={props.ticketCountByOrganization.map(org => formatOrganization(org))}
       keys={['Count']}
-      indexBy='organization'
+      indexBy='formattedOrgName'
       margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
       padding={0.3}
       layout='vertical'

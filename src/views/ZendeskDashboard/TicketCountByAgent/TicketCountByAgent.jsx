@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatAgent } from '../../../utils/zendeskUtils';
 
 import { ResponsiveBar } from '@nivo/bar';
 
@@ -26,31 +27,28 @@ export default function TicketCountByAgent(props) {
     },
   };
 
-  const getKeys = data => {
-    let keys = [];
-    data.forEach(org => {
-      let objKeys = Object.keys(org);
-      objKeys.forEach(objKey => {
-        if (objKey !== 'agent' && !keys.includes(objKey)) {
-          keys.push(objKey);
-        }
-      });
-    });
-
-    return keys;
+  const colors = {
+    New: '#B2182B',
+    Open: '#FC8D62',
+    Pending: '#FFED6F',
+    Hold: '#3690C0',
+    Solved: '#66C2A5',
+    Closed: '#1B7837',
   };
+
+  const getColors = bar => colors[bar.id];
 
   return (
     <ResponsiveBar
-      data={props.ticketCountByAgent}
-      keys={getKeys(props.ticketCountByAgent)}
-      indexBy='agent'
+      data={props.ticketCountByAgent.map(agent => formatAgent(agent))}
+      keys={['New', 'Open', 'Pending', 'Hold', 'Solved', 'Closed']}
+      indexBy='formattedAgentName'
       groupMode='grouped'
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
       padding={0.3}
       layout='vertical'
       // colors={{ scheme: 'set2' }}
-      colors={['#B2182B', '#FC8D62', '#FFED6F', '#66C2A5', '#1B7837']}
+      colors={getColors}
       minValue='auto'
       colorBy='id'
       theme={theme}
