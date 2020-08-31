@@ -1,57 +1,57 @@
 .no-alerts-container {
-   height: 100%;
-   width: 100%;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-   i {
-      font-size: 8rem;
-      color: #016C59;
-      margin-bottom: 1rem;
-   }
+  i {
+    font-size: 8rem;
+    color: #016c59;
+    margin-bottom: 1rem;
+  }
 
-   p {
-      font-size: 1.5rem;
-      color: white;
-   }
+  p {
+    font-size: 1.5rem;
+    color: white;
+  }
 }
 
 .client-count-panel {
-	div > div > div > svg > g > g:nth-child(4) > g > rect {
-		&:hover {
-			cursor: pointer;
-		}
-	}
+  div > div > div > svg > g > g:nth-child(4) > g > rect {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 
-	div > div > div > svg > g > g:nth-child(5) {
-		* {
-			opacity: 1;
-		}
-   }
+  div > div > div > svg > g > g:nth-child(5) {
+    * {
+      opacity: 1;
+    }
+  }
 }
 
 .alert-panel {
-   div > div > div > svg > g > g:nth-child(4) > g > rect {
-      &:hover {
-         cursor: pointer;
-      }
-   }
+  div > div > div > svg > g > g:nth-child(4) > g > rect {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .status-day-count-panel {
-	div > div > div > svg > g > g:nth-child(4) > g > rect {
-		&:hover {
-			cursor: pointer;
-		}
-	}
+  div > div > div > svg > g > g:nth-child(4) > g > rect {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .approval-day-count-panel {
-	div > div > div > svg > g > g:nth-child(4) > g > rect {
-		&:hover {
-			cursor: pointer;
-		}
-	}
+  div > div > div > svg > g > g:nth-child(4) > g > rect {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }

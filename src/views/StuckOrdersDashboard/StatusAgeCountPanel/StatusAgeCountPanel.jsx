@@ -1,10 +1,10 @@
 import React from 'react';
-import './AlertPanel.scss';
+import './StatusAgeCountPanel.scss';
 
 import { ResponsiveBar } from '@nivo/bar';
 import { useHistory } from 'react-router-dom';
 
-export default function AlertPanel(props) {
+export default function StatusAgeCountPanel(props) {
   const history = useHistory();
 
   const theme = {
@@ -12,7 +12,7 @@ export default function AlertPanel(props) {
       ticks: {
         text: {
           fill: 'white',
-          fontSize: '.8rem',
+          fontSize: '.9rem',
         },
       },
       legend: {
@@ -30,25 +30,57 @@ export default function AlertPanel(props) {
     },
   };
 
-  const barColors = {
-    'Exp. Approved 4+': '#B30000',
-    'Std. Approved 24+': '#D73020',
-    'Pending Orders 72+': '#EF6548',
-    'Pending Orders 96+': '#FC8D59',
+  // yellow_orange_red
+  // const colors = {
+  // 	'0': '#FFFFCC',
+  // 	'1': '#FFEDA0',
+  // 	'2': '#FED976',
+  // 	'3': '#FEB24C',
+  // 	'4': '#FD8D3D',
+  // 	'5': '#FC4E2A',
+  // 	'6': '#E31A1C',
+  // 	'7': '#BD0026',
+  // 	'8+': '#800026'
+  // };
+
+  // blue_purple
+  // const colors = {
+  // 	'0': '#F7FCFD',
+  // 	'1': '#E0ECF4',
+  // 	'2': '#BFD3E6',
+  // 	'3': '#9EBCDA',
+  // 	'4': '#8C96C6',
+  // 	'5': '#8C6BB1',
+  // 	'6': '#88419D',
+  // 	'7': '#810F7C',
+  // 	'8+': '#4D004B'
+  // };
+
+  // blues
+  const colors = {
+    '0': '#F7FBFF',
+    '1': '#DEEBF7',
+    '2': '#C6DBEF',
+    '3': '#9ECAE1',
+    '4': '#6BAED6',
+    '5': '#4292C6',
+    '6': '#2171B5',
+    '7': '#08519C',
+    '8+': '#08306B',
   };
 
-  const getColors = bar => barColors[bar.indexValue];
+  const getColors = bar => colors[bar.indexValue];
 
   return (
     <ResponsiveBar
-      onClick={event => history.push(`/details?alert=${event.data.dbName}`)}
-      data={props.alertCount}
-      keys={['Count']}
-      indexBy='alertName'
+      onClick={event => history.push(`/details?status_age=${event.data.day}`)}
+      data={props.statusAgeCount}
+      keys={['Day']}
+      indexBy='day'
       margin={{ top: 5, right: 0, bottom: 85, left: 60 }}
       padding={0.3}
       layout='vertical'
-      // colors={[ '#CE1256', '#2B8CBE', '#41AE76', '#FC8D59', '#807DBA' ]}
+      // colors={{ scheme: 'yellow_orange_red' }}
       colors={getColors}
       colorBy='index'
       theme={theme}
@@ -59,8 +91,8 @@ export default function AlertPanel(props) {
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: -22,
-        legend: 'Type',
+        tickRotation: -0,
+        legend: 'Days',
         legendPosition: 'middle',
         legendOffset: 70,
       }}
@@ -68,8 +100,7 @@ export default function AlertPanel(props) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        tickValues: props.alertCount.length,
-        legend: 'Count',
+        legend: 'Total Orders',
         legendPosition: 'middle',
         legendOffset: -50,
       }}
