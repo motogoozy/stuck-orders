@@ -13,7 +13,7 @@ export const getTicketCountByAgent = ticketData => {
       Solved: 0,
       Closed: 0,
     };
-    agents[ticket.agent][capitalizedStatus] = agents[ticket.agent][capitalizedStatus] + 1;
+    agents[ticket.agent][capitalizedStatus] = agents[ticket.agent][capitalizedStatus] + 1 || 1;
   });
 
   let agentsArr = [];
@@ -37,7 +37,9 @@ export const getTicketCountByOrg = ticketData => {
       organization: ticket.organization,
       Count: 0,
     };
-    orgs[ticket.organization].Count++;
+    if (orgs[ticket.organization]) {
+      orgs[ticket.organization].Count++;
+    }
   });
 
   let orgsArr = [];
@@ -65,7 +67,10 @@ export const getTicketCountByStatus = ticketData => {
   };
 
   ticketData.forEach(ticket => {
-    statuses[ticket.status].Count++;
+    if (statuses[ticket.status]) {
+      statuses[ticket.status].Count++;
+
+    }
   });
 
   let statusesArr = [];
