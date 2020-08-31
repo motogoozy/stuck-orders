@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { fetchData, stuckOrdersUtils, zendeskUtils } from './utils';
+import { fetchData } from './utils/utils';
+import {
+  getStuckOrdersByClient,
+  getAlertCount,
+  getApprovedOrdersByClient,
+  getStatusAgeCount,
+} from './utils/stuckOrdersUtils';
+import {
+  getTicketCountByAgent,
+  getTicketCountByOrg,
+  getTicketCountByStatus,
+  getTicketCountByAge,
+  getAgentCountByOrg,
+} from './utils/zendeskUtils';
 import StuckOrdersDashboard from './views/StuckOrdersDashboard/StuckOrdersDashboard';
 import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
 
@@ -8,167 +21,147 @@ import queryString from 'query-string';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import GridLoader from 'react-spinners/GridLoader';
 
-
 export default function App(props) {
-   const [stuckOrdersData, setStuckOrdersData] = useState('');
-   const [stuckOrdersPanelData, setStuckOrdersPanelData] = useState();
-   const [zendeskData, setZendeskData] = useState('');
-   const [zendeskPanelData, setZendeskPanelData] = useState();
-   const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
+  const [stuckOrdersData, setStuckOrdersData] = useState('');
+  const [stuckOrdersPanelData, setStuckOrdersPanelData] = useState();
+  const [zendeskData, setZendeskData] = useState('');
+  const [zendeskPanelData, setZendeskPanelData] = useState();
+  const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
 
-   const dashboardOrder = ['stuck_orders', 'zendesk'];
-   const isMonitorVersion = Boolean(Boolean(queryString.parse(props.location.search).toggle_interval));
+  const dashboardOrder = ['stuck_orders', 'zendesk'];
+  const isMonitorVersion = Boolean(Boolean(queryString.parse(props.location.search).toggle_interval));
 
-   useEffect(() => {
-      const stuckOrdersRequest = fetchData('/api/stuck_orders');
-      const zendeskRequest = fetchData('/svc/tickets');
+  useEffect(() => {
+    const stuckOrdersRequest = fetchData('/api/stuck_orders');
+    const zendeskRequest = fetchData('/svc/tickets');
 
-      Promise.all([stuckOrdersRequest, zendeskRequest])
-         .then(results => {
-            const [stuckOrdersResponse, zendeskResponse] = results;
-            setStuckOrdersData(stuckOrdersResponse);
-            setZendeskData(zendeskResponse);
+    Promise.all([stuckOrdersRequest, zendeskRequest])
+      .then(results => {
+        const [stuckOrdersResponse, zendeskResponse] = results;
+        setStuckOrdersData(stuckOrdersResponse);
+        setZendeskData(zendeskResponse);
 
-             // if toggle interval parameter is provided (meaning it's the monitor version)
-            if (props.location.search) {
-               const queryValues = queryString.parse(props.location.search);
-               let toggleTimer;
+        // if toggle interval parameter is provided (meaning it's the monitor version)
+        if (props.location.search) {
+          const queryValues = queryString.parse(props.location.search);
+          let toggleTimer;
 
-               if (queryValues.toggle_interval) {
-                  const seconds = parseInt(queryValues.toggle_interval);
-                  const toggleInterval = (seconds > 10 ? seconds * 1000 : 10000); // 10 second minimum
-                  
-                  toggleTimer = setInterval(() => {
-                     const currentDashboard = dashboardOrder.shift();
-                     dashboardOrder.push(currentDashboard);
-                     const nextDashboard = dashboardOrder[0];
+          if (queryValues.toggle_interval) {
+            const seconds = parseInt(queryValues.toggle_interval);
+            const toggleInterval = seconds > 10 ? seconds * 1000 : 10000; // 10 second minimum
 
-                     if (nextDashboard === 'stuck_orders') {
-                        fetchData('/api/stuck_orders')
-                           .then(data => {
-                              setStuckOrdersData(data);
-                              setDashboardSelection('stuck_orders');
-                           })
-                           .catch(err => console.log(err));
-                     } else if (nextDashboard === 'zendesk') {
-                        fetchData('/svc/tickets')
-                           .then(data => {
-                              setZendeskData(data);
-                              setDashboardSelection('zendesk');
-                           })
-                           .catch(err => console.log(err));
-                     }
-                  }, toggleInterval);
-               }
-               
-               return function() {
-                  if (toggleTimer) {
-                     clearInterval(toggleTimer);
-                  }
-               };
+            toggleTimer = setInterval(() => {
+              const currentDashboard = dashboardOrder.shift();
+              dashboardOrder.push(currentDashboard);
+              const nextDashboard = dashboardOrder[0];
+
+              if (nextDashboard === 'stuck_orders') {
+                fetchData('/api/stuck_orders')
+                  .then(data => {
+                    setStuckOrdersData(data);
+                    setDashboardSelection('stuck_orders');
+                  })
+                  .catch(err => console.log(err));
+              } else if (nextDashboard === 'zendesk') {
+                fetchData('/svc/tickets')
+                  .then(data => {
+                    setZendeskData(data);
+                    setDashboardSelection('zendesk');
+                  })
+                  .catch(err => console.log(err));
+              }
+            }, toggleInterval);
+          }
+
+          return function () {
+            if (toggleTimer) {
+              clearInterval(toggleTimer);
             }
-         })
-         .catch(err => {
-            console.log(err);
-         })
-         // eslint-disable-next-line
-   }, []);
+          };
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []); // eslint-disable-line
 
-   useEffect(() => {
-      if (stuckOrdersData) {
-         const clientsArr = stuckOrdersUtils.getClientCount(stuckOrdersData);
-         const alertsArr = stuckOrdersUtils.getAlertCount(stuckOrdersData);
-         const statusDaysArr = stuckOrdersUtils.getStatusDayCount(stuckOrdersData);
-         const approvalDaysArr = stuckOrdersUtils.getApprovalDayCount(stuckOrdersData);
-         const clientNames = {};
-         stuckOrdersData.stuck_orders.forEach(order => {
-            clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
-         });
-   
-         setStuckOrdersPanelData({
-            clientNames: clientNames,
-            clientCount: clientsArr,
-            alertCount: alertsArr,
-            statusDayCount: statusDaysArr,
-            approvalDayCount: approvalDaysArr,
-         });
-      }
-   }, [stuckOrdersData]);
+  useEffect(() => {
+    if (stuckOrdersData) {
+      const clientsArr = getStuckOrdersByClient(stuckOrdersData);
+      const alertsArr = getAlertCount(stuckOrdersData);
+      const approvedArr = getApprovedOrdersByClient(stuckOrdersData);
+      const statusDaysArr = getStatusAgeCount(stuckOrdersData);
+      const clientNames = {};
+      stuckOrdersData.stuck_orders.forEach(order => {
+        clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
+      });
 
-   useEffect(() => {
-      if (zendeskData) {
-         const ticketData = zendeskData.tickets;
-         const ticketByAgentData = zendeskUtils.getTicketCountByAgent(ticketData);
-         const ticketByOrgData = zendeskUtils.getTicketCountByOrg(ticketData);
-         const ticketByStatusData = zendeskUtils.getTicketCountByStatus(ticketData);
-         const ticketByAgeData = zendeskUtils.getTicketCountByAge(ticketData);
-         const agentByOrgData = zendeskUtils.getAgentCountByOrg(ticketData);
+      setStuckOrdersPanelData({
+        stuckOrdersByClient: clientsArr,
+        alertCount: alertsArr,
+        approvedOrdersByClient: approvedArr,
+        statusAgeCount: statusDaysArr,
+        clientNames: clientNames,
+      });
+    }
+  }, [stuckOrdersData]);
 
-         setZendeskPanelData({
-            ticketCountByAgent: ticketByAgentData,
-            ticketCountByOrganization: ticketByOrgData,
-            ticketCountByStatus: ticketByStatusData,
-            ticketCountByAge: ticketByAgeData,
-            agentCountByOrganization: agentByOrgData,
-         })
-      }
-   }, [zendeskData]);
+  useEffect(() => {
+    if (zendeskData) {
+      const ticketData = zendeskData.tickets;
+      const ticketByAgentData = getTicketCountByAgent(ticketData);
+      const ticketByOrgData = getTicketCountByOrg(ticketData);
+      const ticketByStatusData = getTicketCountByStatus(ticketData);
+      const ticketByAgeData = getTicketCountByAge(ticketData);
+      const agentByOrgData = getAgentCountByOrg(ticketData);
 
-   return (
-      <div className='app'>
-         {
-            dashboardSelection === 'stuck_orders' &&
-            stuckOrdersData &&
-            stuckOrdersPanelData
-            &&
-            <StuckOrdersDashboard
-               stuckOrdersData={stuckOrdersData}
-               stuckOrdersPanelData={stuckOrdersPanelData}
-               isMonitorVersion={isMonitorVersion}
-            />
-         }
+      setZendeskPanelData({
+        ticketCountByAgent: ticketByAgentData,
+        ticketCountByOrganization: ticketByOrgData,
+        ticketCountByStatus: ticketByStatusData,
+        ticketCountByAge: ticketByAgeData,
+        agentCountByOrganization: agentByOrgData,
+      });
+    }
+  }, [zendeskData]);
 
-         {
-            dashboardSelection === 'zendesk' &&
-            zendeskData &&
-            zendeskPanelData
-            &&
-            <ZendeskDashboard
-               zendeskPanelData={zendeskPanelData}
-               isMonitorVersion={isMonitorVersion}
-            />
-         }
+  return (
+    <div className='app'>
+      {dashboardSelection === 'stuck_orders' && stuckOrdersData && stuckOrdersPanelData && (
+        <StuckOrdersDashboard
+          stuckOrdersData={stuckOrdersData}
+          stuckOrdersPanelData={stuckOrdersPanelData}
+          isMonitorVersion={isMonitorVersion}
+        />
+      )}
 
-         {
-            !stuckOrdersData &&
-            !stuckOrdersPanelData &&
-            !zendeskData &&
-            !zendeskPanelData
-            &&
-            <div className='grid-loader-container'>
-               <GridLoader size={12} loading={true} color={'#02818A'} />
-            </div>
-         }
+      {dashboardSelection === 'zendesk' && zendeskData && zendeskPanelData && (
+        <ZendeskDashboard zendeskPanelData={zendeskPanelData} isMonitorVersion={isMonitorVersion} />
+      )}
 
-         {
-            !isMonitorVersion &&
-            stuckOrdersData &&
-            stuckOrdersPanelData &&
-            zendeskData &&
-            zendeskPanelData
-            &&
-            <div className='dashboard-tab-container'>
-               <p
-                  className={dashboardSelection === 'stuck_orders' ? 'selected-dashboard-tab' : 'dashboard-tab'}
-                  onClick={() => setDashboardSelection('stuck_orders')}
-               >Stuck Orders</p>
-               <p>|</p>
-               <p
-                  className={dashboardSelection === 'zendesk' ? 'selected-dashboard-tab' : 'dashboard-tab'}
-                  onClick={() => setDashboardSelection('zendesk')}
-               >Zendesk</p>
-            </div>
-         }
-      </div>
-   )
+      {!stuckOrdersData && !stuckOrdersPanelData && !zendeskData && !zendeskPanelData && (
+        <div className='grid-loader-container'>
+          <GridLoader size={12} loading={true} color={'#02818A'} />
+        </div>
+      )}
+
+      {!isMonitorVersion && stuckOrdersData && stuckOrdersPanelData && zendeskData && zendeskPanelData && (
+        <div className='dashboard-tab-container'>
+          <p
+            className={dashboardSelection === 'stuck_orders' ? 'selected-dashboard-tab' : 'dashboard-tab'}
+            onClick={() => setDashboardSelection('stuck_orders')}
+          >
+            Stuck Orders
+          </p>
+          <p>|</p>
+          <p
+            className={dashboardSelection === 'zendesk' ? 'selected-dashboard-tab' : 'dashboard-tab'}
+            onClick={() => setDashboardSelection('zendesk')}
+          >
+            Zendesk
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }
