@@ -26,6 +26,17 @@ export default function TicketCountByStatus(props) {
     },
   };
 
+  const colors = {
+    New: '#B2182B',
+    Open: '#FC8D62',
+    Pending: '#FFED6F',
+    Hold: '#3690C0',
+    Solved: '#66C2A5',
+    Closed: '#1B7837',
+  };
+
+  const getColors = bar => colors[bar.indexValue];
+
   return (
     <ResponsiveBar
       data={props.ticketCountByStatus}
@@ -35,7 +46,7 @@ export default function TicketCountByStatus(props) {
       padding={0.3}
       layout='vertical'
       // colors={{ scheme: 'accent' }}
-      colors={['#B2182B', '#FC8D62', '#FFED6F', '#66C2A5', '#1B7837']}
+      colors={getColors}
       colorBy='index'
       theme={theme}
       enableGridX={false}

@@ -188,3 +188,17 @@ export const createFileName = () => {
 
   return `stuck_orders_${month}_${day}_${year}_${time}.csv`;
 };
+
+export const formatClient = client => {
+  let clientArr = client.client.split(' ');
+  let clientName = clientArr[0];
+  let clientCount = clientArr[1];
+
+  if (clientName.length > 11) {
+    client.formattedClientName = `${client.client.slice(0, 11)}...${clientCount}`;
+  } else {
+    client.formattedClientName = client.client;
+  }
+
+  return client;
+};

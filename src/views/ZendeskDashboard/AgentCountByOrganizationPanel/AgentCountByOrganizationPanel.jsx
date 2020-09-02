@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatOrganization } from '../../../utils/zendeskUtils';
 
 // import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
@@ -35,7 +36,7 @@ export default function AgentCountByOrganizationPanel(props) {
     data.forEach(org => {
       let objKeys = Object.keys(org);
       objKeys.forEach(objKey => {
-        if (objKey !== 'organization' && !keys.includes(objKey)) {
+        if (objKey !== 'organization' && objKey !== 'formattedOrgName' && !keys.includes(objKey)) {
           keys.push(objKey);
         }
       });
@@ -46,9 +47,9 @@ export default function AgentCountByOrganizationPanel(props) {
 
   return (
     <ResponsiveBar
-      data={props.agentCountByOrganization}
+      data={props.agentCountByOrganization.map(org => formatOrganization(org))}
       keys={getKeys(props.agentCountByOrganization)}
-      indexBy='organization'
+      indexBy='formattedOrgName'
       groupMode={props.groupMode || 'stacked'}
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
       padding={0.3}

@@ -1,5 +1,6 @@
 import React from 'react';
 import './StuckOrdersByClientPanel.scss';
+import { formatClient } from '../../../utils/stuckOrdersUtils';
 
 import { useHistory } from 'react-router-dom';
 import { ResponsiveBar } from '@nivo/bar';
@@ -40,9 +41,9 @@ export default function StuckOrdersByClientPanel(props) {
   return (
     <ResponsiveBar
       onClick={event => handleClientSelection(event)}
-      data={props.stuckOrdersByClient}
+      data={props.stuckOrdersByClient.map(client => formatClient(client))}
       keys={['Standard', 'Expedited']}
-      indexBy='client'
+      indexBy='formattedClientName'
       margin={{ top: 5, right: 100, bottom: 80, left: 60 }}
       padding={0.3}
       layout='vertical'
