@@ -6,12 +6,20 @@ import { exportDataToCSV, createFileName } from '../../utils/stuckOrdersUtils';
 
 import GridLoader from 'react-spinners/GridLoader';
 import { Link } from 'react-router-dom';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
 import 'moment-duration-format';
 import queryString from 'query-string';
 import { CSVLink } from 'react-csv';
 import { Tooltip } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const CustomTooltip = withStyles({
+  tooltipPlacementRight: {
+    margin: '0 5px',
+  },
+  tooltip: {
+    backgroundColor: '#f9f9f9',
+  },
+})(Tooltip);
 
 export default function StuckOrdersDetails(props) {
   const [orderData, setOrderData] = useState('');
@@ -217,7 +225,6 @@ export default function StuckOrdersDetails(props) {
         <div className='order-detail-row' key={order.order_number}>
           <p className='detail-client'>{order.client}</p>
           <a
-            // href={`https://helpdesk.mobilsense.com/${order.client_db_name}/Popups/OE/orderEdit?order_subscriber_id=${splitOrderNum(order.order_number)}`}
             href={`https://helpdesk.mobilsense.com/${
               order.client_db_name
             }/api#/app/Utility/order_editor/${splitOrderNum(order.order_number)}`}
@@ -229,52 +236,54 @@ export default function StuckOrdersDetails(props) {
           </a>
           <p className='detail-expedited'>{order.expedited && 'Expedited'}</p>
           <p className='detail-order-status'>{order.order_status}</p>
-          <OverlayTrigger
-            trigger={['hover', 'focus']}
+          <CustomTooltip
             placement='right'
-            overlay={
-              <Popover id='popover-basic'>
-                <Popover.Content>
-                  <strong style={{ color: '#02818A' }}>Status Age</strong>
-                  <br />
-                  <span>Business Hours: {order.status_change_business_age} hours</span>
-                  <br />
-                  <span>Raw Hours: {order.status_change_raw_age} hours</span>
-                  <br />
-                  <span>Timestamp: {formatDate(new Date(order.status_change_timestamp))}</span>
-                </Popover.Content>
-              </Popover>
+            title={
+              <div className='detail-popover'>
+                <strong className='detail-popover-title' style={{ marginBottom: '20px' }}>
+                  Status Age
+                </strong>
+                <br />
+                <br />
+                <span>Business Hours: {order.status_change_business_age} hours</span>
+                <br />
+                <span>Raw Hours: {order.status_change_raw_age} hours</span>
+                <br />
+                <span>Timestamp: {formatDate(new Date(order.status_change_timestamp))}</span>
+              </div>
             }
           >
             <p className='detail-status-age'>{formatAge(order.status_change_business_age)}</p>
-          </OverlayTrigger>
-          <OverlayTrigger
-            trigger={['hover', 'focus']}
+          </CustomTooltip>
+          <CustomTooltip
             placement='right'
-            overlay={
-              <Popover id='popover-basic'>
-                {/* <Popover.Title as="h3">Details</Popover.Title> */}
-                <Popover.Content>
-                  <strong style={{ color: '#02818A' }}>Approval Age</strong>
-                  <br />
-                  <span>Business Hours: {order.approval_business_age} hours</span>
-                  <br />
-                  <span>Raw Hours: {order.approval_raw_age} hours</span>
-                  <br />
-                  <span>Timestamp: {formatDate(new Date(order.approval_timestamp))}</span>
+            title={
+              <div className='detail-popover'>
+                <strong>Approval Age</strong>
+                <br />
+                <br />
 
-                  <br />
-                  <br />
+                <span>Business Hours: {order.approval_business_age} hours</span>
+                <br />
+                <span>Raw Hours: {order.approval_raw_age} hours</span>
+                <br />
+                <span>Timestamp: {formatDate(new Date(order.approval_timestamp))}</span>
 
-                  <strong style={{ color: '#02818A' }}>Order Age</strong>
-                  <br />
-                  <span>Business Hours: {order.order_business_age} hours</span>
-                  <br />
-                  <span>Raw Hours: {order.order_raw_age} hours</span>
-                  <br />
-                  <span>Timestamp: {formatDate(new Date(order.order_timestamp))}</span>
-                </Popover.Content>
-              </Popover>
+                <br />
+                <br />
+                <div className='detail-line'></div>
+                <br />
+
+                <strong>Order Age</strong>
+                <br />
+                <br />
+
+                <span>Business Hours: {order.order_business_age} hours</span>
+                <br />
+                <span>Raw Hours: {order.order_raw_age} hours</span>
+                <br />
+                <span>Timestamp: {formatDate(new Date(order.order_timestamp))}</span>
+              </div>
             }
           >
             <p
@@ -286,7 +295,7 @@ export default function StuckOrdersDetails(props) {
               <br />
               {formatAge(order.order_business_age)}
             </p>
-          </OverlayTrigger>
+          </CustomTooltip>
           <p className='detail-subscriber-name'>{order.subscriber_name}</p>
           <p className='detail-service-number'>{order.service_number}</p>
           <p className='detail-order-type'>{order.order_type}</p>
