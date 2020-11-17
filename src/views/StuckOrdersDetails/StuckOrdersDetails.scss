@@ -202,3 +202,22 @@
   justify-content: center;
   align-items: center;
 }
+
+.detail-popover {
+  background-color: inherit;
+  font-size: 1rem;
+  color: black;
+  height: auto;
+  border: none;
+  outline: none;
+
+  strong {
+    color: #02818a;
+  }
+}
+
+.detail-line {
+  height: 1px;
+  width: 100%;
+  background-color: gray;
+}
