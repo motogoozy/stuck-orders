@@ -1,31 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import { fetchData } from './utils/utils';
-import {
-  getStuckOrdersByClient,
-  getAlertCount,
-  getApprovedOrdersByClient,
-  getStatusAgeCount,
-} from './utils/stuckOrdersUtils';
-import {
-  getTicketCountByAgent,
-  getTicketCountByOrg,
-  getTicketCountByStatus,
-  getTicketCountByAge,
-  getAgentCountByOrg,
-} from './utils/zendeskUtils';
 import StuckOrdersDashboard from './views/StuckOrdersDashboard/StuckOrdersDashboard';
 import ZendeskDashboard from './views/ZendeskDashboard/ZendeskDashboard';
+import useStuckOrdersData from './hooks/useStuckOrdersData';
+import useZendeskData from './hooks/useZendeskData';
 
 import queryString from 'query-string';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import GridLoader from 'react-spinners/GridLoader';
 
 export default function App(props) {
-  const [stuckOrdersData, setStuckOrdersData] = useState('');
-  const [stuckOrdersPanelData, setStuckOrdersPanelData] = useState();
-  const [zendeskData, setZendeskData] = useState('');
-  const [zendeskPanelData, setZendeskPanelData] = useState();
+  const { stuckOrdersData, setStuckOrdersData, stuckOrdersPanelData } = useStuckOrdersData('');
+  const { zendeskData, setZendeskData, zendeskPanelData } = useZendeskData('');
   const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
 
   const dashboardOrder = ['stuck_orders', 'zendesk'];
@@ -84,46 +71,6 @@ export default function App(props) {
         console.log(err);
       });
   }, []); // eslint-disable-line
-
-  useEffect(() => {
-    if (stuckOrdersData) {
-      const clientsArr = getStuckOrdersByClient(stuckOrdersData);
-      const alertsArr = getAlertCount(stuckOrdersData);
-      const approvedArr = getApprovedOrdersByClient(stuckOrdersData);
-      const statusDaysArr = getStatusAgeCount(stuckOrdersData);
-      const clientNames = {};
-      stuckOrdersData.stuck_orders.forEach(order => {
-        clientNames[order.client_db_name] = clientNames[order.client_db_name] || order.client;
-      });
-
-      setStuckOrdersPanelData({
-        stuckOrdersByClient: clientsArr,
-        alertCount: alertsArr,
-        approvedOrdersByClient: approvedArr,
-        statusAgeCount: statusDaysArr,
-        clientNames: clientNames,
-      });
-    }
-  }, [stuckOrdersData]);
-
-  useEffect(() => {
-    if (zendeskData) {
-      const ticketData = zendeskData.tickets;
-      const ticketByAgentData = getTicketCountByAgent(ticketData);
-      const ticketByOrgData = getTicketCountByOrg(ticketData);
-      const ticketByStatusData = getTicketCountByStatus(ticketData);
-      const ticketByAgeData = getTicketCountByAge(ticketData);
-      const agentByOrgData = getAgentCountByOrg(ticketData);
-
-      setZendeskPanelData({
-        ticketCountByAgent: ticketByAgentData,
-        ticketCountByOrganization: ticketByOrgData,
-        ticketCountByStatus: ticketByStatusData,
-        ticketCountByAge: ticketByAgeData,
-        agentCountByOrganization: agentByOrgData,
-      });
-    }
-  }, [zendeskData]);
 
   return (
     <div className='app'>

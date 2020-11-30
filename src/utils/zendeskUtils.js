@@ -69,7 +69,6 @@ export const getTicketCountByStatus = ticketData => {
   ticketData.forEach(ticket => {
     if (statuses[ticket.status]) {
       statuses[ticket.status].Count++;
-
     }
   });
 
