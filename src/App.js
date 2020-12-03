@@ -16,7 +16,7 @@ export default function App(props) {
   const [dashboardSelection, setDashboardSelection] = useState('stuck_orders');
 
   const dashboardOrder = ['stuck_orders', 'zendesk'];
-  const isMonitorVersion = Boolean(Boolean(queryString.parse(props.location.search).toggle_interval));
+  const isMonitorVersion = Boolean(queryString.parse(props.location.search).toggle_interval);
 
   useEffect(() => {
     const stuckOrdersRequest = fetchData('/api/stuck_orders');
